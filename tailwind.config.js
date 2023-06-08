@@ -5,7 +5,26 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        ualert: '#FF00C7',
+        charyo: '#1F1F1F',
+        notpurple: '#F9F8FC',
+        purps: '#7e18ff',
+        purplehaze: '#b8b2ff',
+        lamegray: '#d9d9d9',
+      },
+      spacing: {
+        '80': '20rem',
+      },
+      translate: {
+        '1/2': '50%',
+      },
+      inset: {
+        '1/2': '50%'
+      }
+    },
+    variants: {},
+    plugins: [],
   },
-  plugins: [],
 };
