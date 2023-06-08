@@ -2,19 +2,72 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
-model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  password  String
+model Merchant {
+  id                Int          @id @default(autoincrement())
+  email             String       @unique
+  password          String
+  name              String
+  settlementDetails Json
+  namespaces        Json
+  credentials       Json
+  storefronts       Storefront[]
+
+  @@map("User")
+}
+
+model Storefront {
+  id                Int      @id @default(autoincrement())
+  domain            String
+  entryUrl          String
+  protectedUrl      String
+  settlementDetails Json
+  testnet           Boolean  @default(false)
+  merchantId        Int
+  merchant          Merchant @relation(fields: [merchantId], references: [id])
+  orders            Order[]
+}
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  externalId      String
+  nativeAmount    Float
+  nativeToken     String
+  transactionHash String
+  testnet         Boolean       @default(false)
+  status          String
+  storefrontId    Int
+  storefront      Storefront    @relation(fields: [storefrontId], references: [id])
+  orderRequest    OrderRequest?
+}
+
+model OrderRequest {
+  id                Int            @id @default(autoincrement())
+  phoneNumber       String
+  email             String
+  testnet           Boolean        @default(false)
+  orderAmount       Float
+  settlementAddress String
+  paymentGatewayId  Int
+  paymentGateway    PaymentGateway @relation(fields: [paymentGatewayId], references: [id])
+  orderId           Int            @unique
+  order             Order          @relation(fields: [orderId], references: [id])
+}
+
+model PaymentGateway {
+  id                  Int            @id @default(autoincrement())
+  merchantCodes       Json
+  responseCodes       Json
+  availableCurrencies Json
+  orderRequests       OrderRequest[]
 }
