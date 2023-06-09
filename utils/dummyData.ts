@@ -1,0 +1,31 @@
+export const dummyData = [
+    {
+        paymentId: "12345",
+        orderAmount: 100.0,
+        orderId: "1",
+        tip: 15.0,
+        networkFee: 2.0,
+        serviceFee: 5.0,
+        tax: 8.0,
+        txHash: "abcd",
+        status: "Paid",
+        responseCode: 200,
+        createdAt: "2023-06-01T00:00:00Z",
+        cancelledAt: "2023-06-01T12:00:00Z",
+    },
+    {
+        paymentId: "67890",
+        orderAmount: 200.0,
+        orderId: "2",
+        tip: 30.0,
+        networkFee: 4.0,
+        serviceFee: 10.0,
+        tax: 16.0,
+        txHash: "efgh",
+        status: "Unpaid",
+        responseCode: 400,
+        createdAt: "2023-06-02T00:00:00Z",
+        cancelledAt: "2023-06-02T12:00:00Z",
+    },
+    // More data...
+];

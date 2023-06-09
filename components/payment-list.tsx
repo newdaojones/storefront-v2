@@ -1,3 +1,6 @@
+"use client"
+
+import { dummyData } from 'utils/dummyData';
 
 type Payment = {
     paymentId: string;
@@ -18,31 +21,49 @@ type Props = {
     payments: Payment[];
 };
 
-export default function PaymentList({ payments }: Props) {
+import { useState } from 'react';
+
+export default function PaymentList() {
+    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+    const payments = dummyData;
+
     return (
-        <div className="grid grid-cols-9 gap-4 p-4 overflow-auto place-items-center h-screen">
-            <div className="font-bold">Order ID</div>
-            <div className="font-bold">Amount</div>
-            <div className="font-bold">Tip</div>
-            <div className="font-bold">Network Fee</div>
-            <div className="font-bold">Service Fee</div>
-            <div className="font-bold">Tax</div>
-            <div className="font-bold">Total</div>
-            <div className="font-bold">Status</div>
-            <div className="font-bold">Response Code</div>
-            {payments.map(payment => (
-                <>
-                    <div>{payment.orderId}</div>
-                    <div>{payment.orderAmount}</div>
-                    <div>{payment.tip}</div>
-                    <div>{payment.networkFee}</div>
-                    <div>{payment.serviceFee}</div>
-                    <div>{payment.tax}</div>
-                    <div>{payment.orderAmount + payment.tip + payment.networkFee + payment.serviceFee + payment.tax}</div>
-                    <div>{payment.status}</div>
-                    <div>{payment.responseCode}</div>
-                </>
-            ))}
+        <div className="flex items-center justify-center h-screen overflow-auto">
+            <div className='grid rounded bg-white shadow-md mx-auto max-w-2x1 p-4'>
+                <div className="grid grid-cols-4 gap-4 text-center font-bold mb-4">
+                    <div>Order ID</div>
+                    <div>Total</div>
+                    <div>Status</div>
+                    <div>Response Code</div>
+                </div>
+                {payments.map((payment, index) => (
+                    <div
+                        key={payment.orderId}
+                        className="grid grid-cols-4 gap-4 cursor-pointer p-4 bg-gray-100 rounded-md mb-4 text-center"
+                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
+                    >
+                        <div>{payment.orderId}</div>
+                        <div>{payment.orderAmount + payment.tip + payment.networkFee + payment.serviceFee + payment.tax}</div>
+                        <div>{payment.status}</div>
+                        <div>{payment.responseCode}</div>
+                        {expandedIndex === index && (
+                            <div className="col-span-4 grid grid-cols-2 gap-4 bg-gray-200 p-4 rounded-md mt-4">
+                                <div className="text-left">Amount:</div>
+                                <div className="text-right">{payment.orderAmount}</div>
+                                <div className="text-left">Tip:</div>
+                                <div className="text-right">{payment.tip}</div>
+                                <div className="text-left">Network Fee:</div>
+                                <div className="text-right">{payment.networkFee}</div>
+                                <div className="text-left">Service Fee:</div>
+                                <div className="text-right">{payment.serviceFee}</div>
+                                <div className="text-left">Tax:</div>
+                                <div className="text-right">{payment.tax}</div>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
