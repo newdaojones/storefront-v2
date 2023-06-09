@@ -10,15 +10,13 @@ export default function CreateOrder() {
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-
-        // Do something with form data
         console.log(amount, customerName, phoneNumber, email);
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="bg-notpurple px-24 py-8 rounded shadow-lg border-2 border-ualert">
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid place-items-center h-screen">
+            <div className="bg-blue-100 border-purple-900 border-6 shadow-md p-6 rounded-xl grid gap-4">
+                <form onSubmit={handleSubmit}>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Amount</label>
                         <input

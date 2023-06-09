@@ -28,23 +28,3 @@ body::before {
     background: url('/public/bgr2.0.svg') no-repeat center center fixed;
     background-size: cover;
 }
-
-.nav-button {
-    @apply absolute bg-gray-700 text-white rounded-full w-24 h-12 top-1/2 left-1/2 -mt-6 -ml-12;
-}
-
-.nav-button:nth-child(1) {
-    transform: translate(-50%, -50%) rotate(0deg) translate(100px) rotate(0deg);
-}
-
-.nav-button:nth-child(2) {
-    transform: translate(-50%, -50%) rotate(90deg) translate(100px) rotate(-90deg);
-}
-
-.nav-button:nth-child(3) {
-    transform: translate(-50%, -50%) rotate(180deg) translate(100px) rotate(-180deg);
-}
-
-.nav-button:nth-child(4) {
-    transform: translate(-50%, -50%) rotate(270deg) translate(100px) rotate(-270deg);
-}

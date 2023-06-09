@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title,
     description,
   },
-  metadataBase: new URL("https://storefront-reup.vercel.app/"),
+  metadataBase: new URL("https://storefront-too.vercel.app/"),
   themeColor: "#FFF",
 };
 

@@ -36,7 +36,7 @@ export default function Home() {
           </Link>
           <p className="text-white">·</p>
           <a
-            href="https://github.com/steven-tey/nextjs-typescript-starter"
+            href=""
             target="_blank"
             rel="noopener noreferrer"
             className="text-stone-400 underline hover:text-stone-200 transition-all"
@@ -45,7 +45,7 @@ export default function Home() {
           </a>
           <p className="text-white">·</p>
           <a
-            href="https://vercel.com/templates/next.js/prisma-postgres-auth-starter"
+            href=""
             target="_blank"
             rel="noopener noreferrer"
             className="text-stone-400 underline hover:text-stone-200 transition-all"
