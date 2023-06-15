@@ -1,0 +1,96 @@
+---
+title: KycForms
+---
+
+import { CodeBlock } from '@theme/CodeBlock'
+import { InlineCode } from '@theme/InlineCode'
+
+# KycForms Component Documentation
+
+## Overview
+
+The `KycForms` component is used to manage and handle KYC (Know Your Customer) data. It supports two types of forms: Individual and Entity. Each form has different fields that are relevant to the type of the form. For 'Entity' forms, you can add multiple 'Beneficial Owners'.
+
+## Props
+
+- `type` - A string indicating the type of form to display. It can be either "individual" or "entity".
+
+## Example Usage
+
+<CodeBlock language="tsx">
+  {`<KycForms type="individual" />`}
+</CodeBlock>
+
+## FormType
+
+<InlineCode>FormType</InlineCode> is a string type that can be either "individual" or "entity", corresponding to the type of KYC form.
+
+## FormData
+
+<InlineCode>FormData</InlineCode> is a union type of `KycIndividual` or `KycEntity`, representing the data for an individual or entity form respectively.
+
+## KycIndividual
+
+`KycIndividual` is an object that represents the data of an individual KYC form. It contains the following fields:
+
+- `formType` - The type of the form, in this case "individual".
+- `firstName` - The first name of the individual.
+- `lastName` - The last name of the individual.
+- `dateOfBirth` - The date of birth of the individual.
+- `ssnOrTaxId` - The social security number or tax ID of the individual.
+- `phone` - The phone number of the individual.
+- `email` - The email of the individual.
+- `address1` - The primary address of the individual.
+- `address2` - The secondary address of the individual.
+- `zipCode` - The zip code of the individual.
+- `city` - The city of the individual.
+- `state` - The state of the individual.
+- `country` - The country of the individual.
+- `docsAttachments` - Any attached documents.
+
+## KycEntity
+
+`KycEntity` is an object that represents the data of an entity KYC form. It contains the following fields:
+
+- `formType` - The type of the form, in this case "entity".
+- `entityName` - The name of the entity.
+- `entityType` - The type of the entity.
+- `entityTaxId` - The tax ID of the entity.
+- `entityPhone` - The phone number of the entity.
+- `entityEmail` - The email of the entity.
+- `entityAddress1` - The primary address of the entity.
+- `entityAddress2` - The secondary address of the entity.
+- `entityZipCode` - The zip code of the entity.
+- `entityCity` - The city of the entity.
+- `entityState` - The state of the entity.
+- `entityCountry` - The country of the entity.
+- `entityDocsAttachments` - Any attached documents.
+- `beneficials` - An array of `KycBeneficial` objects, representing the beneficial owners of the entity.
+
+## KycBeneficial
+
+`KycBeneficial` is an object that represents a beneficial owner in an entity form. It is used in the `KycEntity`'s `beneficials` array. The structure is similar to `KycEntity` but fields are prefixed with `beneficial`.
+
+## FormInput Component
+
+The `FormInput` component is used to create individual form fields. The props it takes are:
+
+- `label` - The label text for the input field.
+- `type` - The type of the input field, typically "text".
+- `value` - The current value of the input field.
+- `onChange` - A function to call when the value of the input field changes.
+
+## Helper Functions
+
+- `isKycEntity` - A type guard function to check if a `FormData` object is of type `KycEntity`.
+- `addBeneficialOwnerToState` - Adds a new beneficial owner to the state.
+- `updateBeneficialOwnerInState` - Updates a beneficial owner in the state.
+- `removeBeneficialOwnerFromState` - Removes a beneficial owner from the state.
+- `handleInputChange` - Handles the change of an input field in the form.
+- `handleFormTypeChange` - Switches the form type between "individual" and "entity".
+- `handleSubmit` - Submits the form, currently just logging the form data.
+- `handleBeneficialFormDelete` - Removes a beneficial owner form.
+
+## Layout
+
+The form is laid out in a grid fashion, and is responsive, centering the form on the page. For entity forms, there's an 'Add Beneficial Owner' button to add a new beneficial owner form, and each beneficial owner form has a 'Delete' button to remove it. The form has a 'Submit' button to submit the form data.
