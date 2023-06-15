@@ -48,12 +48,16 @@ type FormInputProps = {
 
 function FormInput({ label, type, value, onChange }: FormInputProps) {
     return (
-        <input
-            type={type}
-            placeholder={label}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-        />
+        <div className="flex flex-col">
+            <label htmlFor={label} className="mb-2">{label}</label>
+            <input
+                id={label}
+                type={type}
+                placeholder={label}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+            />
+        </div>
     );
 }
 

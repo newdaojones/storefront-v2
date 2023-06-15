@@ -101,6 +101,7 @@ export default function KycForms({ type }: { type: FormType }) {
     };
 
     const [formData, setFormData] = useState<FormData>(initialFormStates[type]);
+    const [formType, setFormType] = useState<FormType>(type);
 
     const addBeneficialOwner = () => {
         setFormData(prevState => addBeneficialOwnerToState(prevState));
@@ -169,6 +170,11 @@ export default function KycForms({ type }: { type: FormType }) {
         }
     };
 
+    const handleFormTypeChange = () => {
+        setFormType(formType === 'individual' ? 'entity' : 'individual');
+        setFormData(initialFormStates[formType]);
+    };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(formData);
@@ -179,9 +185,13 @@ export default function KycForms({ type }: { type: FormType }) {
     };
 
     return (
-        <div className="h-screen flex items-center justify-center">
-            <div className="rounded shadow-md max-w-md w-full overflow-hidden p-6 bg-white mx-auto">
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+        <div className="grid place-items-center h-screen">
+            <div className="bg-blue-100 border-purple-900 border-6 shadow-md p-6 rounded-xl max-w-xl w-full overflow-auto h-3/4 mx-auto">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl">{formType.charAt(0).toUpperCase() + formType.slice(1)} KYC Form</h2>
+                    <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={handleFormTypeChange}>Switch to {formType === 'individual' ? 'Entity' : 'Individual'} Form</button>
+                </div>
+                <form onSubmit={handleSubmit} className="grid gap-4 mt-6">
                     {Object.keys(formFields[type]).map((field: string) => (
                         <FormInput
                             key={field}
@@ -199,10 +209,12 @@ export default function KycForms({ type }: { type: FormType }) {
                             onDelete={() => handleBeneficialFormDelete(index)}
                         />
                     ))}
-                    {isKycEntity(formData) && <button type="button" onClick={addBeneficialOwner}>Add Beneficial Owner</button>}
-                    <button type="submit">Submit</button>
+                    {isKycEntity(formData) && <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="button" onClick={addBeneficialOwner}>Add Beneficial Owner</button>}
+                    <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Submit</button>
                 </form>
             </div>
         </div>
     );
 }
+
+

@@ -13,6 +13,7 @@ module.exports = {
         purps: '#7e18ff',
         purplehaze: '#b8b2ff',
         lamegray: '#d9d9d9',
+        lavender: '#97B1FA'
       },
       spacing: {
         '80': '20rem',
