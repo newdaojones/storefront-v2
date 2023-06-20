@@ -14,8 +14,8 @@ export default function Navbar() {
                 <button className="mx-1 px-8 py-2 bg-gray-700 shadow-md border border-transparent rounded-md text-white " type="button" onClick={() => router.push('/protected/payments')}>
                     Payments
                 </button>
-                <button className="mx-1 px-8 py-2 bg-gray-700 shadow-md border border-transparent rounded-md text-white " type="button" onClick={() => router.push('/protected/gateways')}>
-                    Gateways
+                <button className="mx-1 px-8 py-2 bg-gray-700 shadow-md border border-transparent rounded-md text-white " type="button" onClick={() => router.push('/protected/gateway')}>
+                    Gateway
                 </button>
                 <button className="mx-1 px-8 py-2 bg-gray-700 shadow-md border border-transparent rounded-md text-white " type="button" onClick={() => router.push('/protected/settings')}>
                     Settings
