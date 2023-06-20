@@ -1,7 +1,25 @@
-import CreateOrder from "@/components/order-create";
+"use client"
 
-export default function OrderPage() {
+// components/CreateOrder.tsx
+import OrderAmount from '@/components/order/amount';
+import CustomerEmail from '@/components/order/email';
+import OrderHeader from '@/components/order/header';
+import CustomerNumber from '@/components/order/number';
+import styles from '../../../components/order/order.module.css';
+
+export default function CreateOrder() {
     return (
-        <CreateOrder />
+        <div className={styles.container}>
+            <div className={styles.innerContainer}>
+                <OrderHeader />
+                <div className={styles.body}>
+                    <div className={styles.rowContainer}>
+                        <OrderAmount />
+                        <CustomerNumber />
+                        <CustomerEmail />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

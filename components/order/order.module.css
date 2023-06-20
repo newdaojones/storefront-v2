@@ -98,10 +98,10 @@
     align-self: center;
 }
 
-.settlementAddress,
-.merchantUsername,
-.kycStatus,
-.appVersion {
+.orderId,
+.orderAmount,
+.customerNumber,
+.customerEmail {
     display: grid;
     grid-template-columns: 1fr 2fr;
     align-items: center;
@@ -113,10 +113,19 @@
     height: 46px;
 }
 
-.boxSettlementAddress,
-.boxMerchantUsername,
-.boxKycStatus,
-.appVersion {
+.boxOrderId {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    padding: 4px 0px;
+    gap: 2px;
+    width: 100%;
+    height: 46px;
+}
+
+.boxOrderAmount,
+.boxCustomerNumber,
+.boxCustomerEmail {
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
