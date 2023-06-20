@@ -2,6 +2,17 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+:root {
+    --color-ualert: #FF00C7;
+    --color-charyo: #1F1F1F;
+    --color-notpurple: #F9F8FC;
+    --color-purps: #7e18ff;
+    --color-purplehaze: #b8b2ff;
+    --color-lamegray: #d9d9d9;
+    --color-lavender: #97B1FA;
+}
+
+
 html,
 body {
     width: 100%;

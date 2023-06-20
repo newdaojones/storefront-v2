@@ -1,0 +1,57 @@
+/* toggle.module.css */
+.toggle {
+    position: relative;
+    width: 64px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
+    background-color: var(--color-lamegray);
+    border-radius: 8px 8px 8px 8px;
+    margin-right: 6px;
+}
+
+.toggleText {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    color: var(--color-notpurple);
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.toggleText.on {
+    right: 4px;
+}
+
+.toggleText.off {
+    left: 4px;
+}
+
+.toggleCheckbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 34px;
+    width: 60px;
+    z-index: 2;
+}
+
+.toggleKnob {
+    position: absolute;
+    left: 4px;
+    bottom: 3px;
+    background-color: var(--color-ualert);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    transition: .4s;
+}
+
+.toggleCheckbox:checked~.toggleKnob {
+    background-color: var(--color-purps);
+    transform: translateX(28px);
+}

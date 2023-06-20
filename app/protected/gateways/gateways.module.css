@@ -95,9 +95,7 @@
 
 .label {
     text-align: start;
-    /* Left-justifies the label */
     align-self: center;
-    /* Centers the label vertically */
 }
 
 
@@ -118,54 +116,59 @@
 /* Adjust the height of each item */
 
 .testNetwork,
-.supportedTokens {
+.supportedTokens .gatewayPlugin {
     height: 46px;
 }
 
 .supportedNetworks {
-    height: 130px;
-}
-
-.gatewayPlugin {
-    height: 45.5px;
+    height: 138px;
 }
 
 .boxTest,
 .boxToken,
-.boxNetwork,
 .boxGateway {
     display: grid;
     grid-template-columns: 1fr 1fr;
     /* Creates 2 columns of equal width */
     align-items: center;
-    padding: 7px 0px;
-    gap: 10px;
+    padding: 4px 0px;
+    gap: 2px;
     width: 100%;
     /* The box will take up the full width of the right column */
-    background: #F9F8FC;
+    background: var(--color-notpurple);
     border-radius: 6px;
 }
 
+.boxNetwork {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    /* Create 3 rows of equal height */
+    align-items: center;
+    padding: 4px;
+    gap: 10px;
+    width: 100%;
+    background: var(--color-notpurple);
+    border-radius: 6px;
+}
 
 /* Set height for each box */
 
 .boxTest,
-.boxToken {
+.boxToken,
+.boxGateway {
     height: 46px;
 }
 
 .boxNetwork {
-    height: 130px;
-}
-
-.boxGateway {
-    height: 45.5px;
+    height: 136px;
 }
 
 /* Style for the text in the left column */
 
 .leftText {
     justify-self: start;
+    margin-left: 12px;
     /* Align the text to the left */
 }
 
