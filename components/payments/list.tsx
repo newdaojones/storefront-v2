@@ -26,7 +26,7 @@ export default function PaymentList() {
 
     return (
         <div className={styles.rowContainer}>
-            <div className={styles.paymentRow}>
+            <div className={styles.rowHeader}>
                 <div className={styles.headerCell}>Order ID</div>
                 <div className={styles.headerCell}>Total</div>
                 <div className={styles.headerCell}>Status</div>

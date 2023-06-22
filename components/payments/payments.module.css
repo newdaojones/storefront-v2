@@ -69,14 +69,23 @@
 
 .rowContainer {
     /* row container styling adapted from order and gateway components */
-    display: grid;
-    grid-template-rows: auto;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
     gap: 6px;
+    width: 100%;
+}
+
+.rowHeader {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    text-align: center;
+    gap: 0px;
     padding: 0px;
     order: 0;
-    width: 100%;
     flex-grow: 0;
+    width: 100%;
+    height: 46px;
 }
 
 /* Style each row in the payments list. */
@@ -84,12 +93,14 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
-    gap: 14px;
+    text-align: center;
+    gap: 4px;
     padding: 0px;
     order: 0;
     flex-grow: 0;
     width: 100%;
     height: 46px;
+    border-radius: 8px;
     background: var(--color-lavender)
 }
 
@@ -97,12 +108,30 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
+    text-align: center;
     padding: 4px 0px;
     gap: 2px;
     width: 100%;
     background: var(--color-notpurple);
     border-radius: 6px;
 }
+
+.expandedDetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-top: 0px;
+    border-radius: 8px;
+    background: var(--color-notpurple);
+}
+
+
 
 /* Style for the text in the left column */
 .leftText {

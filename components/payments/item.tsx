@@ -27,7 +27,7 @@ const PaymentItem: React.FC<PaymentItemProps> = ({ payment, isExpanded, onClick 
     return (
         <div className={styles.rowContainer}>
             <div
-                className={isExpanded ? `${styles.boxOrderId} ${styles.paymentDetailRow}` : styles.paymentRow}
+                className={styles.paymentRow}
                 onClick={onClick}
             >
                 <div>{payment.orderId}</div>
@@ -35,23 +35,52 @@ const PaymentItem: React.FC<PaymentItemProps> = ({ payment, isExpanded, onClick 
                 <div>{payment.status}</div>
                 <div>{payment.responseCode}</div>
                 <div>{payment.createdAt}</div>
-                {isExpanded && (
-                    <div>
-                        <div className={styles.label}>Amount:</div>
-                        <div className={styles.value}>{payment.orderAmount}</div>
-                        <div className={styles.label}>Tip:</div>
-                        <div className={styles.value}>{payment.tip}</div>
-                        <div className={styles.label}>Network Fee:</div>
-                        <div className={styles.value}>{payment.networkFee}</div>
-                        <div className={styles.label}>Service Fee:</div>
-                        <div className={styles.value}>{payment.serviceFee}</div>
-                        <div className={styles.label}>Tax:</div>
-                        <div className={styles.value}>{payment.tax}</div>
-                    </div>
-                )}
             </div>
+            {isExpanded && (
+                <div className={styles.expandedDetails}>
+                    <div className={styles.leftText}>Name:</div>
+                    <div className={styles.rightText}>{payment.orderAmount}</div>
+                    <div className={styles.leftText}>Email:</div>
+                    <div className={styles.rightText}>{payment.tip}</div>
+                    <div className={styles.leftText}>Phone:</div>
+                    <div className={styles.rightText}>{payment.networkFee}</div>
+                    <div className={styles.leftText}>Records:</div>
+                    <div className={styles.rightText}>{payment.serviceFee}</div>
+                    <div className={styles.leftText}>LTV:</div>
+                    <div className={styles.rightText}>{payment.tax}</div>
+                </div>
+            )}
+            {isExpanded && (
+                <div className={styles.expandedDetails}>
+                    <div className={styles.leftText}>Amount:</div>
+                    <div className={styles.rightText}>{payment.orderAmount}</div>
+                    <div className={styles.leftText}>Tip:</div>
+                    <div className={styles.rightText}>{payment.tip}</div>
+                    <div className={styles.leftText}>Network:</div>
+                    <div className={styles.rightText}>{payment.networkFee}</div>
+                    <div className={styles.leftText}>Service:</div>
+                    <div className={styles.rightText}>{payment.serviceFee}</div>
+                    <div className={styles.leftText}>Tax:</div>
+                    <div className={styles.rightText}>{payment.tax}</div>
+                </div>
+            )}
+            {isExpanded && (
+                <div className={styles.expandedDetails}>
+                    <div className={styles.leftText}>Authentication:</div>
+                    <div className={styles.rightText}>{payment.orderAmount}</div>
+                    <div className={styles.leftText}>Authorization:</div>
+                    <div className={styles.rightText}>{payment.tip}</div>
+                    <div className={styles.leftText}>Captured:</div>
+                    <div className={styles.rightText}>{payment.networkFee}</div>
+                    <div className={styles.leftText}>Status:</div>
+                    <div className={styles.rightText}>{payment.serviceFee}</div>
+                    <div className={styles.leftText}>Dispute:</div>
+                    <div className={styles.rightText}>{payment.tax}</div>
+                </div>
+            )}
         </div>
     );
 };
+
 
 export default PaymentItem;
