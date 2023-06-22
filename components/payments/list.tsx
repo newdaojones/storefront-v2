@@ -25,22 +25,24 @@ export default function PaymentList() {
     const payments: Payment[] = dummyData;
 
     return (
-        <div className={styles.listContainer}>
-            <div className={styles.headerRow}>
+        <div className={styles.rowContainer}>
+            <div className={styles.paymentRow}>
                 <div className={styles.headerCell}>Order ID</div>
                 <div className={styles.headerCell}>Total</div>
                 <div className={styles.headerCell}>Status</div>
                 <div className={styles.headerCell}>Response Code</div>
                 <div className={styles.headerCell}>Timestamp</div>
             </div>
-            {payments.map((payment, index) => (
-                <PaymentItem
-                    key={payment.paymentId}
-                    payment={payment}
-                    isExpanded={expandedIndex === index}
-                    onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
-                />
-            ))}
+            <div className={styles.rowContainer}>
+                {payments.map((payment, index) => (
+                    <PaymentItem
+                        key={payment.paymentId}
+                        payment={payment}
+                        isExpanded={expandedIndex === index}
+                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
