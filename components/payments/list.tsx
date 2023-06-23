@@ -5,7 +5,7 @@ import { dummyData } from 'utils/dummyData';
 import PaymentItem from './item';
 import styles from './payments.module.css';
 
-type Payment = {
+export type Payment = {
     paymentId: string;
     orderAmount: number;
     orderId: string;
