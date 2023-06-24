@@ -1,4 +1,4 @@
-import KycForms from "@/components/form-kyc";
+import KycForms from "@/components/forms/form-kyc";
 
 export default function Login() {
     return (

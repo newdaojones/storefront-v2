@@ -39,8 +39,19 @@ export default function PaymentList() {
                         key={payment.paymentId}
                         payment={payment}
                         isExpanded={expandedIndex === index}
-                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
-                    />
+                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)} customer={{
+                            name: '',
+                            email: '',
+                            phone: '',
+                            records: '',
+                            ltv: ''
+                        }} status={{
+                            authentication: '',
+                            authorization: '',
+                            captured: '',
+                            status: '',
+                            dispute: ''
+                        }} />
                 ))}
             </div>
         </div>

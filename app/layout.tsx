@@ -1,5 +1,5 @@
 // These styles apply to every route in the application
-import AuthStatus from "@/components/auth-status";
+import AuthStatus from "@/components/auth/auth-status";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
