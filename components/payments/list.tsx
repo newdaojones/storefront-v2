@@ -40,17 +40,17 @@ export default function PaymentList() {
                         payment={payment}
                         isExpanded={expandedIndex === index}
                         onClick={() => setExpandedIndex(expandedIndex === index ? null : index)} customer={{
-                            name: '',
-                            email: '',
-                            phone: '',
-                            records: '',
-                            ltv: ''
+                            name: 'Randal Randerson',
+                            email: 'randy@handyman.com',
+                            phone: '+1 206 555 1234',
+                            records: 'NaN',
+                            ltv: 'NaN'
                         }} status={{
-                            authentication: '',
-                            authorization: '',
-                            captured: '',
-                            status: '',
-                            dispute: ''
+                            authentication: '10000',
+                            authorization: '10000',
+                            captured: '10000',
+                            status: '10000',
+                            dispute: '20057'
                         }} />
                 ))}
             </div>

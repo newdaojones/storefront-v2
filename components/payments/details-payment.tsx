@@ -24,15 +24,15 @@ interface PaymentDetailsProps {
 const PaymentDetails: React.FC<PaymentDetailsProps> = ({ payment }) => {
     return (
         <div className={styles.expandedDetails}>
-            <div className={styles.leftText}>Name:</div>
+            <div className={styles.leftText}>Subtotal:</div>
             <div className={styles.rightText}>{payment.orderAmount}</div>
-            <div className={styles.leftText}>Email:</div>
+            <div className={styles.leftText}>Tip:</div>
             <div className={styles.rightText}>{payment.tip}</div>
-            <div className={styles.leftText}>Phone:</div>
+            <div className={styles.leftText}>Network Fee:</div>
             <div className={styles.rightText}>{payment.networkFee}</div>
-            <div className={styles.leftText}>Records:</div>
+            <div className={styles.leftText}>Service Fee:</div>
             <div className={styles.rightText}>{payment.serviceFee}</div>
-            <div className={styles.leftText}>LTV:</div>
+            <div className={styles.leftText}>Tax:</div>
             <div className={styles.rightText}>{payment.tax}</div>
         </div>
     );

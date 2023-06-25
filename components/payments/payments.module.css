@@ -144,3 +144,29 @@
     justify-self: end;
     margin-right: 12px;
 }
+
+.boxController {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    height: 46px;
+    order: 0;
+    flex-grow: 0;
+}
+
+.controller {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    padding: 0px;
+    order: 0;
+    flex-grow: 0;
+    width: 100%;
+    height: 46px;
+    border-radius: 8px;
+    background: var(--color-lavender)
+}

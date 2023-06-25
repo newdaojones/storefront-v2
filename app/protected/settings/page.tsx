@@ -1,3 +1,6 @@
+"use client"
+// This has buttons which will be taking clicks from users and doing state things with them
+
 // components/SettingsPage.tsx
 import SettlementAddress from '@/components/settings/address';
 import SettingsHeader from '@/components/settings/header';
@@ -17,6 +20,10 @@ export default function SettingsPage() {
                         <MerchantUsername />
                         <KYCStatus />
                         <AppVersion />
+                        <div className={styles.boxButton}>
+                            <button className={styles.button}>Cancel</button>
+                            <button className={styles.button}>Edit</button>
+                        </div>
                     </div>
                 </div>
             </div>
