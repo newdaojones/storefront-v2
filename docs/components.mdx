@@ -1,0 +1,34 @@
+---
+title: Card Flip Animation with Controller, Profile, and Main Components
+description: Documentation of the Controller, Profile, and Main components used for card flip animation.
+---
+
+import { InlineCode } from '@theme/Code';
+
+## Controller Component
+
+<InlineCode>Controller</InlineCode> component is responsible for displaying the buttons to rotate the card.
+
+- **Props**: It accepts a prop called `onButtonPress` which is a function that will be executed whenever a button is clicked. This function should accept a string representing the direction of the rotation ("up", "down", "left", "right").
+
+- **Render**: It renders four buttons, each one responsible for a different rotation.
+
+## Profile Component
+
+<InlineCode>Profile</InlineCode> component represents the content of the card that is to be rotated.
+
+- **Render**: It currently renders a simple message, but this can be replaced with whatever you want to display on the card.
+
+## Main Component
+
+<InlineCode>Main</InlineCode> component is the parent component that renders both the `Controller` and `Profile` components.
+
+- **State**: It holds the rotation state for the `Profile` component.
+
+- **Props**: It passes the `handleButtonPress` function to the `Controller`.
+
+- **Functionality**: When a button in the `Controller` is pressed, the `handleButtonPress` function is called, updating the rotation state. The updated rotation state is then used to transform the `Profile` component, causing it to rotate.
+
+The rotation effect is achieved using CSS transforms and animations. The degree of rotation is held in the state and updated whenever a button is pressed, causing the component to re-render with the new rotation.
+
+These components provide a simple, interactive user interface that allows users to rotate a card in different directions. They demonstrate key principles in React like state management, prop drilling, and lifting state up.
