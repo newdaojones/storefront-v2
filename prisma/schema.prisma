@@ -13,15 +13,41 @@ datasource db {
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
+// users will have a web3 wallet address
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+  id            Int    @id @default(autoincrement())
+  email         String @unique
+  passkey       String // this is still using a password even though it says passkey, i got tired of fighting prisma
+  role          String
+  walletAddress Bytes
+
+  kyc       Kyc[]
+  orders    Order[]
+  merchants Merchant[]
+}
+
+model Merchant {
+  id                Int     @id @default(autoincrement())
+  user              User    @relation(fields: [userId], references: [id])
+  userId            Int
+  settlementAddress Bytes
+  orders            Order[]
+}
+
+model Kyc {
+  id                Int    @id @default(autoincrement())
+  userId            Int
+  user              User   @relation(fields: [userId], references: [id])
+  kycType           String // Can be 'Individual' or 'Entity'
+  individualDetails KycI?
+  entityDetails     KycE?
 }
 
 // Models for the KYC forms of type Individual, Entity and Beneficial
-model Individual {
+model KycI {
   id              Int      @id @default(autoincrement())
+  kycId           Int      @unique
+  kyc             Kyc      @relation(fields: [kycId], references: [id])
   firstName       String
   lastName        String
   dateOfBirth     DateTime
@@ -37,37 +63,49 @@ model Individual {
   docsAttachments String?
 }
 
-model Entity {
-  id                    Int          @id @default(autoincrement())
+model KycE {
+  id                    Int     @id @default(autoincrement())
+  kycId                 Int     @unique
+  kyc                   Kyc     @relation(fields: [kycId], references: [id])
   entityName            String
   entityType            String
   entityTaxId           String
-  entityPhone           String       @db.VarChar(15)
-  entityEmail           String       @unique
+  entityPhone           String  @db.VarChar(15)
+  entityEmail           String  @unique
   entityAddress1        String
   entityAddress2        String?
-  entityZipCode         String       @db.VarChar(10)
+  entityZipCode         String  @db.VarChar(10)
   entityCity            String
   entityState           String
   entityCountry         String
   entityDocsAttachments String?
-  beneficials           Beneficial[]
+  beneficials           KycB[]
 }
 
-model Beneficial {
-  id                        Int     @id @default(autoincrement())
-  entityId                  Int
-  entity                    Entity  @relation(fields: [entityId], references: [id])
-  beneficialName            String
-  beneficialType            String
-  beneficialTaxId           String
-  beneficialPhone           String  @db.VarChar(15)
-  beneficialEmail           String  @unique
-  beneficialAddress1        String
-  beneficialAddress2        String?
-  beneficialZipCode         String  @db.VarChar(10)
-  beneficialCity            String
-  beneficialState           String
-  beneficialCountry         String
-  beneficialDocsAttachments String?
+model KycB {
+  id         Int     @id @default(autoincrement())
+  entityId   Int
+  entity     KycE    @relation(fields: [entityId], references: [id])
+  bName      String
+  bType      String
+  bTaxId     String
+  bPhone     String  @db.VarChar(15)
+  bEmail     String  @unique
+  bAddress1  String
+  bAddress2  String?
+  bZipCode   String  @db.VarChar(10)
+  bCity      String
+  bState     String
+  bCounty    String
+  bDocuments String?
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  merchantId   Int
+  merchant     Merchant @relation(fields: [merchantId], references: [id])
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  orderAmount  Float
+  orderDetails Json
 }

@@ -3,6 +3,7 @@ import PaymentsHeader from "@/components/payments/header";
 import PaymentList from "@/components/payments/list";
 import styles from '../../../components/payments/payments.module.css';
 
+
 export default function PaymentPage() {
     return (
         <div className={styles.container}>

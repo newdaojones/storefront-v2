@@ -3,13 +3,30 @@
 // DateRangePicker.tsx
 
 import { endOfDay, format, startOfMonth, startOfYear } from 'date-fns';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DateRange, DayPicker } from 'react-day-picker';
 import styles from './datepicker.module.css';
 
 export default function DateRangePicker() {
   const [range, setRange] = useState<DateRange | undefined>();
   const [activeButton, setActiveButton] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (range) {
+      // replace this temp route with the actual api route
+      fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(range),
+      })
+        .then(response => response.json())
+        .then(data => {
+          setData(data);
+        });
+    }
+  }, [range, setData]);
 
   let footer: React.ReactNode = <p>Please pick the first day.</p>;
   if (range?.from) {

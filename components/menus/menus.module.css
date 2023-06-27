@@ -1,0 +1,6 @@
+.topbar {
+    width: auto;
+    height: 72px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, rgba(126, 24, 255, 0.00) 18.75%, #8A4CF7 48.44%, #B4FFDB 100%);
+}

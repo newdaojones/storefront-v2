@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div
-      className="flex h-screen w-screen overflow-auto bg-no-repeat bg-center bg-fixed"
+      className="flex h-screen w-screen overflow-auto bg-no-repeat bg-center"
       style={{
         backgroundImage: "url('../public/bgr2.0.svg')",
         backgroundSize: 'cover',
