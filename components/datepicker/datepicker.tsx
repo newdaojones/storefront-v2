@@ -1,35 +1,18 @@
-"use client"
-
-// DateRangePicker.tsx
-
-import { endOfDay, format, startOfMonth, startOfYear } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import { addDays, endOfDay, format, startOfMonth, startOfYear } from 'date-fns';
+import React from 'react';
 import { DateRange, DayPicker } from 'react-day-picker';
 import styles from './datepicker.module.css';
 
-export default function DateRangePicker() {
-  const [range, setRange] = useState<DateRange | undefined>();
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+type DateRangePickerProps = {
+  range: DateRange,
+  setRange: (range: DateRange) => void
+};
 
-  useEffect(() => {
-    if (range) {
-      // replace this temp route with the actual api route
-      fetch('/api/data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(range),
-      })
-        .then(response => response.json())
-        .then(data => {
-          setData(data);
-        });
-    }
-  }, [range, setData]);
+export default function DateRangePicker({ range, setRange }: DateRangePickerProps) {
+  const [activeButton, setActiveButton] = React.useState<string | null>(null);
 
   let footer: React.ReactNode = <p>Please pick the first day.</p>;
-  if (range?.from) {
+  if (range.from) {
     if (!range.to) {
       footer = <p>{format(range.from, 'PPP')}</p>;
     } else if (range.to) {
@@ -44,6 +27,7 @@ export default function DateRangePicker() {
   const today = endOfDay(new Date());
   const monthToDate = { from: startOfMonth(new Date()), to: today };
   const yearToDate = { from: startOfYear(new Date()), to: today };
+  const pastWeek = { from: addDays(new Date(), -7), to: today };
 
   return (
     <div>
@@ -68,7 +52,7 @@ export default function DateRangePicker() {
       <button
         className={`${styles.button} ${activeButton === 'custom' ? styles.active : ''}`}
         onClick={() => {
-          setRange(undefined);
+          setRange(pastWeek);
           setActiveButton('custom');
         }}
       >
@@ -78,7 +62,11 @@ export default function DateRangePicker() {
       <DayPicker
         mode="range"
         selected={range}
-        onSelect={setRange}
+        onSelect={(selectedRange) => {
+          if (selectedRange) {
+            setRange(selectedRange);
+          }
+        }}
         footer={footer}
       />
     </div>

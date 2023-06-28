@@ -16,7 +16,9 @@ export default function SettingsPage() {
                 <SettingsHeader />
                 <div className={styles.body}>
                     <div className={styles.rowContainer}>
-                        <SettlementAddress />
+                        <SettlementAddress params={{
+                            settlementAddress: Buffer.from('0x000000', 'hex'),
+                        }} />
                         <MerchantUsername />
                         <KYCStatus />
                         <AppVersion />

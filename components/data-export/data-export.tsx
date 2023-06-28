@@ -1,5 +1,3 @@
-"use client"
-
 import { saveAs } from "file-saver";
 
 type DataItem = {
