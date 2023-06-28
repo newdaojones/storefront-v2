@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import styles from './Orbital.module.css';
+import styles from './orbital.module.css';
 
 export default function Orbital() {
     const [rotation, setRotation] = useState(0);
