@@ -1,4 +1,5 @@
-// Import React and styles
+
+// components/payments/details-customer.tsx
 import React from 'react';
 import styles from './payments.module.css';
 
@@ -7,8 +8,8 @@ export type CustDetails = {
   name: string;
   email: string;
   phone: string;
-  records: string;
-  ltv: string;
+  records: string; // number of records
+  ltv: string; // lifetime value of customer transactions
 };
 
 interface CustomerDetailsProps {

@@ -1,3 +1,5 @@
+
+//app/protected/payments/page.tsx
 import Controller from "@/components/payments/controller";
 import PaymentsHeader from "@/components/payments/header";
 import PaymentList from "@/components/payments/list";
