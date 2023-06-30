@@ -1,11 +1,13 @@
-"use client"
 
 // components/CustomerEmail.tsx
-import { useState } from 'react';
 import styles from './order.module.css';
 
-export default function CustomerEmail() {
-    const [email, setEmail] = useState('');
+type CustomerEmailProps = {
+    email: string;
+    setEmail: (email: string) => void;
+};
+
+export default function CustomerEmail({ email, setEmail }: CustomerEmailProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);

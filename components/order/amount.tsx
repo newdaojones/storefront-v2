@@ -1,11 +1,13 @@
-"use client"
 
 // components/OrderAmount.tsx
-import { useState } from 'react';
 import styles from './order.module.css';
 
-export default function OrderAmount() {
-    const [amount, setAmount] = useState('');
+type OrderAmountProps = {
+    amount: string;
+    setAmount: (amount: string) => void;
+};
+
+export default function OrderAmount({ amount, setAmount }: OrderAmountProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(e.target.value);

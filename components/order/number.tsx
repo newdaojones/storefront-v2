@@ -1,9 +1,12 @@
 // components/CustomerNumber.tsx
-import { useState } from 'react';
 import styles from './order.module.css';
 
-export default function CustomerNumber() {
-    const [phoneNumber, setPhoneNumber] = useState('');
+type CustomerNumberProps = {
+    phoneNumber: string;
+    setPhoneNumber: (phoneNumber: string) => void;
+};
+
+export default function CustomerNumber({ phoneNumber, setPhoneNumber }: CustomerNumberProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPhoneNumber(e.target.value);

@@ -138,3 +138,44 @@
     background: var(--color-notpurple);
     border-radius: 6px;
 }
+
+.cancelButton {
+    background-color: var(--color-notpurple);
+    border-color: var(--color-purps);
+    color: var(--color-charyo);
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+    background-color: var(--color-purps);
+    color: var(--color-notpurple);
+}
+
+.submitButton {
+    background-color: var(--color-notpurple);
+    border-color: var(--color-purps);
+    color: var(--color-charyo);
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+    background-color: var(--color-purps);
+    color: var(--color-notpurple);
+
+}
+
+.submitButtonDisabled {
+    background-color: var(--color-lamegray);
+    color: var(--color-lamegray);
+    opacity: 0.5;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: not-allowed;
+}
