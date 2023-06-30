@@ -18,7 +18,7 @@ model User {
   id            Int    @id @default(autoincrement())
   passkey       String // this is still using a password even though it says passkey, i got tired of fighting prisma
   email         String @unique
-  phone         String @unique //adjust to match phone number format of type +1 (555) 555-5555 by using a custom scalar which in prisma is a string so this  
+  phone         String @unique // adjust to match phone number format of type +1 (555) 555-5555 by using a custom scalar which in prisma is a string so this  
   role          String
   walletAddress Bytes
 
@@ -26,6 +26,13 @@ model User {
   orders    Order[]
   merchants Merchant[]
   Payment   Payment[]
+}
+
+enum Role {
+  GUEST
+  CUSTOMER
+  MERCHANT
+  OPERATOR
 }
 
 model Merchant {
@@ -37,70 +44,13 @@ model Merchant {
   Payment           Payment[]
 }
 
+// this data is going to come from the gateway service and provided by that service api
 model Kyc {
-  id                Int    @id @default(autoincrement())
-  userId            Int
-  user              User   @relation(fields: [userId], references: [id])
-  kycType           String // Can be 'Individual' or 'Entity'
-  individualDetails KycI?
-  entityDetails     KycE?
-}
-
-// Models for the KYC forms of type Individual, Entity and Beneficial
-model KycI {
-  id              Int      @id @default(autoincrement())
-  kycId           Int      @unique
-  kyc             Kyc      @relation(fields: [kycId], references: [id])
-  firstName       String
-  lastName        String
-  dateOfBirth     DateTime
-  ssnOrTaxId      String
-  phone           String   @db.VarChar(15)
-  email           String   @unique
-  address1        String
-  address2        String?
-  zipCode         String   @db.VarChar(10)
-  city            String
-  state           String
-  country         String
-  docsAttachments String?
-}
-
-model KycE {
-  id                    Int     @id @default(autoincrement())
-  kycId                 Int     @unique
-  kyc                   Kyc     @relation(fields: [kycId], references: [id])
-  entityName            String
-  entityType            String
-  entityTaxId           String
-  entityPhone           String  @db.VarChar(15)
-  entityEmail           String  @unique
-  entityAddress1        String
-  entityAddress2        String?
-  entityZipCode         String  @db.VarChar(10)
-  entityCity            String
-  entityState           String
-  entityCountry         String
-  entityDocsAttachments String?
-  beneficials           KycB[]
-}
-
-model KycB {
-  id         Int     @id @default(autoincrement())
-  entityId   Int
-  entity     KycE    @relation(fields: [entityId], references: [id])
-  bName      String
-  bType      String
-  bTaxId     String
-  bPhone     String  @db.VarChar(15)
-  bEmail     String  @unique
-  bAddress1  String
-  bAddress2  String?
-  bZipCode   String  @db.VarChar(10)
-  bCity      String
-  bState     String
-  bCounty    String
-  bDocuments String?
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  user      User   @relation(fields: [userId], references: [id])
+  kycStatus String // Can be 'Pending', 'Approved', 'Rejected'
+  kycType   String // Can be 'Individual' or 'Entity'
 }
 
 model Order {
@@ -115,7 +65,7 @@ model Order {
 
 model Payment {
   id            Int       @id @default(autoincrement())
-  txHash        String
+  txHash        String // this comes from the blockchain which is because of a gateway service transaction
   paymentAmount Float
   orderId       Int
   order         Order     @relation(fields: [orderId], references: [id])
@@ -144,7 +94,7 @@ model Gateway {
 }
 
 // CKO apis + Bridge apis will be used to create a payment 
-model gatewayDetails {
+model GatewayDetails {
   id        Int      @id @default(autoincrement())
   hasTx     String
   canTx     String
@@ -155,7 +105,7 @@ model gatewayDetails {
   updatedAt DateTime @updatedAt
 }
 
-model telemetry {
+model Telemetry {
   id             Int    @id @default(autoincrement())
   gatewayService String
   gatewayVersion String

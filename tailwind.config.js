@@ -25,7 +25,11 @@ module.exports = {
         '1/2': '50%'
       }
     },
-    variants: {},
+    variants: {
+      extend: {
+        visibility: ['hover', 'focus'],
+      },
+    },
     plugins: [],
   },
 };
