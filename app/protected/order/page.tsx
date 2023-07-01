@@ -9,16 +9,16 @@ import { useState } from 'react';
 import styles from '../../../components/order/order.module.css';
 
 export default function CreateOrder() {
-    const [order, setOrder] = useState({ amount: '', email: '', phoneNumber: '' });
+    const [order, setOrder] = useState({ orderAmount: '', guestEmail: '', guestPhone: '' });
 
     const isOrderValid = () => {
-        return order.amount !== '' && order.email !== '' && order.phoneNumber !== '';
+        return order.orderAmount !== '' && order.guestEmail !== '' && order.guestPhone !== '';
     };
 
     const handleSubmit = async () => {
         if (!isOrderValid()) return;
 
-        const response = await fetch('/api/orders', {
+        const response = await fetch('/api/order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(order),
@@ -29,11 +29,11 @@ export default function CreateOrder() {
             console.log(data);
         }
 
-        setOrder({ amount: '', email: '', phoneNumber: '' });
+        setOrder({ orderAmount: '', guestEmail: '', guestPhone: '' });
     };
 
     const handleCancel = () => {
-        setOrder({ amount: '', email: '', phoneNumber: '' });
+        setOrder({ orderAmount: '', guestEmail: '', guestPhone: '' });
     };
 
     return (
@@ -42,9 +42,9 @@ export default function CreateOrder() {
                 <OrderHeader />
                 <div className={styles.body}>
                     <div className={styles.rowContainer}>
-                        <OrderAmount amount={order.amount} setAmount={(amount) => setOrder({ ...order, amount })} />
-                        <CustomerNumber phoneNumber={order.phoneNumber} setPhoneNumber={(phoneNumber) => setOrder({ ...order, phoneNumber })} />
-                        <CustomerEmail email={order.email} setEmail={(email) => setOrder({ ...order, email })} />
+                        <OrderAmount amount={order.orderAmount} setAmount={(amount) => setOrder({ ...order, orderAmount: amount })} />
+                        <CustomerNumber phoneNumber={order.guestPhone} setPhoneNumber={(phoneNumber) => setOrder({ ...order, guestPhone: phoneNumber })} />
+                        <CustomerEmail email={order.guestEmail} setEmail={(email) => setOrder({ ...order, guestEmail: email })} />
                     </div>
                     <Buttons onSubmit={handleSubmit} onCancel={handleCancel} isOrderValid={isOrderValid()} />
                 </div>

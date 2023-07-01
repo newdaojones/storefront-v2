@@ -20,5 +20,15 @@ export default async function middleware(req: NextRequest) {
   } else if (session && (path === "/login" || path === "/register")) {
     return NextResponse.redirect(new URL("/protected", req.url));
   }
+
+  // New: Check if the user has the necessary role to access the endpoint
+  if (session && path === "/createOrder" && session.role !== "MERCHANT") {
+    // The user is authenticated, but does not have the necessary role
+    return NextResponse.json(
+      { error: "Unauthorized", message: "You do not have the necessary role to access this endpoint" },
+      { status: 401 }
+    );
+  }
+
   return NextResponse.next();
 }
