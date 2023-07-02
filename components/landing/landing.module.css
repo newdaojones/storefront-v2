@@ -10,21 +10,32 @@
 }
 
 .innerContainer {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    /* Adjust for larger screens */
+    @media (min-width: 768px) {
+        width: 100vw;
+        height: 100vh;
+    }
 }
 
 .title {
     text-align: center;
-    max-width: calc(100vw - 1rem);
+    max-width: calc(100% - 1rem);
     margin-bottom: 1rem;
     color: var(--color-notpurple);
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.5rem;
+
+    /* Adjust for larger screens */
+    @media (min-width: 768px) {
+        font-size: 2rem;
+    }
 }
 
 .description {
@@ -37,9 +48,15 @@
     gap: 1rem;
     color: var(--color-notpurple);
     text-decoration: underline;
+    flex-direction: column;
 
     /* Add a transition effect */
     transition: color 0.3s ease;
+
+    /* Adjust for larger screens */
+    @media (min-width: 768px) {
+        flex-direction: row;
+    }
 }
 
 .links:hover {
@@ -54,7 +71,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 20vw;
+    width: 80vw;
     height: 60vh;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -67,6 +84,12 @@
     padding: 20px;
     box-sizing: border-box;
     cursor: move;
+
+    /* Adjust for larger screens */
+    @media (min-width: 768px) {
+        width: 20vw;
+        height: 60vh;
+    }
 }
 
 .chatInput {
@@ -83,7 +106,7 @@
     background: rgba(255, 255, 255, 0);
     border: none;
     padding: 10px;
-    color: white;
+    color: var(--color-notpurple);
     /* Electric yellow caret color */
 }
 
