@@ -8,6 +8,14 @@ export default function Agent() {
     const [activeDrags, setActiveDrags] = useState(0);
     const chatModalRef = useRef<HTMLDivElement>(null);
 
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (chatOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [chatOpen]);
+
     const handleChatOpen = () => {
         if (window.navigator && window.navigator.vibrate) {
             window.navigator.vibrate(100);
@@ -51,7 +59,7 @@ export default function Agent() {
                     <div ref={chatModalRef} className={styles.chatModal}>
                         <button onClick={handleChatClose}>Close chat</button>
                         <div className={styles.chatInput}>
-                            <input type="text" placeholder="Start typing..." />
+                            <input ref={inputRef} type="text" placeholder="Start typing..." />
                         </div>
                     </div>
                 </Draggable>
