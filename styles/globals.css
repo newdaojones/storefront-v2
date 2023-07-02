@@ -18,7 +18,6 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-image: url('../public/bgr2.0.svg');
     background-size: cover;
 }
 
@@ -31,6 +30,5 @@ body::before {
     height: 100vh;
     width: 100vw;
     z-index: -1;
-    background: url('/public/bgr2.0.svg') no-repeat center center fixed;
     background-size: cover;
 }

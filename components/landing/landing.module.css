@@ -1,0 +1,95 @@
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background: url('../../public/organic-sf.png');
+    background-size: cover;
+}
+
+.innerContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    text-align: center;
+    max-width: calc(100vw - 1rem);
+    margin-bottom: 1rem;
+    color: var(--color-notpurple);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.description {
+    color: var(--color-notpurple);
+    margin-top: 1rem;
+}
+
+.links {
+    display: flex;
+    gap: 1rem;
+    color: var(--color-notpurple);
+    text-decoration: underline;
+
+    /* Add a transition effect */
+    transition: color 0.3s ease;
+}
+
+.links:hover {
+    color: var(--color-notpurple);
+}
+
+.seperator {
+    color: var(--color-notpurple);
+}
+
+.chatModal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20vw;
+    height: 60vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid #ff00cc;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    cursor: move;
+}
+
+.chatInput {
+    width: 100%;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.0);
+    backdrop-filter: blur(10px);
+    caret-color: #ffea00;
+    /* frosted glass effect */
+}
+
+.chatInput input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0);
+    border: none;
+    padding: 10px;
+    color: white;
+    /* Electric yellow caret color */
+}
+
+.chatInput input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-notpurple);
+    border-radius: 2px;
+    /* Replace 'pink' with the color of your choice. */
+}
