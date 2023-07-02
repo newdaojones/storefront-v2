@@ -1,13 +1,17 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styles from './landing.module.css';
 
 export default function Agent() {
     const [chatOpen, setChatOpen] = useState(false);
     const [activeDrags, setActiveDrags] = useState(0);
+    const chatModalRef = useRef<HTMLDivElement>(null);
 
     const handleChatOpen = () => {
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(100);
+        }
         setChatOpen(true);
     };
 
@@ -23,6 +27,19 @@ export default function Agent() {
         setActiveDrags(activeDrags - 1);
     };
 
+    const handleClickOutside = (event: { target: any; }) => {
+        if (chatModalRef.current && !chatModalRef.current.contains(event.target)) {
+            handleChatClose();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    });
+
     return (
         <>
             <button onClick={handleChatOpen} className={styles.links}>
@@ -31,7 +48,7 @@ export default function Agent() {
 
             {chatOpen && (
                 <Draggable onStart={onStart} onStop={onStop}>
-                    <div className={styles.chatModal}>
+                    <div ref={chatModalRef} className={styles.chatModal}>
                         <button onClick={handleChatClose}>Close chat</button>
                         <div className={styles.chatInput}>
                             <input type="text" placeholder="Start typing..." />
