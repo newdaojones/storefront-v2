@@ -3,8 +3,8 @@
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import DataExport from '../data-export/data-export';
-import DateRangePicker from '../datepicker/datepicker';
+import DataExport from './data-export';
+import DateRangePicker from './datepicker';
 
 type DataItem = {
     property1: string;
