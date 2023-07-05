@@ -1,7 +1,7 @@
-import Agent from "@/components/landing/agent";
-import Begin from "@/components/landing/begin";
-import Constitution from "@/components/landing/constitution";
-import styles from '../components/landing/landing.module.css';
+import Agent from "@/components/home/agent";
+import Begin from "@/components/home/begin";
+import Constitution from "@/components/home/constitution";
+import styles from '../components/home/home.module.css';
 
 export default function Home() {
   return (

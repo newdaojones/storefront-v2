@@ -5,6 +5,9 @@ import { compare } from "bcrypt";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// Wallectonnect and SIWE will use this route to authenticate users
+// Drop email and phone from the user object
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
-import styles from './landing.module.css';
+import styles from './home.module.css';
 
 export default function Agent() {
     const [chatOpen, setChatOpen] = useState(false);
