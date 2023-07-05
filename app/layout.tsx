@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import Providers from "./_providers/root";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -39,7 +40,7 @@ export default async function RootLayout({
         <Suspense fallback="Loading...">
           <AuthStatus />
         </Suspense>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

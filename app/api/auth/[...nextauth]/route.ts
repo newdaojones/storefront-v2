@@ -1,9 +1,9 @@
 
 // [...nextauth]/route.ts
-import prisma from "@/lib/prisma";
-import { compare } from "bcrypt";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { getCsrfToken } from "next-auth/react";
+import { SiweMessage } from "siwe";
 
 // Wallectonnect and SIWE will use this route to authenticate users
 // Drop email and phone from the user object
@@ -11,51 +11,58 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
+      id: "web3-fuck",
+      name: "web3- balls",
       credentials: {
-        email: { label: "Email", type: "email" },
-        publicKey: { label: "PublicKey", type: "publicKey" }
+        message: { label: "Message", type: "text" },
+        signedMessage: { label: "Signed Message", type: "text" }, // aka signature
       },
-      async authorize(credentials) {
-        const { email, publicKey } = credentials as { email: string, publicKey: string };
-
-        if (!email || !publicKey) {
-          throw new Error("Missing username or publicKey");
+      async authorize(credentials, req) {
+        if (!credentials?.signedMessage || !credentials?.message) {
+          return null;
         }
-        const user = await prisma.user.findUnique({
-          where: {
-            email,
-          },
-        });
+        try {
+          const siwe = new SiweMessage(JSON.parse(credentials?.message));
+          const result = await siwe.verify({
+            signature: credentials.signedMessage,
+            nonce: await getCsrfToken({ req }),
+          });
 
-        if (!user || !(await compare(publicKey, user.publicKey))) {
-          throw new Error("Invalid username or publicKey");
+          if (!result.success) throw new Error("Invalid Signature");
+
+          if (result.data.statement !== process.env.NEXT_PUBLIC_SIGNIN_MESSAGE)
+            throw new Error("Statement Mismatch");
+
+          console.log("Returning")
+          return {
+            id: siwe.address,
+          };
+        } catch (error) {
+          console.log(error);
+          return null;
         }
-        return { ...user, id: user.id.toString(), role: user.role };
       },
     }),
   ],
+
+  session: { strategy: "jwt" },
+  debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        token.sub = user.id;
       }
-      console.log(token);
       return token;
     },
-
-    async session({ session, token }) {
-      if (typeof token.userId === 'string') {
-        session.userId = token.userId;
-      }
-      if (typeof token.role === 'string') {
-        session.role = token.role;
-      }
-
-      console.log(session);
+    async session({ session, token }: { session: any; token: any }) {
+      session.user.address = token.sub;
+      session.user.token = token;
       return session;
     },
   },
+
 };
 
 const handler = NextAuth(authOptions);
