@@ -2,7 +2,6 @@ import Agent from "@/components/home/agent";
 import Begin from "@/components/home/begin";
 import Constitution from "@/components/home/constitution";
 import Siwe from "@/components/home/siwe";
-import W3Button from "@/components/home/web3button";
 import styles from '../components/home/home.module.css';
 
 export default function Home() {
@@ -16,7 +15,6 @@ export default function Home() {
           </p>
         </div>
         <div>
-          <W3Button />
           <Siwe />
           <Begin />
           <p className={styles.seperator}>·</p>

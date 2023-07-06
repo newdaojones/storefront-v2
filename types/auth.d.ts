@@ -1,15 +1,21 @@
 // types/next-auth.d.ts
 
 import 'next-auth'
+import { JWT } from 'next-auth/jwt'
 
 declare module 'next-auth' {
     interface Session {
-        role?: string
-        userId?: string
+        address?: string
+        user: AuthenticatedUser
+
     }
 
     interface User {
-        role?: string
-        id?: string
+        id: string
+        wallet?: string
+    }
+
+    interface AuthenticatedUser extends User {
+        token: JWT
     }
 }

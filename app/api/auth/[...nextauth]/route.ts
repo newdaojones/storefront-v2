@@ -11,8 +11,8 @@ import { SiweMessage } from "siwe";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "web3-fuck",
-      name: "web3- balls",
+      id: "web3",
+      name: "Sign In With Ethereum",
       credentials: {
         message: { label: "Message", type: "text" },
         signedMessage: { label: "Signed Message", type: "text" }, // aka signature
@@ -56,9 +56,12 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      session.user.address = token.sub;
-      session.user.token = token;
+    async session({ session, token }) {
+      session.address = token.sub;
+      session.user = {
+        ...(session.user || {}),
+        token: token,
+      };
       return session;
     },
   },
