@@ -15,31 +15,25 @@ export const authOptions: NextAuthOptions = {
       name: "Sign In With Ethereum",
       credentials: {
         message: { label: "Message", type: "text" },
-        signedMessage: { label: "Signed Message", type: "text" }, // aka signature
+        signature: { label: "Signed Message", type: "text" }, // aka signature
       },
       async authorize(credentials, req) {
-        if (!credentials?.signedMessage || !credentials?.message) {
-          return null;
-        }
         try {
-          const siwe = new SiweMessage(JSON.parse(credentials?.message));
+          const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
+
           const result = await siwe.verify({
-            signature: credentials.signedMessage,
+            signature: credentials?.signature || "",
             nonce: await getCsrfToken({ req }),
-          });
+          })
 
-          if (!result.success) throw new Error("Invalid Signature");
-
-          if (result.data.statement !== process.env.NEXT_PUBLIC_SIGNIN_MESSAGE)
-            throw new Error("Statement Mismatch");
-
-          console.log("Returning")
-          return {
-            id: siwe.address,
-          };
-        } catch (error) {
-          console.log(error);
-          return null;
+          if (result.success) {
+            return {
+              id: siwe.address,
+            }
+          }
+          return null
+        } catch (e) {
+          return null
         }
       },
     }),

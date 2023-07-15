@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import AuthContext from './auth-context'
-import WagmiProvider from './wagmi'
+import { WalletConnectProvider } from './walletconnect'
 
 type ProviderType = {
     children: React.ReactNode
@@ -9,9 +9,9 @@ type ProviderType = {
 
 const Providers = ({ children }: ProviderType) => {
     return (
-        <WagmiProvider>
+        <WalletConnectProvider>
             <AuthContext>{children}</AuthContext>
-        </WagmiProvider>
+        </WalletConnectProvider>
     )
 }
 
