@@ -1,8 +1,7 @@
 "use client"
 
-import React from "react";
-import { Login } from "./login";
 import { useWalletConnectClient } from "@/app/_providers/walletconnect";
+import { Login } from "./login";
 
 
 const Siwe = () => {
@@ -14,12 +13,12 @@ const Siwe = () => {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center">
-            <SwieContext />
+            <SiweContext />
         </main>
     );
 };
 
-const SwieContext = () => {
+const SiweContext = () => {
     const { isInitializing, isLoggedIn, disconnect, isLoading } = useWalletConnectClient()
     if (isInitializing) {
         return (<p className="text-xl font-semibold text-gray-400">

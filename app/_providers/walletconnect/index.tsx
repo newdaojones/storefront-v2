@@ -1,13 +1,15 @@
-import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+"use client"
+
+import * as encoding from '@walletconnect/encoding';
 import Client from '@walletconnect/sign-client';
 import { PairingTypes, SessionTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
-import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
+import { signIn } from "next-auth/react";
+import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
+import { SiweMessage, generateNonce } from "siwe";
+import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
-import { SiweMessage } from "siwe";
-import { getCsrfToken, signIn } from "next-auth/react";
-import * as encoding from '@walletconnect/encoding';
 const SIGNATURE_PREFIX = 'NDJ_SIGNATURE_V2_';
 
 interface IContext {
@@ -160,7 +162,8 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         signature = JSON.parse(data)?.signature
         issuedAt = JSON.parse(data)?.issuedAt
       }
-      const nonce = await getCsrfToken();
+      // const nonce = await getCsrfToken();
+      const nonce = generateNonce();
 
       const siweMessage = new SiweMessage({
         domain: window.location.host,

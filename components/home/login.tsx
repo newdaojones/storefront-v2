@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import QRCodeStyling from 'qr-code-styling';
-import logoIcon from '../../public/logo.svg';
-import Image from 'next/image';
 import { useWalletConnectClient } from '@/app/_providers/walletconnect';
+import Image from 'next/image';
+import QRCodeStyling from 'qr-code-styling';
+import { useEffect } from 'react';
+import logoIcon from '../../public/logo.svg';
 
 export const Login = () => {
   const { qrCodeUri, connect, initialized } = useWalletConnectClient();
