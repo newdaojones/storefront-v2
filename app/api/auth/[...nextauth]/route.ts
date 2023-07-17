@@ -1,12 +1,11 @@
-
 // [...nextauth]/route.ts
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextURL } from "next/dist/server/web/next-url";
+import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
 
 // Wallectonnect and SIWE will use this route to authenticate users
-
+// Drop email and phone from the user object
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -19,23 +18,22 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"));
-          const nextAuthUrl = new NextURL(process.env.NEXTAUTH_URL || "");
+          const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
 
           const result = await siwe.verify({
             signature: credentials?.signature || "",
-            domain: nextAuthUrl.hostname,
-            nonce: siwe.nonce,
-          });
+            nonce: await getCsrfToken({ req }),
+          })
+          console.log("Did it work", siwe.address)
 
           if (result.success) {
             return {
               id: siwe.address,
-            };
+            }
           }
-          return null;
-        } catch (error) {
-          return null;
+          return null
+        } catch (e) {
+          return null
         }
       },
     }),
