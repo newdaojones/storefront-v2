@@ -1,0 +1,75 @@
+---
+title: 'Authentication Documentation'
+---
+
+import { CodeBlock } from '@theme/CodeBlock';
+
+# Authentication Documentation
+
+This document provides a detailed explanation of our authentication setup in the project. 
+
+## Server Side
+
+On the server-side, we use the NextAuth.js library for handling authentication. The configuration file can be found in [`...nextauth]/route.ts`](../path/to/your/route.ts).
+
+### Providers
+
+For the authentication provider, we are using the `CredentialsProvider` from NextAuth. This provider allows users to sign in using their Ethereum wallet, i.e., Web3 authentication.
+
+<CodeBlock>
+{`CredentialsProvider({
+  id: "web3",
+  name: "Sign In With Ethereum",
+  credentials: {
+    message: { label: "Message", type: "text" },
+    signature: { label: "Signed Message", type: "text" }, // aka signature
+  },
+  async authorize(credentials, req) {
+    // ...authorization logic
+  },
+})`}
+</CodeBlock>
+
+### User and Session Handling
+
+The `authorize` function is responsible for user authentication and creating new users if needed. In this function, the Ethereum message and signature are first verified using the `siwe` library. 
+
+If verification is successful, the function checks whether a user with the given Ethereum address already exists in the database using Prisma. If the user does not exist, a new user entry is created. 
+
+The JWT callback takes the user data and assigns the user's id to the `sub` property. 
+
+The session callback then takes the token and assigns the user's id, role, merchant, operator, and token to the session user. 
+
+<CodeBlock>
+{`jwt({ token, user }) {
+  // ...jwt logic
+},
+
+session({ session, token, user }) {
+  // ...session logic
+},`}
+</CodeBlock>
+
+### Authentication types
+
+The auth types are defined in [`types/auth.d.ts`](types/auth.d.ts), where we have interfaces for `Session`, `User`, `AuthenticatedUser`, `Merchant`, and `Operator`.
+
+## Client Side
+
+The user-facing part of the authentication process is handled in [`_providers/walletconnect`](app/_providers/walletconnect/*).
+
+### Login Component
+
+`Login` component handles the login UI and the interactions with the WalletConnect client, which is initialized in the `WalletConnectProvider`. 
+
+### WalletConnect Provider
+
+The WalletConnectProvider uses the WalletConnect `Client` and provides its state and methods through a context to the `Login` component.
+
+## QR Code Authentication
+
+For the actual sign-in process with WalletConnect, we have another client-side file [`Sign In With Ethereum`](app/components/home/siwe.tsx).
+
+The WalletConnectProvider exports a context that provides methods for connecting and disconnecting WalletConnect sessions, state variables for the current state of the WalletConnect client and session, and some other utility states and functions.
+
+The QR code for the WalletConnect pairing proposal is generated during the `connect` method of the WalletConnectProvider. The `uri` for the QR code is one of the return values of the `client.connect` method from WalletConnect client.
