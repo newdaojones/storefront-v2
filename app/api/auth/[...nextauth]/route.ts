@@ -1,4 +1,5 @@
 // [...nextauth]/route.ts
+import prisma from "@/lib/prisma";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
@@ -27,12 +28,46 @@ export const authOptions: NextAuthOptions = {
           console.log("Did it work", siwe.address)
 
           if (result.success) {
+            const user = await prisma.user.findUnique({
+              where: { walletAddress: siwe.address },
+              include: {
+                merchant: true,
+                operator: true,
+              },
+            })
+
+            if (!user) {
+              const newUser = await prisma.user.create({
+                data: {
+                  walletAddress: siwe.address,
+                  role: "GUEST",
+                },
+                include: {
+                  merchant: true,
+                  operator: true,
+                },
+              })
+              return {
+                id: newUser.id,
+                wallet: newUser.walletAddress,
+                role: newUser.role,
+                merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
+                operator: newUser.operator ? { id: newUser.operator.id } : null,
+              }
+            }
+
             return {
-              id: siwe.address,
+              id: user.id,
+              wallet: user.walletAddress,
+              role: user.role,
+              merchant: user.merchant,
+              operator: user.operator,
             }
           }
+
           return null
         } catch (e) {
+          console.error(e)
           return null
         }
       },
@@ -46,18 +81,25 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.sub = user.id;
+        token.sub = user.id.toString();
       }
       return token;
     },
-    async session({ session, token }) {
-      session.address = token.sub;
+    async session({ session, token, user }) {
+      if (token.sub === undefined) {
+        throw new Error("token.sub is undefined");
+      }
       session.user = {
         ...(session.user || {}),
+        id: parseInt(token.sub),
+        role: user ? user.role : null, // <-- Add a check for undefined here
+        merchant: user ? user.merchant : null, // <-- And here
+        operator: user ? user.operator : null, // <-- And here
         token: token,
-      };
+      }
       return session;
     },
+
   },
 
 };

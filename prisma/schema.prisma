@@ -14,17 +14,20 @@ datasource db {
 
 // users will have a web3 wallet address
 model User {
-  id        Int       @id @default(autoincrement())
-  publicKey String
-  email     String    @unique
-  phone     String    @unique
-  role      Role      @default(CUSTOMER) // Default role set to GUEST
-  Kyc       Kyc[]
-  Order     Order[]
-  Payment   Payment[]
-  Customer  Customer?
-  Merchant  Merchant?
-  Operator  Operator?
+  id                  Int        @id @default(autoincrement())
+  email               String?    @unique
+  phone               String?
+  role                Role       @default(GUEST)
+  order               Order[]
+  payment             Payment[]
+  walletAddress       String?    @unique
+  customer            Customer?
+  merchant            Merchant?
+  operator            Operator?
+  kycStatus           KycStatus  @default(NONE)
+  ownershipPercentage Decimal?
+  merchantId          Int? // Merchant this user is associated with (for ownership)
+  merchants           Merchant[] @relation("MerchantBeneficialOwners")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,49 +40,43 @@ enum Role {
   OPERATOR
 }
 
-model Guest {
-  id      Int       @id @default(autoincrement())
-  email   String    @unique
-  phone   String    @unique
-  Order   Order[]
-  Payment Payment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum KycStatus {
+  NONE
+  PENDING
+  VERIFIED
+  FAILED
 }
 
 model Customer {
-  id            Int       @id @default(autoincrement())
-  userId        Int       @unique
-  user          User      @relation(fields: [userId], references: [id])
-  publicKey     String // Required for Customers
-  walletAddress Bytes // Required for Customers
-  Order         Order[]
-  Payment       Payment[]
+  id      Int       @id @default(autoincrement())
+  userId  Int       @unique
+  user    User      @relation(fields: [userId], references: [id])
+  order   Order[]
+  payment Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Merchant {
-  id                Int       @id @default(autoincrement())
-  userId            Int       @unique
-  user              User      @relation(fields: [userId], references: [id])
-  publicKey         String // Required for Merchants
-  settlementAddress Bytes // Required for Merchants
-  Order             Order[]
-  Payment           Payment[]
+  id               Int        @id @default(autoincrement())
+  userId           Int        @unique
+  user             User       @relation(fields: [userId], references: [id])
+  order            Order[]
+  payment          Payment[]
+  beneficialOwners User[]     @relation("MerchantBeneficialOwners")
+  operators        Operator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Operator {
-  id            Int    @id @default(autoincrement())
-  userId        Int    @unique
-  user          User   @relation(fields: [userId], references: [id])
-  publicKey     String // Required for Operators
-  walletAddress Bytes // Required for Customers
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  user       User     @relation(fields: [userId], references: [id])
+  merchantId Int
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,9 +89,7 @@ model Order {
   user        User       @relation(fields: [userId], references: [id])
   merchantId  Int
   merchant    Merchant   @relation(fields: [merchantId], references: [id])
-  Payment     Payment[]
-  guestId     Int
-  guest       Guest      @relation(fields: [guestId], references: [id])
+  payment     Payment[]
   customer    Customer[]
 
   createdAt DateTime @default(now())
@@ -117,27 +112,17 @@ model Payment {
   merchantId    Int?
   gatewayId     Int
   gateway       Gateway    @relation(fields: [gatewayId], references: [id])
-  guestId       Int
-  guest         Guest      @relation(fields: [guestId], references: [id])
   customer      Customer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Kyc {
-  id        Int    @id @default(autoincrement())
-  userId    Int
-  user      User   @relation(fields: [userId], references: [id])
-  kycStatus String // Can be 'Pending', 'Approved', 'Rejected'
-  kycType   String // Can be 'Individual' or 'Entity'
-}
-
 model Gateway {
   id      Int       @id @default(autoincrement())
   name    String
   version String
-  Payment Payment[]
+  payment Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
