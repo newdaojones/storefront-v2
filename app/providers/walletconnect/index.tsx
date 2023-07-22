@@ -4,10 +4,10 @@ import * as encoding from '@walletconnect/encoding';
 import Client from '@walletconnect/sign-client';
 import { PairingTypes, SessionTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
-import { SiweMessage } from "siwe";
+import { SiweMessage, generateNonce } from "siwe";
 import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
 
@@ -164,7 +164,8 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         issuedAt = JSON.parse(data)?.issuedAt
       }
 
-      const nonce = await getCsrfToken();
+      //const nonce = await getCsrfToken();
+      const nonce = generateNonce();
 
       const siweMessage = new SiweMessage({
         domain: window.location.host,
@@ -201,6 +202,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       const res = await signIn("credentials", {
         message: JSON.stringify(siweMessage),
         signature,
+        nonce, // attempt to swap out csrf
         redirect: false,
       });
 
