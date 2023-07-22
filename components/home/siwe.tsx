@@ -1,6 +1,6 @@
 "use client"
 
-import { useWalletConnectClient } from "@/app/_providers/walletconnect";
+import { useWalletConnectClient } from "@/app/providers/walletconnect";
 import { Login } from "./login";
 
 

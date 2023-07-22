@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { SiweMessage } from "siwe";
 import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
+
 const SIGNATURE_PREFIX = 'NDJ_SIGNATURE_V2_';
 
 interface IContext {
@@ -162,6 +163,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         signature = JSON.parse(data)?.signature
         issuedAt = JSON.parse(data)?.issuedAt
       }
+
       const nonce = await getCsrfToken();
 
       const siweMessage = new SiweMessage({
@@ -196,7 +198,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         }));
       }
 
-      const res = await signIn("web3", {
+      const res = await signIn("credentials", {
         message: JSON.stringify(siweMessage),
         signature,
         redirect: false,
