@@ -164,7 +164,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         issuedAt = JSON.parse(data)?.issuedAt
       }
 
-      //const nonce = await getCsrfToken();
       const nonce = generateNonce();
 
       const siweMessage = new SiweMessage({
@@ -202,7 +201,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       const res = await signIn("credentials", {
         message: JSON.stringify(siweMessage),
         signature,
-        nonce, // attempt to swap out csrf
+        nonce,
         redirect: false,
       });
 

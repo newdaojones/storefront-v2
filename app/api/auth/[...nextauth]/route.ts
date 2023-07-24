@@ -3,24 +3,15 @@ import prisma from "@/lib/prisma";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { SiweMessage } from "siwe";
-
-// Wallectonnect and SIWE will use this route to authenticate users
-// Drop email and phone from the user object
-
-type Credentials = {
-  message: string,
-  signature: string,
-  nonce: string,
-}
+import { Credentials } from "types/auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      // id: "web3", // <- I'm not sure if this is needed?
       name: "Sign In With Ethereum",
       credentials: {
         message: { label: "Message", type: "text" },
-        signature: { label: "Signed Message", type: "text" }, // aka signature
+        signature: { label: "Signed Message", type: "text" },
         nonce: { label: "Nonce", type: "text" },
       },
       async authorize(credentials: Credentials | undefined, req) {
@@ -31,8 +22,6 @@ export const authOptions: NextAuthOptions = {
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             nonce: credentials?.nonce,
-            //nonce: await getCsrfToken({ req }),
-            //nonce: generateNonce(),
           })
           console.log("siwe.nonce:", siwe.nonce);
 
@@ -68,6 +57,7 @@ export const authOptions: NextAuthOptions = {
               walletAddress: newUser.walletAddress,
               merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
               operator: newUser.operator ? { id: newUser.operator.id } : null,
+              isNewUser: true,
             }
           }
 
@@ -77,6 +67,7 @@ export const authOptions: NextAuthOptions = {
             walletAddress: user.walletAddress,
             merchant: user.merchant ? { id: user.merchant.id } : null,
             operator: user.operator ? { id: user.operator.id } : null,
+            isNewUser: false,
           }
         } catch (e) {
           console.error(e)
@@ -96,21 +87,36 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user }) {
       console.log("jwt token before", token);
       console.log("jwt user", user);
 
       if (user) {
+        const { walletAddress, isNewUser, role } = user as any;
+
         try {
-          const { walletAddress } = user as any;
           if (walletAddress) {
             token.walletAddress = walletAddress;
             console.log(`Assigned user.walletAddress to token.walletAddress: ${token.walletAddress}`);
           } else {
             console.error('user.walletAddress is undefined');
           }
+
+          if (role) {
+            token.role = role;
+            console.log(`Assigned user.role to token.role: ${token.role}`);
+          } else {
+            console.error('user.role is undefined');
+          }
         } catch (error) {
-          console.error('Failed to set token.walletAddress:', error);
+          console.error('Failed to set token.walletAddress or token.role:', error);
+        }
+
+        if (isNewUser !== undefined) {
+          token.isNewUser = isNewUser;
+          console.log(`Assigned user.isNewUser to token.isNewUser: ${token.isNewUser}`);
+        } else {
+          console.error('user.isNewUser is undefined');
         }
       }
 
@@ -120,9 +126,6 @@ export const authOptions: NextAuthOptions = {
 
 
     async session({ session, token }: { session: any, token: any }) {
-      console.log("SESSION before", session)
-      console.log("TOKEN before", token)
-
       if (token.walletAddress === undefined) {
         throw new Error("token.walletAddress is undefined");
       }
@@ -130,9 +133,11 @@ export const authOptions: NextAuthOptions = {
       session.user = session.user || {};
       session.user.name = token.walletAddress;
       session.user.image = "https://www.fillmurray.com/128/128";
+      session.user.role = token.role || "GUEST";  // Default to "GUEST" if role is not defined
 
       // Initialize address
       session.address = token.walletAddress;
+      session.isNewUser = token.isNewUser;
 
       console.log("SESSION after", session)
       console.log("TOKEN after", token)
@@ -140,8 +145,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-
-
 };
 
 const handler = NextAuth(authOptions);

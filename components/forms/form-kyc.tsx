@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import SignOut from "../auth/sign-out";
 import BeneficialForm, { KycBeneficial } from "./form-beneficial";
 
 type KycIndividual = {
@@ -212,6 +213,7 @@ export default function KycForms({ type }: { type: FormType }) {
                     {isKycEntity(formData) && <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="button" onClick={addBeneficialOwner}>Add Beneficial Owner</button>}
                     <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Submit</button>
                 </form>
+                <SignOut />
             </div>
         </div>
     );

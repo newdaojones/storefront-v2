@@ -18,7 +18,7 @@ export default function CreateOrder() {
     const handleSubmit = async () => {
         if (!isOrderValid()) return;
 
-        const response = await fetch('/api/order', {
+        const response = await fetch('https://test.checkout.mybackpack.app/api/partners/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(order),
