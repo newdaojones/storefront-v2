@@ -1,7 +1,7 @@
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
 
 // Define the POST handler for creating an Order
 export async function POST(req: NextRequest) {

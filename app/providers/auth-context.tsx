@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useWalletConnectClient } from "./walletconnect";
 
@@ -35,7 +35,7 @@ export default function AuthContext({ children }: AuthContextProps) {
 
         if (pathname === '/') {
             if (session.isNewUser || !session.user || session.user.role === "GUEST") {
-                router.push('/onboard')
+                router.push('/protected/onboard')
             } else if (['MERCHANT', 'OPERATOR'].includes(session.user?.role || '')) {
                 router.push('/protected/payments')
             }
