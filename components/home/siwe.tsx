@@ -5,12 +5,6 @@ import { Login } from "./login";
 
 
 const Siwe = () => {
-    const { isInitializing } = useWalletConnectClient()
-
-    if (isInitializing) {
-
-    }
-
     return (
         <main className="flex min-h-screen flex-col items-center justify-center">
             <SiweContext />

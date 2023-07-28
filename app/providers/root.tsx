@@ -2,6 +2,7 @@
 import React from 'react'
 import AuthContext from './auth-context'
 import { WalletConnectProvider } from './walletconnect'
+import { SessionProvider } from 'next-auth/react'
 
 type ProviderType = {
     children: React.ReactNode
@@ -9,9 +10,13 @@ type ProviderType = {
 
 const Providers = ({ children }: ProviderType) => {
     return (
-        <WalletConnectProvider>
-            <AuthContext>{children}</AuthContext>
-        </WalletConnectProvider>
+        <SessionProvider>
+            <WalletConnectProvider>
+                <AuthContext>
+                    {children}
+                </AuthContext>
+            </WalletConnectProvider>
+        </SessionProvider>
     )
 }
 

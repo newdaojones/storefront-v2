@@ -4,7 +4,7 @@ import * as encoding from '@walletconnect/encoding';
 import Client from '@walletconnect/sign-client';
 import { PairingTypes, SessionTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { SiweMessage, generateNonce } from "siwe";
@@ -92,6 +92,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       });
 
       reset();
+      signOut()
     } catch (err: any) {
       toast.error(err.message)
     } finally {
@@ -100,14 +101,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
 
     }
   }, [client, session]);
-
-  const disconnectAndReload = useCallback(() => {
-    disconnect().then(() => {
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    });
-  }, [disconnect])
 
   const onSessionConnected = useCallback((_session: SessionTypes.Struct) => {
     const allNamespaceAccounts = Object.values(_session.namespaces)
@@ -141,10 +134,10 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         onSessionConnected(session);
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e: any) {
-        disconnectAndReload();
+        disconnect();
       }
     },
-    [client, chains, onSessionConnected, disconnectAndReload]
+    [client, chains, onSessionConnected, disconnect]
   );
 
   const login = useCallback(async () => {
@@ -159,12 +152,18 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       const data = localStorage.getItem(`${SIGNATURE_PREFIX}_${account}`)
       let signature: string | undefined = undefined
       let issuedAt: string | undefined = undefined
+      let nonce: string | undefined = undefined
+
       if (data) {
-        signature = JSON.parse(data)?.signature
-        issuedAt = JSON.parse(data)?.issuedAt
+        const jsonData = JSON.parse(data)
+        signature = jsonData?.signature
+        issuedAt = jsonData?.issuedAt
+        nonce = jsonData?.nonce
       }
 
-      const nonce = generateNonce();
+      if (!nonce) {
+        nonce = generateNonce()
+      }
 
       const siweMessage = new SiweMessage({
         domain: window.location.host,
@@ -194,7 +193,8 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
 
         localStorage.setItem(`${SIGNATURE_PREFIX}_${account}`, JSON.stringify({
           signature,
-          issuedAt: siweMessage.issuedAt
+          issuedAt: siweMessage.issuedAt,
+          nonce
         }));
       }
 
