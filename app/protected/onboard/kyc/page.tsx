@@ -1,7 +1,7 @@
-import KycForms from "@/components/forms/form-kyc";
+import BridgeKyc from "@/components/forms/kyc-bridge";
 
 export default function Login() {
     return (
-        <KycForms type={"individual"} />
+        <BridgeKyc />
     );
 }
