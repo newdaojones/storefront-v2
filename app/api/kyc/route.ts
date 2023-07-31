@@ -1,26 +1,36 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export async function POST(req: NextApiRequest, res: NextApiResponse, next: any) {
+// Only exporting POST method as it's the only one we're using here
+export async function POST(request: Request): Promise<Response> {
+    console.log('POST request received', request);
     try {
-        const response = await fetch('https://test.checkout.mybackpack.app/api/partners', {
+        // Parse request body
+        const body = await request.json();
+
+        // External KYC API endpoint
+        const url = 'https://test.checkout.mybackpack.app/api/partners';
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(req.body),
+            body: JSON.stringify(body), // Pass the body to the external API
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            // Handle role assignment on success
-            // req.user.role = "MERCHANT";
-            res.status(200).json(data);
-            console.log("It worked", data);
+            return new Response(JSON.stringify(data), {
+                headers: { 'Content-Type': 'application/json' },
+            });
         } else {
-            res.status(response.status).json(data);
+            return new Response(JSON.stringify(data), { status: response.status, headers: { 'Content-Type': 'application/json' } });
         }
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        console.error('Error submitting kyc', error);
+
+        return new Response(JSON.stringify({ error: 'An error occurred while processing the request.' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 }
