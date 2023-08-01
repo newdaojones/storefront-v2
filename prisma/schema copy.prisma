@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+// users will have a web3 wallet address
+model User {
+  id                  Int        @id @default(autoincrement())
+  email               String?    @unique
+  phone               String?
+  role                Role       @default(GUEST)
+  order               Order[]
+  payment             Payment[]
+  walletAddress       String?    @unique
+  customer            Customer?
+  merchant            Merchant?
+  operator            Operator?
+  kycStatus           KycStatus  @default(NONE)
+  ownershipPercentage Decimal?
+  merchantId          Int? // Merchant this user is associated with (for ownership)
+  merchants           Merchant[] @relation("MerchantBeneficialOwners")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  GUEST
+  CUSTOMER
+  MERCHANT
+  OPERATOR
+}
+
+enum KycStatus {
+  NONE
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+model Customer {
+  id      Int       @id @default(autoincrement())
+  userId  Int       @unique
+  user    User      @relation(fields: [userId], references: [id])
+  order   Order[]
+  payment Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Merchant {
+  id               Int        @id @default(autoincrement())
+  userId           Int        @unique
+  user             User       @relation(fields: [userId], references: [id])
+  order            Order[]
+  payment          Payment[]
+  beneficialOwners User[]     @relation("MerchantBeneficialOwners")
+  operators        Operator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Operator {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  user       User     @relation(fields: [userId], references: [id])
+  merchantId Int
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          Int        @id @default(autoincrement())
+  orderAmount Float
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  merchantId  Int
+  merchant    Merchant   @relation(fields: [merchantId], references: [id])
+  payment     Payment[]
+  customer    Customer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id            Int        @id @default(autoincrement())
+  txHash        String
+  paymentAmount Float
+  orderId       Int
+  order         Order      @relation(fields: [orderId], references: [id])
+  tipAmount     Float
+  networkFee    Float
+  serviceFee    Float
+  taxAmount     Float
+  user          User?      @relation(fields: [userId], references: [id])
+  userId        Int?
+  merchant      Merchant?  @relation(fields: [merchantId], references: [id])
+  merchantId    Int?
+  gatewayId     Int
+  gateway       Gateway    @relation(fields: [gatewayId], references: [id])
+  customer      Customer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Gateway {
+  id      Int       @id @default(autoincrement())
+  name    String
+  version String
+  payment Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// CKO apis + Bridge apis will be used to create a payment 
+model GatewayDetails {
+  id        Int      @id @default(autoincrement())
+  hasTx     String
+  canTx     String
+  didTx     String
+  disputeTx String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Telemetry {
+  id             Int    @id @default(autoincrement())
+  gatewayService String
+  gatewayVersion String
+  smsService     String
+  emailService   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

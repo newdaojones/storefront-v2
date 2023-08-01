@@ -12,141 +12,94 @@ datasource db {
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
-// users will have a web3 wallet address
+enum Role {
+  GUEST = 'guest'
+  OWNER = 'owner'
+  OPERATOR = 'operator'
+}
+
 model User {
   id                  Int        @id @default(autoincrement())
-  email               String?    @unique
-  phone               String?
-  role                Role       @default(GUEST)
-  order               Order[]
-  payment             Payment[]
-  walletAddress       String?    @unique
-  customer            Customer?
-  merchant            Merchant?
-  operator            Operator?
+  role                Role
+  walletAddress       String
+  firstName           String!
+  lastName            String!
+  email               String!    @unique
+  phoneNumber         String!    @unique
+  ssn                 String!    @unique
+  dob                 String!
+  streetAddress       String!
+  streetAddress2      String!
+  city                String!
+  state               String!
+  postalCode          String!
+  country             String!
+  merchantId          String!
+  walletId            String!
   kycStatus           KycStatus  @default(NONE)
-  ownershipPercentage Decimal?
-  merchantId          Int? // Merchant this user is associated with (for ownership)
-  merchants           Merchant[] @relation("MerchantBeneficialOwners")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum Role {
-  GUEST
-  CUSTOMER
-  MERCHANT
-  OPERATOR
-}
-
-enum KycStatus {
-  NONE
-  PENDING
-  VERIFIED
-  FAILED
-}
-
-model Customer {
-  id      Int       @id @default(autoincrement())
-  userId  Int       @unique
-  user    User      @relation(fields: [userId], references: [id])
-  order   Order[]
-  payment Payment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastSignedAt        DateTime!
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
 }
 
 model Merchant {
-  id               Int        @id @default(autoincrement())
-  userId           Int        @unique
-  user             User       @relation(fields: [userId], references: [id])
-  order            Order[]
-  payment          Payment[]
-  beneficialOwners User[]     @relation("MerchantBeneficialOwners")
-  operators        Operator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  Int        @id @default(autoincrement())
+  name                String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
-model Operator {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @unique
-  user       User     @relation(fields: [userId], references: [id])
-  merchantId Int
-  merchant   Merchant @relation(fields: [merchantId], references: [id])
+enum OrderStatus {
+  PROCESSING = 'processing',
+  PENDING = 'pending',
+  PAID = 'paid',
+  ERROR = 'error',
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum ChargeStatus {
+  AUTHORIZED = 'Authorized'
+  DECLINED = 'Declined'
 }
 
 model Order {
-  id          Int        @id @default(autoincrement())
-  orderAmount Float
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  merchantId  Int
-  merchant    Merchant   @relation(fields: [merchantId], references: [id])
-  payment     Payment[]
-  customer    Customer[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  Int       @id @default(autoincrement())
+  chainId             String
+  currency            String
+  walletAddress       String
+  amount              Float
+  tipAmount           Float default(0)
+  serviceFee          Float default(0)
+  networkFee          Float default(0)
+  taxAmount           Float default(0)
+  unitAmount          Float default(0)
+  chargeAmount        Float default(0)
+  txHash              String!
+  last4               String!
+  chargeStatus        ChargeStatus!
+  status              OrderStatus @default(OrderStatus.PENDING)
+  error               JSON!
+  merchantId          Int
+  userId              Int
+  customerId          Int!
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
-model Payment {
-  id            Int        @id @default(autoincrement())
-  txHash        String
-  paymentAmount Float
-  orderId       Int
-  order         Order      @relation(fields: [orderId], references: [id])
-  tipAmount     Float
-  networkFee    Float
-  serviceFee    Float
-  taxAmount     Float
-  user          User?      @relation(fields: [userId], references: [id])
-  userId        Int?
-  merchant      Merchant?  @relation(fields: [merchantId], references: [id])
-  merchantId    Int?
-  gatewayId     Int
-  gateway       Gateway    @relation(fields: [gatewayId], references: [id])
-  customer      Customer[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Gateway {
-  id      Int       @id @default(autoincrement())
-  name    String
-  version String
-  payment Payment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// CKO apis + Bridge apis will be used to create a payment 
-model GatewayDetails {
-  id        Int      @id @default(autoincrement())
-  hasTx     String
-  canTx     String
-  didTx     String
-  disputeTx String
-  message   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Telemetry {
-  id             Int    @id @default(autoincrement())
-  gatewayService String
-  gatewayVersion String
-  smsService     String
-  emailService   String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Customer {
+  id                  Int       @id @default(autoincrement())
+  externalId          String    // unique pylon id
+  firstName           String
+  lastName            String
+  email               String!   @unique
+  phoneNumber         String!   @unique
+  ssn                 String!    @unique
+  dob                 String!
+  streetAddress       String
+  streetAddress2      String!
+  city                String
+  state               String
+  postalCode          String
+  country             String
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
