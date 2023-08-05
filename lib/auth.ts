@@ -43,20 +43,25 @@ export const authOptions: NextAuthOptions = {
                 walletAddress: siwe.address,
                 role: "GUEST",
               },
+              include: {
+                merchant: true,
+              },
             })
 
             return {
               id: newUser.id,
-              walletAddress: newUser.walletAddress,
               role: newUser.role,
+              walletAddress: newUser.walletAddress,
+              merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
               isNewUser: true,
             }
           }
 
           return {
             id: user.id,
-            walletAddress: user.walletAddress,
             role: user.role,
+            walletAddress: user.walletAddress,
+            merchant: user.merchant ? { id: user.merchant.id } : null,
             isNewUser: false,
           }
         } catch (e) {

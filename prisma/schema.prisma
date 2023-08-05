@@ -36,7 +36,7 @@ model Merchant {
 model User {
   id                  Int        @id @default(autoincrement())
   role                Role
-  walletAddress       String
+  walletAddress       String     @unique
   firstName           String?
   lastName            String?
   email               String?    @unique
