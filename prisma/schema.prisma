@@ -25,6 +25,14 @@ enum KycStatus {
   FAILED
 }
 
+model Merchant {
+  id                  Int        @id @default(autoincrement())
+  name                String
+  users               User[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 model User {
   id                  Int        @id @default(autoincrement())
   role                Role
@@ -41,19 +49,12 @@ model User {
   state               String?
   postalCode          String?
   country             String?
-  merchantId          String?
-  walletId            String?
+  merchantId          Int?
+  merchant            Merchant?      @relation(fields: [merchantId], references: [id])
   kycStatus           KycStatus  @default(NONE)
   lastSignedAt        DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
-}
-
-model Merchant {
-  id                  Int        @id @default(autoincrement())
-  name                String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
 }
 
 enum OrderStatus {

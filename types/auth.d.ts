@@ -36,15 +36,15 @@ declare module 'next-auth' {
      * The User interface represents the basic structure for a user.
      *
      * @property {number} id - The user's ID.
+     * @property {string} id - The user's ID.
      * @property {string | null} role - The user's role.
      * @property {Merchant | null} merchant - Merchant information, if the user is a merchant.
-     * @property {Operator | null} operator - Operator information, if the user is an operator.
      */
     interface User {
         id: number
+        walletAddress: string
         role: string | null
         merchant: Merchant | null
-        operator: Operator | null
     }
 
     /**
@@ -54,7 +54,6 @@ declare module 'next-auth' {
      * @property {JWT} token - The user's JSON Web Token.
      */
     interface AuthenticatedUser extends User {
-        walletAddress: string
         token: JWT
     }
 

@@ -33,7 +33,6 @@ export const authOptions: NextAuthOptions = {
             where: { walletAddress: siwe.address },
             include: {
               merchant: true,
-              operator: true,
             },
           })
           console.log("user.walletAddress:", user?.walletAddress);
@@ -44,28 +43,20 @@ export const authOptions: NextAuthOptions = {
                 walletAddress: siwe.address,
                 role: "GUEST",
               },
-              include: {
-                merchant: true,
-                operator: true,
-              },
             })
 
             return {
               id: newUser.id,
-              role: newUser.role,
               walletAddress: newUser.walletAddress,
-              merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
-              operator: newUser.operator ? { id: newUser.operator.id } : null,
+              role: newUser.role,
               isNewUser: true,
             }
           }
 
           return {
             id: user.id,
-            role: user.role,
             walletAddress: user.walletAddress,
-            merchant: user.merchant ? { id: user.merchant.id } : null,
-            operator: user.operator ? { id: user.operator.id } : null,
+            role: user.role,
             isNewUser: false,
           }
         } catch (e) {
