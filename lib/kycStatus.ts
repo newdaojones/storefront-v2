@@ -1,6 +1,6 @@
 import { KycStatus } from "@prisma/client"
 
-export const convertKycStatus = (status: string) => {
+export const convertKycStatus = (status?: string) => {
   switch (status) {
     case 'pending':
       return KycStatus.PENDING

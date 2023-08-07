@@ -28,6 +28,7 @@ enum KycStatus {
 model Merchant {
   id                  Int        @id @default(autoincrement())
   name                String
+  walletAddress       String
   users               User[]
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -77,6 +78,8 @@ model Order {
   currency            String
   walletAddress       String
   amount              Float
+  merchantId          Int
+  userId              Int
   tipAmount           Float   @default(0)
   serviceFee          Float   @default(0)
   networkFee          Float   @default(0)
@@ -85,19 +88,18 @@ model Order {
   chargeAmount        Float   @default(0)
   txHash              String?
   last4               String?
+  chargeCode          String?
   chargeStatus        ChargeStatus?
   status              OrderStatus @default(pending)
-  error               Json?
-  merchantId          Int
-  userId              Int
   customerId          Int?
+  customer            Customer?  @relation(fields: [customerId], references: [id])
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
 
 model Customer {
   id                  Int       @id @default(autoincrement())
-  externalId          String    @unique()// unique pylon id
+  externalId          String?
   firstName           String
   lastName            String
   email               String?
@@ -110,6 +112,7 @@ model Customer {
   state               String
   postalCode          String
   country             String
+  orders              Order[]
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 }
