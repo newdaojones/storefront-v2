@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useWalletConnectClient } from "./walletconnect";
+import { useAgreement } from "@/components/use/agreement";
 
 export interface AuthContextProps {
     children: React.ReactNode;
@@ -14,13 +15,17 @@ const publicPaths = [
 ]
 
 export default function AuthContext({ children }: AuthContextProps) {
+    useAgreement()
     const { data: session } = useSession();
     const { isLoggedIn, disconnect } = useWalletConnectClient()
     const router = useRouter()
     const pathname = usePathname()
 
     const detectRoutes = useCallback(() => {
-        console.log(isLoggedIn, session)
+        if (pathname === '/agreement-accept') {
+            return
+        }
+
         if (!session) {
             if (!publicPaths.includes(pathname)) { // ignoring public path
                 router.push('/')

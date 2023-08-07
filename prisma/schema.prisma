@@ -19,10 +19,10 @@ enum Role {
 }
 
 enum KycStatus {
-  NONE
-  PENDING
-  VERIFIED
-  FAILED
+  pending
+  active
+  manual_review
+  rejected
 }
 
 model Merchant {
@@ -34,7 +34,7 @@ model Merchant {
 }
 
 model User {
-  id                  Int        @id @default(autoincrement())
+  id                  String        @id
   role                Role
   walletAddress       String     @unique
   firstName           String?
@@ -51,7 +51,8 @@ model User {
   country             String?
   merchantId          Int?
   merchant            Merchant?      @relation(fields: [merchantId], references: [id])
-  kycStatus           KycStatus  @default(NONE)
+  token               String?
+  status              KycStatus  @default(pending)
   lastSignedAt        DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
@@ -87,7 +88,7 @@ model Order {
   status              OrderStatus @default(pending)
   error               Json?
   merchantId          Int
-  userId              Int
+  userId              String
   customerId          Int?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -95,12 +96,12 @@ model Order {
 
 model Customer {
   id                  Int       @id @default(autoincrement())
-  externalId          String    // unique pylon id
+  externalId          String    @unique()// unique pylon id
   firstName           String
   lastName            String
-  email               String?   @unique
-  phoneNumber         String?   @unique
-  ssn                 String?   @unique
+  email               String?
+  phoneNumber         String?
+  ssn                 String?
   dob                 String?
   streetAddress       String
   streetAddress2      String?

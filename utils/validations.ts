@@ -12,6 +12,7 @@ export const kycValidationSchema = yup.object().shape({
   postalCode: yup.string().required('Zip Code is required'),
   state: yup.string().required('State is required'),
   city: yup.string().required('City is required'),
-  streetAddress1: yup.string().required('Street Address is required'),
+  streetAddress: yup.string().required('Street Address is required'),
   streetAddress2: yup.string().optional(),
+  signedAgreementId: yup.string().required('Required accept agreement')
 })

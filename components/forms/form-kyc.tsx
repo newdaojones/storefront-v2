@@ -5,6 +5,9 @@ import SignOut from "../auth/sign-out";
 import styles from './form.module.css';
 import { FormikProps, useFormik } from 'formik';
 import { FormInput } from "../form-input";
+import { useAgreement } from "../use/agreement";
+import { config } from "config";
+import { useEffect } from "react";
 
 interface KycIndividual {
     companyName: string;
@@ -20,9 +23,12 @@ interface KycIndividual {
     city: string;
     state: string;
     country: string;
+    signedAgreementId: string;
 }
 
 export default function KycForms() {
+    const { signedAgreementId, openAgreement } = useAgreement()
+
     const onSubmitForm = async (values: KycIndividual) => {
         try {
             const response = await fetch('/api/kyc', {
@@ -63,6 +69,7 @@ export default function KycForms() {
             city: '',
             state: '',
             country: 'USA',
+            signedAgreementId: signedAgreementId || '',
         },
         validateOnBlur: true,
         validateOnChange: true,
@@ -70,11 +77,32 @@ export default function KycForms() {
         onSubmit: onSubmitForm
     });
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const { setFieldValue, errors, touched } = kycInfo
 
+    useEffect(() => {
+        setFieldValue('signedAgreementId', signedAgreementId)
+    }, [setFieldValue, signedAgreementId])
 
-    };
+    const onGetAgreementLink = async () => {
+        console.log(window.location.origin)
+        try {
+            const response = await fetch(`${config.PYLON_API_URI}/tos_link`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    redirectUri: `${window.location.origin}/agreement-accept`
+                }),
+            });
+
+            const result = await response.json();
+
+            openAgreement(result.link)
+        } catch (err) {
+
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -107,6 +135,12 @@ export default function KycForms() {
                     <FormInput {...kycInfo} field="postalCode" label="Postal Code" />
                     <FormInput {...kycInfo} field="country" label="Country" disabled />
                 </div>
+                <label className="mt-5 cursor-pointer select-none">
+                    <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
+                    Click here to review and accept <span className="text-purple-500">Bridge terms of service (TOS)</span>.
+                </label>
+                {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
+
                 <button className={styles.button} onClick={() => kycInfo.submitForm()}>Submit</button>
                 <SignOut />
             </div>

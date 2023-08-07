@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { SiweMessage, generateNonce } from "siwe";
 import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
+import { config } from 'config';
 
 const SIGNATURE_PREFIX = 'NDJ_SIGNATURE_V2_';
 
@@ -40,7 +41,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
   const [qrCodeUri, setQRCodeUri] = useState<string>();
   const [account, setAccount] = useState<string>();
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [chains] = useState(['eip155:80001']) // Polygon Testnet
+  const [chains] = useState([`eip155:${config.CHAIN_ID}`]) // Polygon Testnet
 
   const createClient = useCallback(async () => {
     try {
