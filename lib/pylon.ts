@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from "axios";
+import { User } from "@prisma/client";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { config } from "config";
 
 export class PylonService {
@@ -23,6 +24,49 @@ export class PylonService {
     );
   }
 
+  static getInstance() {
+    return new PylonService()
+  }
+
+  async privateApi(data: AxiosRequestConfig, user: User) {
+    try {
+      const res = await this.axiosInstance.request({
+        ...data,
+        headers: {
+          ...data.headers,
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
+
+      return res.data
+    } catch (err: any) {
+      if (err.status === 401 && user.email) {
+        const token = await this.login(user.email)
+
+        await prisma?.user.update({
+          where: {
+            id: user.id
+          },
+          data: {
+            token
+          }
+        })
+
+        const res = await this.axiosInstance.request({
+          ...data,
+          headers: {
+            ...data.headers,
+            'Authorization': `Bearer ${token}`
+          }
+        })
+
+        return res.data
+      }
+
+      throw err
+    }
+  }
+
   async createPartner(data: any) {
     const res = await this.axiosInstance.post('/', data)
 
@@ -43,6 +87,32 @@ export class PylonService {
       password: config.PYLON_PASSWORD
     })
 
-    return res.data.link
+    return res.data.token
+  }
+
+  async getKYCLink(walletAddress?: string) {
+    const user = await prisma?.user.findUnique({
+      where: {
+        walletAddress
+      }
+    })
+
+    if (!user) {
+      throw new Error(`Not found user for ${walletAddress}`)
+    }
+
+    const res = await this.privateApi({
+      method: 'GET',
+      url: '/kyb_link',
+    }, user)
+
+    return res.link
+  }
+
+  async sandboxApproveAccount(user: User) {
+    return this.privateApi({
+      method: 'POST',
+      url: '/kyb_success/sandbox'
+    }, user)
   }
 }

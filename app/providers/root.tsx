@@ -3,6 +3,7 @@ import React from 'react'
 import AuthContext from './auth-context'
 import { WalletConnectProvider } from './walletconnect'
 import { SessionProvider } from 'next-auth/react'
+import { ToastContainer } from 'react-toastify';
 
 type ProviderType = {
     children: React.ReactNode
@@ -16,6 +17,7 @@ const Providers = ({ children }: ProviderType) => {
                     {children}
                 </AuthContext>
             </WalletConnectProvider>
+            <ToastContainer />
         </SessionProvider>
     )
 }

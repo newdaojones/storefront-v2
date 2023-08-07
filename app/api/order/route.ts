@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
     console.log("session.user:", session.user);
 
-    if (session.role !== "MERCHANT") {
+    if (session.user.role !== "OWNER") {
         return NextResponse.json({ error: "Forbidden" }, { status: 401 });
     }
     console.log("session.role:", session.role);

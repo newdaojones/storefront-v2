@@ -1,3 +1,5 @@
+import { convertKycStatus } from "@/lib/kycStatus";
+
 export async function POST(request: Request): Promise<Response> {
   try {
     // Parse request body
@@ -5,7 +7,7 @@ export async function POST(request: Request): Promise<Response> {
     console.log('received hook', body)
 
     if (body.type === 'account') {
-      orderWebhookHandler(body)
+      accountWebhookHandler(body)
     } else if (body.type === 'order') {
       // orderWebhookHandler(body)
     }
@@ -21,11 +23,14 @@ export async function POST(request: Request): Promise<Response> {
   }
 }
 
-const orderWebhookHandler = async ({ id, data }: any) => {
+const accountWebhookHandler = async ({ id, data }: any) => {
+  const status = convertKycStatus(data.status)
   await prisma?.user.update({
     where: {
-      id
+      externalId: id
     },
-    data
+    data: {
+      status
+    }
   })
 }

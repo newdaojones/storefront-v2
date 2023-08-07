@@ -3,6 +3,7 @@ import React from 'react';
 import { DateRange, DayPicker } from 'react-day-picker';
 import Tooltip from '../tooltips/tooltip';
 import styles from './datepicker.module.css';
+import 'react-day-picker/dist/style.css';
 
 type DateRangePickerProps = {
   range: DateRange,

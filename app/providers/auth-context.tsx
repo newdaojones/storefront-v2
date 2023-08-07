@@ -39,16 +39,16 @@ export default function AuthContext({ children }: AuthContextProps) {
         }
 
         if (pathname === '/') {
-            if (session.isNewUser || !session.user || session.user.role === "GUEST") {
+            if (session.isNewUser || session.user.status !== 'VERIFIED' || session.user.role === "GUEST") {
                 router.push('/protected/onboard')
-            } else if (['MERCHANT', 'OPERATOR'].includes(session.user?.role || '')) {
+            } else if (['OWNER', 'OPERATOR'].includes(session.user?.role || '')) {
                 router.push('/protected/payments')
             }
         }
     }, [session, pathname, router, isLoggedIn, disconnect])
 
     useEffect(() => {
-        detectRoutes()
+        // detectRoutes()
     }, [detectRoutes])
 
     return <>{children}</>;

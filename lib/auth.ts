@@ -35,7 +35,6 @@ export const authOptions: NextAuthOptions = {
               merchant: true,
             },
           })
-          console.log("user.walletAddress:", user?.walletAddress);
 
           if (!user) {
             const newUser = await prisma.user.create({
@@ -51,6 +50,9 @@ export const authOptions: NextAuthOptions = {
             return {
               id: newUser.id,
               role: newUser.role,
+              name: `${newUser.firstName} ${newUser.lastName}`,
+              status: newUser.status,
+              email: newUser.email,
               walletAddress: newUser.walletAddress,
               merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
               isNewUser: true,
@@ -60,6 +62,9 @@ export const authOptions: NextAuthOptions = {
           return {
             id: user.id,
             role: user.role,
+            name: `${user.firstName} ${user.lastName}`,
+            status: user.status,
+            email: user.email,
             walletAddress: user.walletAddress,
             merchant: user.merchant ? { id: user.merchant.id } : null,
             isNewUser: false,
@@ -87,31 +92,9 @@ export const authOptions: NextAuthOptions = {
       console.log("jwt user", user);
 
       if (user) {
-        const { walletAddress, isNewUser, role } = user as any;
-
-        try {
-          if (walletAddress) {
-            token.walletAddress = walletAddress;
-            console.log(`Assigned user.walletAddress to token.walletAddress: ${token.walletAddress}`);
-          } else {
-            console.error('user.walletAddress is undefined');
-          }
-
-          if (role) {
-            token.role = role;
-            console.log(`Assigned user.role to token.role: ${token.role}`);
-          } else {
-            console.error('user.role is undefined');
-          }
-        } catch (error) {
-          console.error('Failed to set token.walletAddress or token.role:', error);
-        }
-
-        if (isNewUser !== undefined) {
-          token.isNewUser = isNewUser;
-          console.log(`Assigned user.isNewUser to token.isNewUser: ${token.isNewUser}`);
-        } else {
-          console.error('user.isNewUser is undefined');
+        token = {
+          ...token,
+          ...user
         }
       }
 
@@ -124,11 +107,16 @@ export const authOptions: NextAuthOptions = {
       // if (token.walletAddress === undefined) {
       //   throw new Error("token.walletAddress is undefined");
       // }
-
+      console.log('==============================')
+      console.log(token)
       session.user = session.user || {};
-      session.user.name = token?.walletAddress;
+      session.user.id = token?.id
+      session.user.name = token?.name
+      session.user.email = token?.email
+      session.user.walletAddress = token?.walletAddress;
       session.user.image = "https://www.fillmurray.com/128/128";
-      session.user.role = token.role || "GUEST";  // Default to "GUEST" if role is not defined
+      session.user.role = token?.role || "GUEST";  // Default to "GUEST" if role is not defined
+      session.user.status = token?.status
 
       // Initialize address
       session.address = token.walletAddress;

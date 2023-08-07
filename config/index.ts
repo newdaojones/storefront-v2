@@ -3,5 +3,6 @@ export const config = {
   WALLETCONNECT_PID: process.env.NEXT_PUBLIC_WALLETCONNECT_PID,
   PYLON_PASSWORD: process.env.NEXT_PUBLIC_PYLON_PASSWORD,
   ALCHEMY_API_KEY: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-  CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID
+  CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
+  IS_PRODUCTION: process.env.NODE_ENV === 'production'
 }

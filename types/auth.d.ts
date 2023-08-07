@@ -1,3 +1,4 @@
+import { KycStatus } from '@prisma/client';
 import 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
@@ -36,15 +37,24 @@ declare module 'next-auth' {
      * The User interface represents the basic structure for a user.
      *
      * @property {number} id - The user's ID.
-     * @property {string} id - The user's ID.
-     * @property {string | null} role - The user's role.
+     * @property {string } name - The user's role.
+     * @property {string} email - The user's role.
+     * @property {string} walletAddress - The user's role.
+     * @property {KycStatus} status - The user's role.
+     * @property {string} role - The user's role.
+     * @property {boolean} isNewUser - The user's role.
      * @property {Merchant | null} merchant - Merchant information, if the user is a merchant.
      */
+
     interface User {
         id: number
         walletAddress: string
-        role: string | null
-        merchant: Merchant | null
+        name?: string
+        email?: string
+        status?: KycStatus
+        role?: string | null
+        merchant?: Merchant | null
+        isNewUser?: boolean
     }
 
     /**
