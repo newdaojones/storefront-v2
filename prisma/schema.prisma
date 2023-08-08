@@ -86,11 +86,12 @@ model Order {
   tipAmount           Float   @default(0)
   serviceFee          Float   @default(0)
   networkFee          Float   @default(0)
-  taxAmount           Float   @default(0)
+  taxFee              Float   @default(0)
   unitAmount          Float   @default(0)
   chargeAmount        Float   @default(0)
   txHash              String?
   last4               String?
+  chargeId            String?
   chargeCode          String?
   chargeStatus        ChargeStatus?
   status              OrderStatus @default(pending)

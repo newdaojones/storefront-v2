@@ -24,23 +24,23 @@ export default function Controller() {
     useEffect(() => {
         if (range) {
             // replace this temp route with the actual api route
-            fetch('/api/payments', {
-                method: 'POST',
+            fetch('/api/order', {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(range),
             })
                 .then(response => response.json())
                 .then(data => {
                     setData(data);
+                }).catch((err) => {
+                    console.log(err)
                 });
         }
     }, [range]);
 
     return (
-        <div>
-            <DateRangePicker range={range} setRange={setRange} />
+        <div className='h-10 bg-white border-2 border-blue-400'>
             <DataExport data={data} />
         </div>
     );

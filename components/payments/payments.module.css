@@ -10,7 +10,7 @@
 
     position: absolute;
     width: 1038px;
-    height: 788px;
+    min-height: 600px;
     left: calc(20%);
     top: calc(15%);
 
@@ -21,6 +21,17 @@
     border: 5px solid #7E18FF;
     box-shadow: 0px 20px 10px -3px rgba(213, 213, 213, 0.4), inset 10px 10px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
+}
+
+.button {
+    background-color: var(--color-purps);
+    border: 2px solid var(--color-purps);
+    color: white;
+    border-radius: 6px;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
 }
 
 .innerContainer {

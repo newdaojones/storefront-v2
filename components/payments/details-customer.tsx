@@ -2,33 +2,30 @@
 // components/payments/details-customer.tsx
 import React from 'react';
 import styles from './payments.module.css';
+import { Customer } from '@prisma/client';
 
 // Import the type for Payment
 export type CustDetails = {
-  name: string;
-  email: string;
-  phone: string;
-  records: string; // number of records
-  ltv: string; // lifetime value of customer transactions
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  records?: string | null; // number of records
+  ltv?: string | null; // lifetime value of customer transactions
 };
 
 interface CustomerDetailsProps {
-  customer: CustDetails;
+  customer: Customer;
 }
 
 const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) => {
   return (
     <div className={styles.expandedDetails}>
       <div className={styles.leftText}>Name:</div>
-      <div className={styles.rightText}>{customer.name}</div>
+      <div className={styles.rightText}>{customer.firstName} {customer.lastName}</div>
       <div className={styles.leftText}>Email:</div>
       <div className={styles.rightText}>{customer.email}</div>
       <div className={styles.leftText}>Phone:</div>
-      <div className={styles.rightText}>{customer.phone}</div>
-      <div className={styles.leftText}>Records:</div>
-      <div className={styles.rightText}>{customer.records}</div>
-      <div className={styles.leftText}>LTV:</div>
-      <div className={styles.rightText}>{customer.ltv}</div>
+      <div className={styles.rightText}>{customer.phoneNumber}</div>
     </div>
   );
 }

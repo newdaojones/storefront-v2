@@ -39,6 +39,7 @@ interface OrderPayload {
   unitAmount?: number;
   chargeStatus?: ChargeStatus;
   chargeCode?: string;
+  chargeId?: string;
   last4?: string;
   customer?: AccountPayload
 }
@@ -96,6 +97,7 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
     tipAmount: data.tipAmount,
     chargeAmount: data.chargeAmount,
     unitAmount: data.unitAmount || 0,
+    chargeId: data.chargeId,
     chargeStatus: data.chargeStatus || null,
     chargeCode: data.chargeCode || null,
     last4: data.last4 || null,

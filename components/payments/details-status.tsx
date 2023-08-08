@@ -1,34 +1,24 @@
 // Import React and styles
 import React from 'react';
 import styles from './payments.module.css';
+import { Order } from '@prisma/client';
 
-// Import the type for Payment
-
-export type ResponseCodes = {
-    authentication: string;
-    authorization: string;
-    captured: string;
-    status: string;
-    dispute: string;
-};
 
 interface StatusDetailsProps {
-    status: ResponseCodes;
+    order: Order;
 }
 
-const StatusDetails: React.FC<StatusDetailsProps> = ({ status }) => {
+const StatusDetails: React.FC<StatusDetailsProps> = ({ order }) => {
     return (
         <div className={styles.expandedDetails}>
-            <div className={styles.leftText}>Authentication:</div>
-            <div className={styles.rightText}>{status.authentication}</div>
+            <div className={styles.leftText}>Charge Id:</div>
+            <div className={styles.rightText}>{order.chargeId}</div>
+            <div className={styles.leftText}>Last 4:</div>
+            <div className={styles.rightText}>{order.last4}</div>
             <div className={styles.leftText}>Authorization:</div>
-            <div className={styles.rightText}>{status.authorization}</div>
-            <div className={styles.leftText}>Captured:</div>
-            <div className={styles.rightText}>{status.captured}</div>
+            <div className={styles.rightText}>{order.chargeCode}</div>
             <div className={styles.leftText}>Status:</div>
-            <div className={styles.rightText}>{status.status}</div>
-            <div className={styles.leftText}>Dispute:</div>
-            <div className={styles.rightText}>{status.dispute}</div>
+            <div className={styles.rightText}>{order.chargeStatus}</div>
         </div>
     );
 }

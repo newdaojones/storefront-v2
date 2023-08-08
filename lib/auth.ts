@@ -88,8 +88,8 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      console.log("jwt token before", token);
-      console.log("jwt user", user);
+      // console.log("jwt token before", token);
+      // console.log("jwt user", user);
 
       if (user) {
         token = {
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      console.log("jwt token after", token);
+      // console.log("jwt token after", token);
       return token;
     },
 
@@ -107,8 +107,6 @@ export const authOptions: NextAuthOptions = {
       // if (token.walletAddress === undefined) {
       //   throw new Error("token.walletAddress is undefined");
       // }
-      console.log('==============================')
-      console.log(token)
       session.user = session.user || {};
       session.user.id = token?.id
       session.user.name = token?.name
@@ -122,8 +120,8 @@ export const authOptions: NextAuthOptions = {
       session.address = token.walletAddress;
       session.isNewUser = token.isNewUser;
 
-      console.log("SESSION after", session)
-      console.log("TOKEN after", token)
+      // console.log("SESSION after", session)
+      // console.log("TOKEN after", token)
 
       return session;
     },

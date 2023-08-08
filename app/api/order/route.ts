@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { PylonService } from "@/lib/pylon";
 import { SmsService } from "@/lib/sms";
 import { config } from "config";
+import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { CreateOrderData } from "types/order";
@@ -72,6 +73,60 @@ export async function POST(req: NextRequest) {
         smsService.send(order.phoneNumber, `StorefrontPay checkout url: ${res.uri}.`)
 
         return new Response(JSON.stringify(updatedOrder), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error: any) {
+        return new Response(JSON.stringify({ error: error.message || 'An error occurred while processing the request.' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+}
+
+export async function GET(req: NextRequest) {
+    try {
+        const page = Number(req.nextUrl.searchParams.get('page') || 1);
+        const limit = Number(req.nextUrl.searchParams.get('limit') || 10);
+        const range: any = req.nextUrl.searchParams.get('range');
+        const session = await getServerSession({ req, ...authOptions });
+
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const orders = await prisma.order.findMany({
+            where: {
+                merchantId: session.user.merchant?.id,
+                createdAt: {
+                    gte: range.from,
+                    lte: range.to
+                }
+            },
+            include: {
+                customer: true
+            },
+            orderBy: {
+                id: 'desc'
+            },
+            skip: (page - 1) * limit,
+            take: limit
+        })
+
+        const count = await prisma.order.count({
+            where: {
+                merchantId: session.user.merchant?.id,
+                createdAt: {
+                    gte: range.from,
+                    lte: range.to
+                }
+            }
+        })
+
+        return new Response(JSON.stringify({
+            count,
+            rows: orders
+        }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
