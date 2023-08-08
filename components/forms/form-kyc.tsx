@@ -171,7 +171,7 @@ export default function KycForms() {
                         </div>
                         <div className="flex gap-2">
                             <FormInput {...kycInfo} field="email" label="Email" type="email" />
-                            <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" />
+                            <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" type="phoneNumber" />
                         </div>
                         <div className="flex gap-2">
                             <FormInput {...kycInfo} field="dob" label="Date of Birthday" />

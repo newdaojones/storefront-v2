@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useWalletConnectClient } from "./walletconnect";
@@ -17,12 +17,16 @@ const publicPaths = [
 export default function AuthContext({ children }: AuthContextProps) {
     useAgreement()
     const { data: session } = useSession();
-    const { isLoggedIn, disconnect } = useWalletConnectClient()
+    const { isLoggedIn, disconnect, isLoginInning, initialized } = useWalletConnectClient()
     const router = useRouter()
     const pathname = usePathname()
 
     const detectRoutes = useCallback(() => {
         if (pathname === '/agreement-accept') {
+            return
+        }
+
+        if (isLoginInning || !initialized) {
             return
         }
 
@@ -38,17 +42,21 @@ export default function AuthContext({ children }: AuthContextProps) {
             return
         }
 
+        if (session && !isLoggedIn) {
+            signOut()
+        }
+
         if (pathname === '/') {
-            if (session.isNewUser || session.user.status !== 'VERIFIED' || session.user.role === "GUEST") {
+            if (session?.isNewUser || session?.user.status !== 'VERIFIED' || session?.user.role === "GUEST") {
                 router.push('/protected/onboard')
             } else if (['OWNER', 'OPERATOR'].includes(session.user?.role || '')) {
                 router.push('/protected/payments')
             }
         }
-    }, [session, pathname, router, isLoggedIn, disconnect])
+    }, [session, pathname, router, isLoggedIn, disconnect, isLoginInning, initialized])
 
     useEffect(() => {
-        // detectRoutes()
+        detectRoutes()
     }, [detectRoutes])
 
     return <>{children}</>;

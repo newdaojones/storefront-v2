@@ -23,19 +23,6 @@ export default function DateRangePicker({ range, setRange, disabled }: DateRange
     setTempRange(range)
   }, [range])
 
-  let footer: React.ReactNode = <p>Please pick the first day.</p>;
-  if (range.from) {
-    if (!range.to) {
-      footer = <p>{format(range.from, 'PPP')}</p>;
-    } else if (range.to) {
-      footer = (
-        <p>
-          {format(range.from, 'PPP')}–{format(range.to, 'PPP')}
-        </p>
-      );
-    }
-  }
-
   const today = endOfDay(new Date());
   const monthToDate = { from: startOfMonth(new Date()), to: today };
   const yearToDate = { from: startOfYear(new Date()), to: today };
@@ -112,7 +99,6 @@ export default function DateRangePicker({ range, setRange, disabled }: DateRange
                 setTempRange(selectedRange);
               }
             }}
-            footer={footer}
           />
         </div>
       </div>

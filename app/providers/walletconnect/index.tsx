@@ -26,6 +26,7 @@ interface IContext {
   isLoading: boolean;
   pairings: PairingTypes.Struct[];
   accounts: string[];
+  isLoginInning: boolean;
 }
 
 export const ClientContext = createContext<IContext>({} as IContext);
@@ -33,10 +34,11 @@ export const ClientContext = createContext<IContext>({} as IContext);
 export function WalletConnectProvider({ children }: { children: ReactNode | ReactNode[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoginInning, setIsLoginInning] = useState(true)
   const [session, setSession] = useState<SessionTypes.Struct>();
   const [pairings, setPairings] = useState<PairingTypes.Struct[]>([]);
   const [client, setClient] = useState<Client>();
-  const [isInitializing, setIsInitializing] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [qrCodeUri, setQRCodeUri] = useState<string>();
   const [account, setAccount] = useState<string>();
@@ -216,6 +218,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       disconnect()
     } finally {
       setIsLoading(false)
+      setIsLoginInning(false)
     }
   }, [client, session, account, disconnect])
 
@@ -259,6 +262,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     client.on("session_delete", () => {
       console.debug("EVENT", "session_delete");
       reset();
+      signOut()
     });
   }, [client, onSessionConnected])
 
@@ -271,14 +275,18 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       setPairings(client.pairing.values);
       console.log("RESTORED PAIRINGS: ", client.pairing.values);
 
-
-      if (typeof session !== 'undefined') return;
+      if (typeof session !== 'undefined') {
+        setIsLoginInning(false)
+        return
+      };
 
       if (client.session.length) {
         const lastKeyIndex = client.session.keys.length - 1;
         const _session = client.session.get(client.session.keys[lastKeyIndex]);
         await onSessionConnected(_session);
         return _session;
+      } else {
+        setIsLoginInning(false)
       }
     },
     [client, session, onSessionConnected, setPairings]
@@ -302,6 +310,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       account,
       accounts,
       session,
+      isLoginInning
     }),
     [
       isInitializing,
@@ -314,6 +323,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       client,
       session,
       isLoggedIn,
+      isLoginInning,
       connect,
       disconnect,
     ]
