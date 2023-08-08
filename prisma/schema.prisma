@@ -74,10 +74,13 @@ enum ChargeStatus {
 
 model Order {
   id                  Int       @id @default(autoincrement())
+  externalId          String? @unique()
   chainId             String
   currency            String
   walletAddress       String
   amount              Float
+  email               String
+  phoneNumber         String
   merchantId          Int
   userId              Int
   tipAmount           Float   @default(0)
@@ -91,6 +94,7 @@ model Order {
   chargeCode          String?
   chargeStatus        ChargeStatus?
   status              OrderStatus @default(pending)
+  link                String?
   customerId          Int?
   customer            Customer?  @relation(fields: [customerId], references: [id])
   createdAt           DateTime @default(now())

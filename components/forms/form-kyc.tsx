@@ -68,7 +68,7 @@ export default function KycForms() {
                 })
                 toast.success('Submitted successfully')
             } else {
-                throw result
+                throw new Error(result.message || result.error)
             }
         } catch (error: any) {
             toast.error(error.message)
@@ -123,7 +123,7 @@ export default function KycForms() {
             if (response.ok) {
                 openAgreement(result.link)
             } else {
-                throw result
+                throw new Error(result.message || result.error)
             }
         } catch (err: any) {
             toast.error(err.message)
@@ -147,7 +147,7 @@ export default function KycForms() {
             if (response.ok && result.link) {
                 window.open(result.link, '_blank')
             } else {
-                throw result
+                throw new Error(result.message || result.error)
             }
         } catch (err: any) {
             toast.error(err.message)

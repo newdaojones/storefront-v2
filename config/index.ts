@@ -4,5 +4,6 @@ export const config = {
   PYLON_PASSWORD: process.env.NEXT_PUBLIC_PYLON_PASSWORD,
   ALCHEMY_API_KEY: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
   CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
+  DISCORD_URI: process.env.NEXT_PUBLIC_DISCORD_URI,
   IS_PRODUCTION: process.env.NODE_ENV === 'production'
 }

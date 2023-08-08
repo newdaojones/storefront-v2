@@ -1,54 +1,83 @@
 "use client"
 // components/CreateOrder.tsx
-import OrderAmount from '@/components/order/amount';
 import Buttons from '@/components/order/cancel-submit';
-import CustomerEmail from '@/components/order/email';
 import OrderHeader from '@/components/order/header';
-import CustomerNumber from '@/components/order/number';
 import { useState } from 'react';
 import styles from '../../../components/order/order.module.css';
+import { useFormik } from 'formik';
+import { createOrderValidationSchema } from 'utils/validations';
+import { FormInput } from '@/components/form-input';
+import ClockLoader from 'react-spinners/ClockLoader';
+import { CreateOrderData } from 'types/order';
+import { toast } from 'react-hot-toast';
 
 export default function CreateOrder() {
-    const [order, setOrder] = useState({ orderAmount: '', guestEmail: '', guestPhone: '' });
+    const [loading, setLoading] = useState(false);
 
-    const isOrderValid = () => {
-        return order.orderAmount !== '' && order.guestEmail !== '' && order.guestPhone !== '';
-    };
+    const onSubmitForm = async (values: CreateOrderData) => {
+        try {
+            setLoading(true)
+            const response = await fetch('/api/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+            });
 
-    const handleSubmit = async () => {
-        if (!isOrderValid()) return;
+            const result = await response.json();
 
-        const response = await fetch('https://test.checkout.mybackpack.app/api/partners/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(order),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
+            if (response.ok) {
+                toast.success('Created an order successfully')
+                handleClear()
+            } else {
+                throw new Error(result.message || result.error)
+            }
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setLoading(false)
         }
+    }
 
-        setOrder({ orderAmount: '', guestEmail: '', guestPhone: '' });
+    const createOrderInfo = useFormik<CreateOrderData>({
+        initialValues: {
+            amount: 0,
+            email: '',
+            phoneNumber: '',
+        },
+        validateOnBlur: true,
+        validateOnChange: true,
+        validationSchema: createOrderValidationSchema,
+        onSubmit: onSubmitForm
+    });
+
+    const handleClear = () => {
+        createOrderInfo.setValues({
+            amount: 0,
+            email: '',
+            phoneNumber: '',
+        }, false)
     };
-
-    const handleCancel = () => {
-        setOrder({ orderAmount: '', guestEmail: '', guestPhone: '' });
-    };
-
     return (
         <div className={styles.container}>
             <div className={styles.innerContainer}>
                 <OrderHeader />
                 <div className={styles.body}>
                     <div className={styles.rowContainer}>
-                        <OrderAmount amount={order.orderAmount} setAmount={(amount) => setOrder({ ...order, orderAmount: amount })} />
-                        <CustomerNumber phoneNumber={order.guestPhone} setPhoneNumber={(phoneNumber) => setOrder({ ...order, guestPhone: phoneNumber })} />
-                        <CustomerEmail email={order.guestEmail} setEmail={(email) => setOrder({ ...order, guestEmail: email })} />
+                        <FormInput {...createOrderInfo} field="amount" label="Amount" type="number" />
+                        <FormInput {...createOrderInfo} field="phoneNumber" label="Phone number" type="phoneNumber" />
+                        <FormInput {...createOrderInfo} field="email" label="Email" type="email" />
                     </div>
-                    <Buttons onSubmit={handleSubmit} onCancel={handleCancel} isOrderValid={isOrderValid()} />
+                    <Buttons onSubmit={() => createOrderInfo.handleSubmit()} onCancel={handleClear} isOrderValid={createOrderInfo.isValid} />
                 </div>
             </div>
+            {loading && (
+                <div className="absolute bg-black/20 w-full h-full left-0 top-0 flex flex-col items-center justify-center">
+                    <ClockLoader size={40} color='black' />
+                    <div className="mt-2">Creating Order...</div>
+                </div>
+            )}
         </div>
     );
 }

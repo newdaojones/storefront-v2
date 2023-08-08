@@ -30,6 +30,7 @@ export async function POST(request: Request): Promise<Response> {
         const merchant = await prisma?.merchant.create({
             data: {
                 name: body.companyName,
+                walletAddress: session.address
             },
         })
 

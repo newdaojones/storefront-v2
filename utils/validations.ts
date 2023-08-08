@@ -16,3 +16,9 @@ export const kycValidationSchema = yup.object().shape({
   streetAddress2: yup.string().optional(),
   signedAgreementId: yup.string().required('Required accept agreement')
 })
+
+export const createOrderValidationSchema = yup.object().shape({
+  amount: yup.number().required('The amount is required').positive().min(1, 'The amount must be greater than $1'),
+  phoneNumber: yup.string().required('Phone Number is required'),
+  email: yup.string().required('Email is required').email('Email is invalid'),
+})

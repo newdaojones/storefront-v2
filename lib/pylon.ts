@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { config } from "config";
+import { CreateOrderData } from "types/order";
 
 export class PylonService {
   axiosInstance: AxiosInstance;
@@ -114,5 +115,14 @@ export class PylonService {
       method: 'POST',
       url: '/kyb_success/sandbox'
     }, user)
+  }
+
+  async createOrder(data: CreateOrderData, user: User) {
+    return this.privateApi({
+      method: 'POST',
+      url: '/orders',
+      data
+    }, user)
+
   }
 }
