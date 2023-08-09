@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
 
         const orders = await prisma.order.findMany({
             where: {
-                merchantId: session.user.merchant?.id,
+                merchantId: merchantId,
                 createdAt: {
                     gte: range.from,
                     lte: range.to
@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
 
         const count = await prisma.order.count({
             where: {
-                merchantId: session.user.merchant?.id,
+                merchantId: session.user.merchantId,
                 createdAt: {
                     gte: range.from,
                     lte: range.to
