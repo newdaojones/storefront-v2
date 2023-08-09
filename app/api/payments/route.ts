@@ -17,6 +17,6 @@ export async function POST(req: Request) {
             gateway: true,
         }
     });
-    return NextResponse.json(payments);
 
+    return NextResponse.json(payments);
 }
