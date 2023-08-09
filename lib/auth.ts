@@ -87,14 +87,21 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, trigger, user, session }) {
       // console.log("jwt token before", token);
-      // console.log("jwt user", user);
-
+      // console.log("jwt use
       if (user) {
         token = {
           ...token,
           ...user
+        }
+      }
+
+      if (trigger === 'update' && session?.user) {
+        token = {
+          ...token,
+          ...session?.user,
+          status: 'OWNER'
         }
       }
 
@@ -104,9 +111,6 @@ export const authOptions: NextAuthOptions = {
 
 
     async session({ session, token }: { session: any, token: any }) {
-      // if (token.walletAddress === undefined) {
-      //   throw new Error("token.walletAddress is undefined");
-      // }
       session.user = session.user || {};
       session.user.id = token?.id
       session.user.name = token?.name

@@ -32,7 +32,7 @@ interface KycIndividual {
 export default function KycForms() {
     const { data: session } = useSession()
     const { signedAgreementId, openAgreement } = useAgreement()
-    const { update } = useSession()
+    const { update: sessionUpdate } = useSession()
     const [loading, setLoading] = useState(false)
 
     const onSubmitForm = async (values: KycIndividual) => {
@@ -53,7 +53,7 @@ export default function KycForms() {
 
             if (response.ok) {
                 // Handle successful submission
-                update({
+                sessionUpdate({
                     user: {
                         id: result.id,
                         name: `${result.firstName} ${result.lastName}`,
