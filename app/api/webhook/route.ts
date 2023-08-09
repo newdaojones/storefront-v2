@@ -51,16 +51,16 @@ export async function POST(request: Request): Promise<Response> {
     console.log('received hook', body)
 
     if (body.type === 'account') {
-      accountWebhookHandler(body)
+      await accountWebhookHandler(body)
     } else if (body.type === 'order') {
-      orderWebhookHandler(body)
+      await orderWebhookHandler(body)
     }
 
     return new Response();
   } catch (error) {
     console.error('Error submitting kyc', error);
 
-    return new Response(JSON.stringify({ error: 'An error occurred while processing the request.' }), {
+    return new Response(JSON.stringify({ error }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

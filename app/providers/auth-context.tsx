@@ -26,6 +26,12 @@ export default function AuthContext({ children }: AuthContextProps) {
             return
         }
 
+        console.log('-----------')
+        console.log('isLoginInning', isLoginInning)
+        console.log('initialized', initialized)
+        console.log('session', !!session)
+        console.log('isLoggedIn', isLoggedIn)
+        console.log('==========')
         if (isLoginInning || !initialized) {
             return
         }
