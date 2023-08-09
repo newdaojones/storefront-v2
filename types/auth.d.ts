@@ -55,6 +55,7 @@ declare module 'next-auth' {
         role?: string | null
         merchant?: Merchant | null
         isNewUser?: boolean
+        merchantId?: number
     }
 
     /**

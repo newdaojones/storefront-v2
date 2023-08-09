@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
           return {
             id: user.id,
             role: user.role,
-            name: `${user.firstName} ${user.lastName}`,
+            name: user.firstName ? `${user.firstName} ${user.lastName}` : user.walletAddress,
             status: user.status,
             email: user.email,
             walletAddress: user.walletAddress,
@@ -118,6 +118,7 @@ export const authOptions: NextAuthOptions = {
       session.user.image = "https://www.fillmurray.com/128/128";
       session.user.role = token?.role || "GUEST";  // Default to "GUEST" if role is not defined
       session.user.status = token?.status
+      session.user.merchantId = token?.merchant?.id
 
       // Initialize address
       session.address = token.walletAddress;

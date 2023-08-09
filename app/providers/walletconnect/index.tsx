@@ -273,12 +273,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       }
       // populates existing pairings to state
       setPairings(client.pairing.values);
-      console.log("RESTORED PAIRINGS: ", client.pairing.values);
-
-      if (typeof session !== 'undefined') {
-        setIsLoginInning(false)
-        return
-      };
 
       if (client.session.length) {
         const lastKeyIndex = client.session.keys.length - 1;
@@ -289,7 +283,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         setIsLoginInning(false)
       }
     },
-    [client, session, onSessionConnected, setPairings]
+    [client, onSessionConnected, setPairings]
   );
 
   useEffect(() => {
