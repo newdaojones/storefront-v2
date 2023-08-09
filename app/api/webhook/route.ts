@@ -53,7 +53,12 @@ export async function POST(request: Request): Promise<Response> {
     if (body.type === 'account') {
       await accountWebhookHandler(body)
     } else if (body.type === 'order') {
-      await orderWebhookHandler(body)
+      const order = await orderWebhookHandler(body)
+
+      return new Response(JSON.stringify(order || {}), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     return new Response();
@@ -127,7 +132,7 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
     updateOrderData.customerId = customer?.id
   }
 
-  await prisma.order.update({
+  return prisma.order.update({
     where: {
       id: Number(id)
     }, data: updateOrderData
