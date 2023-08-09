@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { config } from "config";
 import { CreateOrderData } from "types/order";
+import prisma from "@/lib/prisma";
 
 export class PylonService {
   axiosInstance: AxiosInstance;
@@ -44,7 +45,7 @@ export class PylonService {
       if (err.status === 401 && user.email) {
         const token = await this.login(user.email)
 
-        await prisma?.user.update({
+        await prisma.user.update({
           where: {
             id: user.id
           },
@@ -92,7 +93,7 @@ export class PylonService {
   }
 
   async getKYCLink(walletAddress?: string) {
-    const user = await prisma?.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         walletAddress
       }

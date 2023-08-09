@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { User } from '@prisma/client';
 import { convertKycStatus } from '@/lib/kycStatus';
 import { NextResponse } from 'next/server';
+import prisma from "@/lib/prisma";
 
 const pylonService = PylonService.getInstance()
 
@@ -27,7 +28,7 @@ export async function POST(request: Request): Promise<Response> {
 
         const token = await pylonService.login(res.data.email);
 
-        const merchant = await prisma?.merchant.create({
+        const merchant = await prisma.merchant.create({
             data: {
                 name: body.companyName,
                 walletAddress: session.address
@@ -54,7 +55,7 @@ export async function POST(request: Request): Promise<Response> {
             status: convertKycStatus(res.data.status)
         }
 
-        const updatedUser = await prisma?.user.update({
+        const updatedUser = await prisma.user.update({
             where: {
                 walletAddress: session?.user.walletAddress
             },

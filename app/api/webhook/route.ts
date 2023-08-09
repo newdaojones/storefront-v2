@@ -1,5 +1,6 @@
 import { convertKycStatus } from "@/lib/kycStatus";
 import { ChargeStatus, Order, OrderStatus } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
 interface Payload<T> {
   id: string;
@@ -68,7 +69,7 @@ export async function POST(request: Request): Promise<Response> {
 
 const accountWebhookHandler = async ({ id, data }: Payload<AccountPayload>) => {
   const status = convertKycStatus(data.status)
-  await prisma?.user.update({
+  await prisma.user.update({
     where: {
       externalId: id
     },
@@ -79,7 +80,7 @@ const accountWebhookHandler = async ({ id, data }: Payload<AccountPayload>) => {
 }
 
 const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload>) => {
-  const order = await prisma?.order.findUnique({
+  const order = await prisma.order.findUnique({
     where: { id: Number(id) },
     include: {
       customer: true,
@@ -105,7 +106,7 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
 
   if (data.customer && !order.customer) {
 
-    const customer = await prisma?.customer.create({
+    const customer = await prisma.customer.create({
       data: {
         externalId: data.customer.id,
         firstName: data.customer.firstName,
@@ -126,7 +127,7 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
     updateOrderData.customerId = customer?.id
   }
 
-  await prisma?.order.update({
+  await prisma.order.update({
     where: {
       id: Number(id)
     }, data: updateOrderData
