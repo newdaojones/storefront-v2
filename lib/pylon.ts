@@ -15,10 +15,14 @@ export class PylonService {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (err) => {
-        const error = err.response;
+        const error = err.response
+        const status = error.status
 
         if (error?.data) {
-          throw error.data;
+          throw {
+            status,
+            ...error.data
+          };
         }
 
         throw error;
