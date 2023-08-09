@@ -202,7 +202,7 @@ export default function KycForms() {
                                 <h2 className={styles.title}>KYC Process</h2>
                             </div>
                             {session?.user.status === 'VERIFIED' ? (
-                                <div className="text-center">it's verified your KYC successfully</div>
+                                <div className="text-center">it&apos;s verified your KYC successfully</div>
                             ) : <>
                                 <div className="flex-1"></div>
                                 <button className={styles.button} onClick={() => processKyc()}>Process</button>
