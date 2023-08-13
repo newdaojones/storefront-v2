@@ -5,8 +5,8 @@ import prisma from "@/lib/prisma";
 interface Payload<T> {
   id: string;
   accountId: string;
-  type: 'account' | 'order'
-  data: T
+  type: "account" | "order";
+  data: T;
 }
 
 interface AccountPayload {
@@ -23,7 +23,7 @@ interface AccountPayload {
   city: string;
   postalCode: string;
   state: string;
-  country: string
+  country: string;
 }
 
 interface OrderPayload {
@@ -40,60 +40,65 @@ interface OrderPayload {
   unitAmount?: number;
   chargeStatus?: ChargeStatus;
   chargeCode?: string;
+  chargeMsg?: string;
   chargeId?: string;
   last4?: string;
-  customer?: AccountPayload
+  customer?: AccountPayload;
 }
 
 export async function POST(request: Request): Promise<Response> {
   try {
     const body: Payload<any> = await request.json();
-    console.log('received hook', body)
+    console.log("received hook", body);
 
-    if (body.type === 'account') {
-      await accountWebhookHandler(body)
-    } else if (body.type === 'order') {
-      const order = await orderWebhookHandler(body)
+    if (body.type === "account") {
+      await accountWebhookHandler(body);
+    } else if (body.type === "order") {
+      const order = await orderWebhookHandler(body);
 
       return new Response(JSON.stringify(order || {}), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
     return new Response();
   } catch (error) {
-    console.error('Error submitting kyc', error);
+    console.error("Error submitting kyc", error);
 
     return new Response(JSON.stringify({ error }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }
 
 const accountWebhookHandler = async ({ id, data }: Payload<AccountPayload>) => {
-  const status = convertKycStatus(data.status)
+  const status = convertKycStatus(data.status);
   await prisma.user.update({
     where: {
-      externalId: id
+      externalId: id,
     },
     data: {
-      status
-    }
-  })
-}
+      status,
+    },
+  });
+};
 
-const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload>) => {
+const orderWebhookHandler = async ({
+  id,
+  accountId,
+  data,
+}: Payload<OrderPayload>) => {
   const order = await prisma.order.findUnique({
     where: { id: Number(id) },
     include: {
       customer: true,
     },
-  })
+  });
 
   if (!order) {
-    return
+    return;
   }
 
   const updateOrderData: Partial<Order> = {
@@ -106,11 +111,11 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
     chargeId: data.chargeId,
     chargeStatus: data.chargeStatus || null,
     chargeCode: data.chargeCode || null,
+    chargeMsg: data.chargeMsg || null,
     last4: data.last4 || null,
-  }
+  };
 
   if (data.customer && !order.customer) {
-
     const customer = await prisma.customer.create({
       data: {
         externalId: data.customer.id,
@@ -126,15 +131,16 @@ const orderWebhookHandler = async ({ id, accountId, data }: Payload<OrderPayload
         state: data.customer.state,
         postalCode: data.customer.postalCode,
         country: data.customer.country,
-      }
-    })
+      },
+    });
 
-    updateOrderData.customerId = customer?.id
+    updateOrderData.customerId = customer?.id;
   }
 
   return prisma.order.update({
     where: {
-      id: Number(id)
-    }, data: updateOrderData
-  })
-}
+      id: Number(id),
+    },
+    data: updateOrderData,
+  });
+};

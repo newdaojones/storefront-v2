@@ -93,6 +93,7 @@ model Order {
   last4               String?
   chargeId            String?
   chargeCode          String?
+  chargeMsg           String?
   chargeStatus        ChargeStatus?
   status              OrderStatus @default(pending)
   link                String?

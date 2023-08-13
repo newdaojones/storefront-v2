@@ -17,6 +17,8 @@ const StatusDetails: React.FC<StatusDetailsProps> = ({ order }) => {
             <div className={styles.rightText}>{order.last4}</div>
             <div className={styles.leftText}>Authorization:</div>
             <div className={styles.rightText}>{order.chargeCode}</div>
+            <div className={styles.leftText}>Message:</div>
+            <div className={styles.rightText}>{order.chargeMsg}</div>
             <div className={styles.leftText}>Status:</div>
             <div className={styles.rightText}>{order.chargeStatus}</div>
         </div>
