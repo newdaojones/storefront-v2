@@ -27,7 +27,7 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
     };
 
     return (
-        <div className="grid grid-cols-5 gap-10 w-full rounded-md px-1 py-1 justify-items-center hover:bg-violet-300"
+        <div className="grid grid-cols-4 gap-12 w-full rounded-md px-2 py-2 justify-items-center bg-slate-50 hover:bg-violet-300"
 
             // This will relay the list item data being hovered to the response code widget
             onMouseEnter={onMouseEnter}

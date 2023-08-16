@@ -5,7 +5,7 @@ type CustomerDetailsProps = {
 export default function CustomerDetails({ data }: CustomerDetailsProps) {
     console.log(data);
     return (
-        <div className="border p-4">
+        <div className="py-2 px-4">
             <p><strong>Customer:</strong> {data?.firstName} {data?.lastName}</p>
             <p><strong>Email:</strong> {data?.email}</p>
             <p><strong>Phone:</strong> {data?.phoneNumber}</p>

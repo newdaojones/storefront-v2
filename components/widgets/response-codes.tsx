@@ -7,7 +7,7 @@ type ResponseCodeProps = {
 export default function ResponseCode({ data }: ResponseCodeProps) {
     console.log(data);
     return (
-        <div className="border p-4">
+        <div className="py-2 px-4">
             <p><strong>Order ID:</strong> {data?.chargeId}</p>
             <p><strong>Last 4:</strong> {data?.last4}</p>
             <p><strong>Authorization:</strong> {data?.chargeCode}</p>
