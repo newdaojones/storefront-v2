@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { PylonService } from "@/lib/pylon";
 import { SmsService } from "@/lib/sms";
 import { config } from "config";
-import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { CreateOrderData } from "types/order";
@@ -88,7 +87,7 @@ export async function GET(req: NextRequest) {
     try {
         const page = Number(req.nextUrl.searchParams.get('page') || 1);
         const limit = Number(req.nextUrl.searchParams.get('limit') || 10);
-        const range: any = req.nextUrl.searchParams.get('range');
+        const dateRange: any = req.nextUrl.searchParams.get('dateRange');
         const session = await getServerSession({ req, ...authOptions });
 
         if (!session) {
@@ -99,8 +98,8 @@ export async function GET(req: NextRequest) {
             where: {
                 merchantId: session.user.merchantId,
                 createdAt: {
-                    gte: range.from,
-                    lte: range.to
+                    gte: dateRange.from,
+                    lte: dateRange.to
                 }
             },
             include: {
@@ -117,8 +116,8 @@ export async function GET(req: NextRequest) {
             where: {
                 merchantId: session.user.merchantId,
                 createdAt: {
-                    gte: range.from,
-                    lte: range.to
+                    gte: dateRange.from,
+                    lte: dateRange.to
                 }
             }
         })

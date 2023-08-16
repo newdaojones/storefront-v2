@@ -1,9 +1,8 @@
-import { Order } from '@prisma/client';
-import CustomerDetails, { CustDetails } from './details-customer';
-import PaymentDetails, { Payment } from './details-payment';
-import StatusDetails, { ResponseCodes } from './details-status';
-import styles from './payments.module.css';
 import { format } from 'date-fns';
+import CustomerDetails from './details-customer';
+import PaymentDetails from './details-payment';
+import StatusDetails from './details-status';
+import styles from './payments.module.css';
 
 type PaymentItemProps = {
     order: any;

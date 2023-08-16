@@ -1,10 +1,9 @@
 "use client"
 
+import { Order } from '@prisma/client';
 import { useState } from 'react';
-import { dummyData } from 'utils/dummyData';
 import PaymentItem from './item';
 import styles from './payments.module.css';
-import { Order } from '@prisma/client';
 
 export type Payment = {
     paymentId: string;

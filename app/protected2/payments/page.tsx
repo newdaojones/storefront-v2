@@ -2,14 +2,17 @@
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import Widget from "@/components/generics/widget";
-import PaymentButtons from "@/components/payments2/buttons";
-import { HoveredItemProvider, useHoveredItem } from "@/components/payments2/hovered-context";
-import PaymentList from "@/components/payments2/list";
-import Agent from "@/components/widgets2/agent";
-import DateRangePicker from "@/components/widgets2/datepicker";
-import ResponseCodes from "@/components/widgets2/response-codes";
-import Shortcuts from "@/components/widgets2/shortcuts";
-import { useState } from "react";
+import PaymentButtons from "@/components/payments/buttons";
+import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hovered-context";
+import PaymentList from "@/components/payments/list2";
+import CustomerDetails from "@/components/widgets/customer-details";
+import DateRangePicker from "@/components/widgets/datepicker";
+import ResponseCodes from "@/components/widgets/response-codes";
+import Shortcuts from "@/components/widgets/shortcuts";
+import { Order } from "@prisma/client";
+import queryString from "query-string";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export default function Payments() {
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
@@ -17,49 +20,75 @@ export default function Payments() {
 
     return (
         <HoveredItemProvider>
-            <ContentWithHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
+            <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
         </HoveredItemProvider>
     )
 }
 
-function ContentWithHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
+function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { hoveredItem } = useHoveredItem();
     const [dateRange, setDateRange] = useState<{ startDate: Date | null, endDate: Date | null }>({ startDate: null, endDate: null });
+    const [loading, setLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [total, setTotal] = useState(0)
+    const [limit] = useState(10);
+
+    const [orders, setOrders] = useState<Array<Order>>([])
 
     const handleDateRangeChange = (startDate: Date, endDate: Date) => {
         setDateRange({ startDate, endDate });
     };
 
+    const getOrders = useCallback(async () => {
+        try {
+            setLoading(true)
+            setOrders([])
+            const query = queryString.stringify({
+                page,
+                limit,
+                dateRange
+            })
+            const response = await fetch(`/api/order?${query}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setOrders(result.rows)
+                setTotal(result.count)
+            } else {
+                throw new Error(result.message || result.error)
+            }
+        } catch (err: any) {
+            toast.error(err.message)
+        } finally {
+            setLoading(false)
+        }
+    }, [page, limit, dateRange])
+
+    useEffect(() => {
+        getOrders()
+    }, [getOrders])
+
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Payments"} footer={<PaymentButtons />}>
-                <PaymentList orders={[
-                    {
-                        orderId: "12345",
-                        orderDate: "2023-08-10",
-                        orderStatus: "Paid",
-                        orderAmount: "$100.00",
-                        orderCustomer: "John Doe"
-                    },
-                    {
-                        orderId: "54321",
-                        orderDate: "2023-08-09",
-                        orderStatus: "Pending",
-                        orderAmount: "$150.00",
-                        orderCustomer: "Jane Smith"
-                    }
-                ]} />
+                <PaymentList orders={orders} />
             </Container>
             <CommandBar
                 slot1={'Status Codes'}
                 slot2={'Date Range'}
-                slot3={'Agent'}
+                slot3={'Customer Details'}
                 slot4={'Shortcuts'}
                 changeWidget={setActiveWidget}
             />
             {activeWidget === 'Status Codes' && <Widget title="Codes"><ResponseCodes data={hoveredItem} /></Widget>}
             {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}
-            {activeWidget === 'Agent' && <Widget title="Agent"><Agent viewType={"payments"} /></Widget>}
+            {activeWidget === 'Customer Details' && <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>}
             {activeWidget === 'Shortcuts' && <Widget title="Shortcuts"><Shortcuts viewType={"payments"} /></Widget>}
         </div>
     )

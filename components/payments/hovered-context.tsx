@@ -1,3 +1,4 @@
+import { Order } from '@prisma/client';
 import React, { ReactNode, createContext, useContext, useState } from 'react';
 
 type OrderData = {
@@ -9,8 +10,8 @@ type OrderData = {
 };
 
 type HoveredItemContextType = {
-    hoveredItem: OrderData | null;
-    setHoveredItem: React.Dispatch<React.SetStateAction<OrderData | null>>;
+    hoveredItem: Order | null;
+    setHoveredItem: React.Dispatch<React.SetStateAction<Order | null>>;
 };
 
 const HoveredItemContext = createContext<HoveredItemContextType | undefined>(undefined);
@@ -20,7 +21,7 @@ type Props = {
 };
 
 export const HoveredItemProvider: React.FC<Props> = ({ children }) => {
-    const [hoveredItem, setHoveredItem] = useState<OrderData | null>(null);
+    const [hoveredItem, setHoveredItem] = useState<Order | null>(null);
 
     return (
         <HoveredItemContext.Provider value={{ hoveredItem, setHoveredItem }}>

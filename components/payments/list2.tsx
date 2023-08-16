@@ -1,18 +1,10 @@
-"use client"
+import { Order } from '@prisma/client';
 import { useHoveredItem } from './hovered-context';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
 
-type OrderData = {
-    orderId: string;
-    orderDate: string;
-    orderStatus: string;
-    orderAmount: string;
-    orderCustomer: string;
-}
-
 type ListProps = {
-    orders: OrderData[];
-}
+    orders: Order[];
+};
 
 export default function PaymentList({ orders }: ListProps) {
 
@@ -21,15 +13,11 @@ export default function PaymentList({ orders }: ListProps) {
     console.log(orders);
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-2 overflow-y-auto max-h-80">
             {orders.map(order => (
                 <ListItem
-                    key={order.orderId}
-                    orderId={order.orderId}
-                    orderDate={order.orderDate}
-                    orderStatus={order.orderStatus}
-                    orderAmount={order.orderAmount}
-                    orderCustomer={order.orderCustomer}
+                    key={order.id}
+                    order={order}
                     onMouseEnter={(e) => setHoveredItem(order)}
                     onMouseLeave={(e) => setHoveredItem(null)}
                 />
