@@ -13,7 +13,7 @@ type Props = {
 }
 
 
-export default function CommandBar({ slot1, slot2, slot3, slot4, changeWidget }: Props) {
+export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWidget }: Props) {
 
     return (
         <nav className="fixed w-full mx-2 grid items-center grid-cols-1 navbar-styles h-20 flex-shrink-0 sm:bg-gradient-to-r sm:from-transparent sm:from-20% sm:via-[#8A4CF7] sm:to-[#B4FFDB] sm:top-0 bottom-36">
@@ -60,8 +60,8 @@ export default function CommandBar({ slot1, slot2, slot3, slot4, changeWidget }:
                         type="button"
                         onClick={(e) => {
                             e.preventDefault;
-                            console.log("Setting active widget to:", slot3);
-                            changeWidget && changeWidget(slot3 || '');
+                            console.log("Setting active widget to:", slot4);
+                            changeWidget && changeWidget(slot4 || '');
                         }}
                         className="p-2 bg-blue-500 text-white rounded shadow-md sm:bg-transparent sm:text-current sm:shadow-none sm:p-0">
                         {slot4}

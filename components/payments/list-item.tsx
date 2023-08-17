@@ -35,24 +35,16 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
         >
 
             <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{order.id}</p>
-                <p className="text-sm font-semibold text-gray-500">{order.transactionHash}</p>
-
+                <p className="text-sm font-semibold text-gray-500">{order.id ?? "problem 😮‍💨"}</p>
             </div>
             <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{displayDate}</p>
-                <p className="text-sm font-semibold text-gray-500">{displayDate}</p>
+                <p className="text-sm font-semibold text-gray-500">{displayDate ?? "problem 😮‍💨"}</p>
             </div>
             <div className="col-span-1">
-                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{order.amount}</p>
-                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{total}</p>
-
+                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{order.amount ?? "problem 😮‍💨"}</p>
             </div>
             <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName} {order.customer?.lastName}</p>
-                <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName} {order.customer?.lastName}</p>
-
-
+                <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName ?? "problem 😮‍💨"} {order.customer?.lastName ?? ''}</p>
             </div>
         </div>
     )

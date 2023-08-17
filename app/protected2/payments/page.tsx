@@ -7,8 +7,7 @@ import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hover
 import PaymentList from "@/components/payments/list2";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker from "@/components/widgets/datepicker";
-import ResponseCodes from "@/components/widgets/response-codes";
-import Shortcuts from "@/components/widgets/shortcuts";
+import ResponseCodes from "@/components/widgets/payment-details";
 import { Order } from "@prisma/client";
 import queryString from "query-string";
 import { useCallback, useEffect, useState } from "react";
@@ -80,16 +79,14 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 <PaymentList orders={orders} />
             </Container>
             <CommandBar
-                slot1={'Status Codes'}
+                slot1={'Payment Details'}
                 slot2={'Date Range'}
                 slot3={'Customer Details'}
-                slot4={'Shortcuts'}
                 changeWidget={setActiveWidget}
             />
-            {activeWidget === 'Status Codes' && <Widget title="Codes"><ResponseCodes data={hoveredItem} /></Widget>}
+            {activeWidget === 'Payment Details' && <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>}
             {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}
             {activeWidget === 'Customer Details' && <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>}
-            {activeWidget === 'Shortcuts' && <Widget title="Shortcuts"><Shortcuts viewType={"payments"} /></Widget>}
         </div>
     )
 }

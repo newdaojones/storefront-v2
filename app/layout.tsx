@@ -1,11 +1,11 @@
 // These styles apply to every route in the application
 import AuthStatus from "@/components/auth/auth-status";
 import "@/styles/globals.css";
-import 'react-phone-number-input/style.css'
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import 'react-phone-number-input/style.css';
 import Providers from "./providers/root";
 
 const inter = Inter({
