@@ -36,7 +36,7 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
 
             <div className="col-span-1">
                 <p className="text-sm font-semibold text-gray-500">{order.id}</p>
-                <p className="text-sm font-semibold text-gray-500">{order.id}</p>
+                <p className="text-sm font-semibold text-gray-500">{order.transactionHash}</p>
 
             </div>
             <div className="col-span-1">
@@ -44,7 +44,7 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
                 <p className="text-sm font-semibold text-gray-500">{displayDate}</p>
             </div>
             <div className="col-span-1">
-                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{total}</p>
+                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{order.amount}</p>
                 <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{total}</p>
 
             </div>
