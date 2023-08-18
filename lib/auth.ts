@@ -1,8 +1,8 @@
+import prisma from "@/lib/prisma";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { SiweMessage } from "siwe";
 import { Credentials } from "types/auth";
-import prisma from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
               role: newUser.role,
               name: `${newUser.firstName} ${newUser.lastName}`,
               status: newUser.status,
-              email: newUser.email,
+              email: newUser.email ?? undefined,
               walletAddress: newUser.walletAddress,
               merchant: newUser.merchant,
               isNewUser: true,
@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             name: user.firstName ? `${user.firstName} ${user.lastName}` : user.walletAddress,
             status: user.status,
-            email: user.email,
+            email: user.email ?? undefined,
             merchant: user.merchant,
             isNewUser: false,
           }

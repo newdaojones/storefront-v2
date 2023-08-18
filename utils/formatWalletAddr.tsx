@@ -1,6 +1,11 @@
-
-
 export default function formatWalletAddress(address: string): string {
-    if (address.length <= 8) return address; // Return the address as-is if it's short
-    return `${address.slice(0, 4)}...${address.slice(-4)}`;
+
+    // Make the wallet address human readable
+    if (address.length <= 8) {
+        return address;
+    }
+
+    const formattedAddress = `${address.slice(0, 4)}...${address.slice(-4)}`;
+
+    return formattedAddress;
 }

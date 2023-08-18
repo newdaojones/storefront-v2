@@ -12,7 +12,7 @@ import Agent from "@/components/widgets/agent";
 import Shortcuts from "@/components/widgets/shortcuts";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import formatWalletAddr from "utils/formatWalletAddr";
+import { default as formatWalletAddress } from "utils/formatWalletAddr";
 
 export default function Settings() {
     const { data: session } = useSession();
@@ -24,10 +24,11 @@ export default function Settings() {
             <Container title={"Settings"} footer={<OnboardButtons />}>
                 {session && (
                     <>
-                        <SettlementAddress settlementAddr={formatWalletAddr(session.user?.merchant?.walletAddress || '')} />
-                        <MerchUsername merchName={session?.user?.name || ''} />
+                        <SettlementAddress settlementAddr={formatWalletAddress(session.address || 'Error: No Address')} />
+                        <MerchUsername merchName={formatWalletAddress(session?.user?.name || 'Error: No Name')} />
                     </>
                 )}
+
                 {merchKyc && (
                     <>
                         <MerchKycStatus kycStatus={merchKyc} />
