@@ -54,19 +54,19 @@ export const authOptions: NextAuthOptions = {
               status: newUser.status,
               email: newUser.email,
               walletAddress: newUser.walletAddress,
-              merchant: newUser.merchant ? { id: newUser.merchant.id } : null,
+              merchant: newUser.merchant,
               isNewUser: true,
             }
           }
 
           return {
             id: user.id,
+            walletAddress: user.walletAddress,
             role: user.role,
             name: user.firstName ? `${user.firstName} ${user.lastName}` : user.walletAddress,
             status: user.status,
             email: user.email,
-            walletAddress: user.walletAddress,
-            merchant: user.merchant ? { id: user.merchant.id } : null,
+            merchant: user.merchant,
             isNewUser: false,
           }
         } catch (e) {
@@ -119,6 +119,7 @@ export const authOptions: NextAuthOptions = {
       session.user.role = token?.role || "GUEST";  // Default to "GUEST" if role is not defined
       session.user.status = token?.status
       session.user.merchantId = token?.merchant?.id
+      session.user.merchant = token?.merchant
 
       // Initialize address
       session.address = token.walletAddress;

@@ -52,7 +52,7 @@ export async function POST(request: Request): Promise<Response> {
             country: res.data.country,
             merchantId: merchant?.id || null,
             token: token,
-            status: convertKycStatus(res.data.status)
+            status: convertKycStatus(res.data.status),
         }
 
         const updatedUser = await prisma.user.update({
@@ -66,7 +66,10 @@ export async function POST(request: Request): Promise<Response> {
             pylonService.sandboxApproveAccount(updatedUser)
         }
 
-        return new Response(JSON.stringify(updatedUser), {
+        return new Response(JSON.stringify({
+            ...updatedUser,
+            merchant
+        }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });

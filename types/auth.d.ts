@@ -75,6 +75,8 @@ declare module 'next-auth' {
      */
     interface Merchant {
         id: number
+        name: string
+        walletAddress: string
     }
 
     /**

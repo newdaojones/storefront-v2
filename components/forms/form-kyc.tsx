@@ -63,9 +63,7 @@ export default function KycForms() {
                         image: '',
                         role: result.role,
                         isVerified: result.status === 'VERIFIED',
-                        merchant: {
-                            id: result.merchantId
-                        }
+                        merchant: result.merchant
                     },
                     isNewUser: false,
                 })
