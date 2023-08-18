@@ -17,21 +17,16 @@ import { default as formatWalletAddress } from "utils/formatWalletAddr";
 export default function Settings() {
     const { data: session } = useSession();
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
-    const [merchKyc, setMerchKyc] = useState<string | null>(null);
+    const [merchKyc, setMerchKyc] = useState<| null>(null);
 
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Settings"} footer={<OnboardButtons />}>
                 {session && (
                     <>
-                        <SettlementAddress settlementAddr={formatWalletAddress(session.address || 'Error: No Address')} />
-                        <MerchUsername merchName={formatWalletAddress(session?.user?.name || 'Error: No Name')} />
-                    </>
-                )}
-
-                {merchKyc && (
-                    <>
-                        <MerchKycStatus kycStatus={merchKyc} />
+                        <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
+                        <MerchUsername merchName={(session?.user?.name || '🛑 No Name')} />
+                        <MerchKycStatus kycStatus={(session?.user.status || '🛑 No KYC Status')} />
                     </>
                 )}
                 <AppVersion />
