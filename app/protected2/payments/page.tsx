@@ -41,7 +41,6 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     const getOrders = useCallback(async () => {
         try {
             setLoading(true)
-            setOrders([])
             const query = queryString.stringify({
                 page,
                 limit,
@@ -57,7 +56,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
             const result = await response.json();
 
             if (response.ok) {
-                setOrders(result.rows)
+                setOrders(orders.concat(result.rows))
                 setTotal(result.count)
             } else {
                 throw new Error(result.message || result.error)
@@ -76,7 +75,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Payments"} footer={<PaymentButtons />}>
-                <PaymentList orders={orders} />
+                <PaymentList orders={orders} loading={loading} total={total} loadMore={() => setPage(page + 1)} />
             </Container>
             <CommandBar
                 slot1={'Payment Details'}

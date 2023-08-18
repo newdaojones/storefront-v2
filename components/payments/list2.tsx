@@ -1,16 +1,30 @@
+import { useMemo } from 'react';
 import { Order } from '@prisma/client';
 import { useHoveredItem } from './hovered-context';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
+import useInfiniteScroll from '../useInfiniteScroll';
+import FadeLoader from 'react-spinners/FadeLoader';
 
 type ListProps = {
     orders: Order[];
+    loading?: boolean;
+    total?: number
+    loadMore?: () => void
 };
 
-export default function PaymentList({ orders }: ListProps) {
+export default function PaymentList({ orders, loading = false, total = 0, loadMore }: ListProps) {
 
+    const isReached = useMemo(() => orders.length >= total, [orders, total])
     // This will relay the list item data being hovered to the response code widget
     const { setHoveredItem } = useHoveredItem();
-    console.log(orders);
+
+    const [lastElementRef] = useInfiniteScroll(() => {
+        if (isReached || loading || !loadMore) {
+            return
+        }
+
+        loadMore()
+    }, loading);
 
     return (
         <div>
@@ -29,7 +43,14 @@ export default function PaymentList({ orders }: ListProps) {
                         onMouseLeave={(e) => setHoveredItem(null)}
                     />
                 ))}
+                {loading && (
+                    <div className="flex items-center justify-center">
+                        <FadeLoader color="black" />
+                    </div>
+                )}
+                <div ref={lastElementRef} />
             </div>
+
         </div>
     );
 }
