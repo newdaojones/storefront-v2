@@ -1,45 +1,50 @@
 "use client"
-
-import { useCallback, useEffect, useMemo, useState } from "react";
+import CommandBar from "@/components/generics/command-bar";
+import Container from "@/components/generics/container";
+import Widget from "@/components/generics/widget";
+import PaymentButtons from "@/components/payments/buttons";
+import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hovered-context";
 import PaymentList from "@/components/payments/list";
-import queryString from 'query-string';
-import styles from '../../../components/payments/payments.module.css';
-import DateRangePicker from "@/components/payments/datepicker";
-import { DateRange } from "react-day-picker";
-import { endOfDay, startOfDay, subDays } from "date-fns";
+import CustomerDetails from "@/components/widgets/customer-details";
+import DateRangePicker from "@/components/widgets/datepicker";
+import ResponseCodes from "@/components/widgets/payment-details";
 import { Order } from "@prisma/client";
-import PaymentsHeader from "@/components/payments/header";
+import queryString from "query-string";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import FadeLoader from 'react-spinners/FadeLoader';
-import { useRouter } from "next/navigation";
 
-export default function PaymentPage() {
-    const router = useRouter()
-    const [orders, setOrders] = useState<Array<Order>>([])
+export default function Payments() {
+    const [activeWidget, setActiveWidget] = useState<string | null>(null);
+
+
+    return (
+        <HoveredItemProvider>
+            <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
+        </HoveredItemProvider>
+    )
+}
+
+function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
+    const { hoveredItem } = useHoveredItem();
+    const [dateRange, setDateRange] = useState<{ startDate: Date | null, endDate: Date | null }>({ startDate: null, endDate: null });
+    const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
     const [total, setTotal] = useState(0)
-    const [loading, setLoading] = useState(false)
     const [limit] = useState(10);
-    const [range, setRange] = useState<DateRange>({
-        from: startOfDay(subDays(new Date(), 7)),
-        to: endOfDay(new Date()),
-    });
-    const isDisabledPrev = useMemo(() => loading || page === 1, [page, loading])
-    const isDisabledNext = useMemo(() => loading || page * limit >= total, [page, limit, total, loading])
 
-    const onChangeRange = (value: DateRange) => {
-        setRange(value)
-        setPage(1)
-    }
+    const [orders, setOrders] = useState<Array<Order>>([])
+
+    const handleDateRangeChange = (startDate: Date, endDate: Date) => {
+        setDateRange({ startDate, endDate });
+    };
 
     const getOrders = useCallback(async () => {
         try {
             setLoading(true)
-            setOrders([])
             const query = queryString.stringify({
                 page,
                 limit,
-                range
+                dateRange
             })
             const response = await fetch(`/api/order?${query}`, {
                 method: 'GET',
@@ -51,7 +56,7 @@ export default function PaymentPage() {
             const result = await response.json();
 
             if (response.ok) {
-                setOrders(result.rows)
+                setOrders(orders.concat(result.rows))
                 setTotal(result.count)
             } else {
                 throw new Error(result.message || result.error)
@@ -61,41 +66,26 @@ export default function PaymentPage() {
         } finally {
             setLoading(false)
         }
-    }, [page, limit, range])
+    }, [page, limit, dateRange])
 
     useEffect(() => {
         getOrders()
     }, [getOrders])
 
     return (
-        <div className={styles.container}>
-            <div className={styles.body}>
-                <PaymentsHeader />
-                <div className="flex justify-between">
-                    <DateRangePicker disabled={loading} range={range} setRange={onChangeRange} />
-                    <button className={styles.button} onClick={() => router.push('/protected/order')}>Create</button>
-                </div>
-                <div className={styles.rowContainer}>
-                    <PaymentList orders={orders} />
-                    {loading && (
-                        <div className="flex items-center justify-center">
-                            <FadeLoader color="black" />
-                        </div>
-                    )}
-                    <div className="flex justify-end">
-                        <button
-                            disabled={isDisabledPrev}
-                            onClick={() => setPage(page - 1)}
-                            className={`border-2 rounded pl-4 pr-4 text-white ${isDisabledPrev ? 'bg-gray-400' : 'bg-purple-500'}`}
-                        >{'<'}</button>
-                        <button
-                            disabled={isDisabledNext}
-                            onClick={() => setPage(page + 1)}
-                            className={`border-2 rounded pl-4 pr-4 text-white ${isDisabledNext ? 'bg-gray-400' : 'bg-purple-500'}`}
-                        >{'>'}</button>
-                    </div>
-                </div>
-            </div>
+        <div className="relative w-screen h-screen">
+            <Container title={"Payments"} footer={<PaymentButtons orders={undefined} />}>
+                <PaymentList orders={orders} loading={loading} total={total} loadMore={() => setPage(page + 1)} />
+            </Container>
+            <CommandBar
+                slot1={'Payment Details'}
+                slot2={'Date Range'}
+                slot3={'Customer Details'}
+                changeWidget={setActiveWidget}
+            />
+            {activeWidget === 'Payment Details' && <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>}
+            {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}
+            {activeWidget === 'Customer Details' && <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>}
         </div>
-    );
+    )
 }

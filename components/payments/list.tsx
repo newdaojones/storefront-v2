@@ -1,45 +1,76 @@
-"use client"
-
 import { Order } from '@prisma/client';
-import { useState } from 'react';
-import PaymentItem from './item';
-import styles from './payments.module.css';
+import React, { useMemo } from 'react';
+import FadeLoader from 'react-spinners/FadeLoader';
+import useInfiniteScroll from '../useInfiniteScroll';
+import { fetchLatestOrder } from './data-refresh';
+import { useHoveredItem } from './hovered-context';
+import ListItem from './list-item'; // Ensure the path to the list-item component is correct
 
-export type Payment = {
-    paymentId: string;
-    orderAmount: number;
-    orderId: string;
-    tip: number;
-    networkFee: number;
-    serviceFee: number;
-    tax: number;
-    txHash: string;
-    status: string;
-    responseCode: number;
-    createdAt: string;
-    cancelledAt?: string;
+type ListProps = {
+    orders: Order[];
+    loading?: boolean;
+    total?: number
+    loadMore?: () => void
 };
 
-export default function PaymentList({ orders }: { orders: Array<Order> }) {
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+export default function PaymentList({ orders, loading = false, total = 0, loadMore }: ListProps) {
+
+    const isReached = useMemo(() => orders.length >= total, [orders, total])
+    // This will relay the list item data being hovered to the response code widget
+    const { setHoveredItem } = useHoveredItem();
+
+    const [lastElementRef] = useInfiniteScroll(() => {
+        if (isReached || loading || !loadMore) {
+            return
+        }
+
+        loadMore()
+    }, loading);
+
+    const handleRefresh = async () => {
+        const latestOrder = await fetchLatestOrder();
+
+        if (latestOrder && (!orders.length || latestOrder.id !== orders[0].id)) {
+            // If there's a new order, prepend it to the list.
+            // Here, we assume orders are sorted in descending order by their creation date or ID.
+            orders.unshift(latestOrder);
+            // Update your state accordingly.
+        }
+    };
+
+    // Optional: Set up an interval to auto-refresh the list every X seconds
+    React.useEffect(() => {
+        const intervalId = setInterval(handleRefresh, 10000); // Check every 10 seconds
+        return () => clearInterval(intervalId); // Clean up on component unmount
+    }, [orders]);
+
+
 
     return (
-        <div className={styles.rowContainer}>
-            <div className={styles.rowHeader}>
-                <div className={styles.headerCell}>Order ID</div>
-                <div className={styles.headerCell}>Total</div>
-                <div className={styles.headerCell}>Status</div>
-                <div className={styles.headerCell}>Timestamp</div>
+        <div>
+            <div className="grid grid-cols-4 pb-4 justify-items-center">
+                <p><strong>Order ID</strong></p>
+                <p><strong>Time</strong></p>
+                <p><strong>Order</strong></p>
+                <p><strong>Customer</strong></p>
             </div>
-            <div className={styles.rowContainer}>
-                {orders.map((order, index) => (
-                    <PaymentItem
+            <div className="space-y-2 overflow-y-auto max-h-80">
+                {orders.map(order => (
+                    <ListItem
                         key={order.id}
                         order={order}
-                        isExpanded={expandedIndex === index}
-                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)} />
+                        onMouseEnter={(e) => setHoveredItem(order)}
+                        onMouseLeave={(e) => setHoveredItem(null)}
+                    />
                 ))}
+                {loading && (
+                    <div className="flex items-center justify-center">
+                        <FadeLoader color="black" />
+                    </div>
+                )}
+                <div ref={lastElementRef} />
             </div>
+
         </div>
     );
 }

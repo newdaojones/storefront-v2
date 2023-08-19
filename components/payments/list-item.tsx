@@ -44,7 +44,7 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
                 <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{order.amount ?? "problem 😮‍💨"}</p>
             </div>
             <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName ?? "problem 😮‍💨"} {order.customer?.lastName ?? ''}</p>
+                <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
             </div>
         </div>
     )
