@@ -1,5 +1,5 @@
+import Orbital from '@/components/generics/orbital';
 import TopBar from '@/components/menus/topbar';
-import Orbital from '@/components/orbital/orbital';
 import React from 'react';
 
 export default function MainLayout({ children }: {

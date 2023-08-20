@@ -2,10 +2,10 @@ import Satellites from "./satellites";
 
 export default function Orbital() {
     const links = [
-        { path: '/orders', label: 'Orders' },
-        { path: '/payments', label: 'Payments' },
-        { path: '/gateway', label: 'Gateway' },
-        { path: '/settings', label: 'Settings' },
+        { path: '/protected/orders', label: 'Orders' },
+        { path: '/protected/payments', label: 'Payments' },
+        { path: '/protected/gateway', label: 'Gateway' },
+        { path: '/protected/settings', label: 'Settings' },
     ];
     return (
         <div className="fixed z-10 w-0 bottom-50 lg:-top-0 lg:-left-0">
