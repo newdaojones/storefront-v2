@@ -1,6 +1,5 @@
 "use client"
 
-
 // Slots are filled by props passed at the top level layout.tsx currently
 type Props = {
     slot1: string
@@ -11,7 +10,6 @@ type Props = {
     children?: React.ReactNode
     changeWidget?: (widget: string) => void
 }
-
 
 export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWidget }: Props) {
 

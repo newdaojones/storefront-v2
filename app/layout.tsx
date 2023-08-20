@@ -1,5 +1,6 @@
 // These styles apply to every route in the application
 import AuthStatus from "@/components/auth/auth-status";
+import Orbital from "@/components/generics/orbital";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -41,7 +42,11 @@ export default async function RootLayout({
         <Suspense fallback="Loading...">
           <AuthStatus />
         </Suspense>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Orbital />
+
+        </Providers>
       </body>
     </html>
   );
