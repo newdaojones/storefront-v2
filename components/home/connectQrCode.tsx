@@ -72,7 +72,7 @@ export const Login = () => {
   const classNames = {
     centerLogo: 'flex items-center justify-center pt-2 relative rounded-md',
     qrcode: 'flex items-center justify-center rounded-10xl overflow-hidden qrcode',
-    logo: 'w-20 h-20 absolute z-10 ',
+    logo: 'w-20 h-20 absolute z-10',
     logoBlur: 'w-20 h-20 absolute z-9 blur',
   };
 
