@@ -6,8 +6,8 @@ import Widget from "@/components/generics/widget";
 import AppVersion from "@/components/settings/app-version";
 import SettingsButtons from "@/components/settings/buttons";
 import MerchKycStatus from "@/components/settings/kyc-status";
-import MerchUsername from "@/components/settings/merchant-username";
 import SettlementAddress from "@/components/settings/settlement-address";
+import StorefrontName from "@/components/settings/storefront-name";
 import Agent from "@/components/widgets/agent";
 import Shortcuts from "@/components/widgets/shortcuts";
 import { useSession } from "next-auth/react";
@@ -26,8 +26,8 @@ export default function Settings() {
     const [currentMerchName, setMerchName] = useState<string>(getDefaultMerchName());
 
     useEffect(() => {
-        if (session?.user?.name) {
-            setMerchName(session.user.name);
+        if (session?.user?.merchant?.name) {
+            setMerchName(session.user.merchant.name);
         }
     }, [session]);
 
@@ -54,7 +54,7 @@ export default function Settings() {
                 {session && (
                     <>
                         <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
-                        <MerchUsername
+                        <StorefrontName
                             merchName={currentMerchName}
                             isEditing={isEditing}
                             onNameChange={setMerchName} />

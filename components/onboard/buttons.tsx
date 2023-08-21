@@ -7,7 +7,7 @@ export default function OnboardButtons() {
             <Link href="https://storefront-too-test.vercel.app">
                 <button className="w-24 p-4 h-12 flex justify-center items-center rounded-md bg-blue-300 hover:bg-violet-600 md:w-28 lg:w-32">Demo</button>
             </Link>
-            <Link href="/kyc">
+            <Link href="/protected/onboard/kyc">
                 <button className="w-24 p-4 h-12 flex justify-center items-center rounded-md bg-blue-300 hover:bg-violet-600 md:w-28 lg:w-32">KYC</button>
             </Link>
         </div>

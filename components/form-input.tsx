@@ -12,6 +12,51 @@ interface Props extends FormikProps<any> {
 }
 
 export function FormInput({ type, values, errors, touched, field, label, disabled, setFieldValue, setFieldTouched }: Props) {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    let formattedValue = val;
+
+    if (field === 'dob') {
+      formattedValue = val.replace(/[^0-9]/g, '');
+      if (formattedValue.length >= 4) {
+        formattedValue = formattedValue.slice(0, 4) + '-' + formattedValue.slice(4);
+      }
+      if (formattedValue.length >= 7) {
+        formattedValue = formattedValue.slice(0, 7) + '-' + formattedValue.slice(7);
+      }
+      if (formattedValue.length > 10) {
+        formattedValue = formattedValue.slice(0, 10);
+      }
+    }
+
+    if (field === 'ssn') {
+      formattedValue = val.replace(/[^0-9]/g, '');
+      if (formattedValue.length >= 3) {
+        formattedValue = formattedValue.slice(0, 3) + '-' + formattedValue.slice(3);
+      }
+      if (formattedValue.length >= 6) {
+        formattedValue = formattedValue.slice(0, 6) + '-' + formattedValue.slice(6);
+      }
+      if (formattedValue.length > 11) {
+        formattedValue = formattedValue.slice(0, 11);
+      }
+    }
+
+    if (field === 'postalCode') {
+      formattedValue = val.replace(/[^0-9]/g, '');
+    }
+
+    if (field === 'state') {
+      formattedValue = val.toUpperCase();
+      if (formattedValue.length > 2) {
+        formattedValue = formattedValue.slice(0, 2);
+      }
+    }
+
+    setFieldValue(field, formattedValue);
+  };
+
   let inputComponent;
 
   switch (type) {
@@ -27,6 +72,7 @@ export function FormInput({ type, values, errors, touched, field, label, disable
         />
       );
       break;
+
     case 'amount':
       inputComponent = (
         <div className="relative">
@@ -41,20 +87,23 @@ export function FormInput({ type, values, errors, touched, field, label, disable
         </div>
       );
       break;
+
     default:
       inputComponent = (
         <input
-          className="px-4 py-2 w-full rounded"
-          type={type}
+          className="px-4 py-2 w-full rounded outline-violet-500 bg-stone-50"
+          type="text"
           placeholder={label}
           value={values[field]}
           disabled={disabled}
-          onChange={(e) => setFieldValue(field, e.target.value)}
+          onChange={handleInputChange}
           onBlur={() => setFieldTouched(field, true)}
         />
       );
       break;
   }
+
+
 
   return (
     <div className="w-full py-4">

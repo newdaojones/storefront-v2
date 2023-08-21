@@ -1,16 +1,17 @@
 "use client"
 
+import { config } from "config";
+import { useFormik } from 'formik';
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import ClockLoader from 'react-spinners/ClockLoader';
 import { kycValidationSchema } from "utils/validations";
 import SignOut from "../auth/sign-out";
-import styles from './form.module.css';
-import { useFormik } from 'formik';
 import { FormInput } from "../form-input";
+import Container from "../generics/container";
 import { useAgreement } from "../use/agreement";
-import { config } from "config";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import ClockLoader from 'react-spinners/ClockLoader';
-import { toast } from "react-hot-toast";
+import styles from './form.module.css';
 
 interface KycIndividual {
     companyName: string;
@@ -158,68 +159,63 @@ export default function KycForms() {
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.innerContainer}>
-                <div className="flex-1 flex flex-col gap-2">
-                    {session?.user.role === 'GUEST' ? (<>
-                        <div className={styles.formHeader}>
-                            <h2 className={styles.title}>Owner KYC Form</h2>
-                        </div>
-                        <FormInput {...kycInfo} field="companyName" label="Company Name" />
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="firstName" label="First Name" />
-                            <FormInput {...kycInfo} field="lastName" label="Last Name" />
-                        </div>
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="email" label="Email" type="email" />
-                            <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" type="phoneNumber" />
-                        </div>
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="dob" label="Date of Birthday" />
-                            <FormInput {...kycInfo} field="ssn" label="SSN" />
-                        </div>
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="streetAddress" label="Street Address" />
-                            <FormInput {...kycInfo} field="streetAddress2" label="Unit" />
-                        </div>
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="city" label="City" />
-                            <FormInput {...kycInfo} field="state" label="State" />
-                        </div>
-                        <div className="flex gap-2">
-                            <FormInput {...kycInfo} field="postalCode" label="Postal Code" />
-                            <FormInput {...kycInfo} field="country" label="Country" disabled />
-                        </div>
-                        <label className="mt-5 cursor-pointer select-none">
-                            <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
-                            Click here to review and accept <span className="text-purple-500">Bridge terms of service (TOS)</span>.
-                        </label>
-                        {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
-
-                        <button className={styles.button} onClick={() => kycInfo.submitForm()}>Submit</button></>
-                    ) : <>
-                        <>
-                            <div className={styles.formHeader}>
-                                <h2 className={styles.title}>KYC Process</h2>
-                            </div>
-                            {session?.user.status === 'VERIFIED' ? (
-                                <div className="text-center">it&apos;s verified your KYC successfully</div>
-                            ) : <>
-                                <div className="flex-1"></div>
-                                <button className={styles.button} onClick={() => processKyc()}>Process</button>
-                            </>}
-                        </>
-                    </>}
-                </div>
-                <SignOut />
-                {loading && (
-                    <div className="absolute bg-black/20 w-full h-full left-0 top-0 flex flex-col items-center justify-center">
-                        <ClockLoader size={40} color='black' />
-                        <div className="mt-2">Loading...</div>
+        <Container title={"Storefront KYC Entity Form"}>
+            <div className="grid grid-cols-2 gap-2">
+                {session?.user.role === 'GUEST' ? (<>
+                    <FormInput {...kycInfo} field="companyName" label="Company Name" />
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="firstName" label="First Name" />
+                        <FormInput {...kycInfo} field="lastName" label="Last Name" />
                     </div>
-                )}
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="email" label="Email" type="email" />
+                        <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" type="phoneNumber" />
+                    </div>
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="dob" label="Date of Birth" />
+                        <FormInput {...kycInfo} field="ssn" label="SSN" />
+                    </div>
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="streetAddress" label="Street Address" />
+                        <FormInput {...kycInfo} field="streetAddress2" label="Unit" />
+                    </div>
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="city" label="City" />
+                        <FormInput {...kycInfo} field="state" label="State" />
+                    </div>
+                    <div className="flex gap-2">
+                        <FormInput {...kycInfo} field="postalCode" label="Postal Code" />
+                        <FormInput {...kycInfo} field="country" label="Country" disabled />
+                    </div>
+                    <label className="mt-5 cursor-pointer select-none">
+                        <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
+                        Click here to review and accept <span className="text-purple-500">Bridge terms of service (TOS)</span>.
+                        {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
+                    </label>
+
+                    <button className="col-span-2 w-full rounded-md bg-violet-500 p-2 hover:bg-pink-500" onClick={() => kycInfo.submitForm()}>Submit</button></>
+                ) : <>
+                    <>
+                        <div className={styles.formHeader}>
+                            <h2 className={styles.title}>KYC Process</h2>
+                        </div>
+                        {session?.user.status === 'VERIFIED' ? (
+                            <div className="text-center">it&apos;s verified your KYC successfully</div>
+                        ) : <>
+                            <div className="flex-1"></div>
+                            <button className={styles.button} onClick={() => processKyc()}>Process</button>
+                        </>}
+                    </>
+                </>}
             </div>
-        </div >
+            <SignOut />
+            {loading && (
+                <div className="absolute bg-black/20 w-full h-full left-0 top-0 flex flex-col items-center justify-center">
+                    <ClockLoader size={40} color='black' />
+                    <div className="mt-2">Loading...</div>
+                </div>
+            )}
+        </Container>
     );
 }
 
