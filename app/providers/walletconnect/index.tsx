@@ -209,13 +209,11 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       });
 
       if (res?.status !== 200 || res?.error) {
-        console.log('Failed login', res?.error)
-        throw new Error('Failed login')
+        disconnect()
       }
 
       setIsLoggedIn(true)
     } catch (err) {
-      disconnect()
     } finally {
       setIsLoading(false)
       setIsLoginInning(false)
