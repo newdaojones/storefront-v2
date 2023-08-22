@@ -48,7 +48,7 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
 
     return (
         <div>
-            <div className="grid grid-cols-4 pb-4 justify-items-center">
+            <div className="grid grid-cols-4 pb-8 justify-items-center">
                 <p><strong>Order ID</strong></p>
                 <p><strong>Time</strong></p>
                 <p><strong>Order</strong></p>
