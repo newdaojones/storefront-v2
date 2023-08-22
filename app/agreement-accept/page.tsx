@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function AcceptAgreement() {
   let searchParams = useSearchParams();
@@ -37,7 +37,7 @@ export default function AcceptAgreement() {
       // Remove the event listener when component unmounts
       return () => window.removeEventListener('load', onPageLoad);
     }
-  }, []);
+  }, [subSignedAgreementId]);
 
   return <></>
 }

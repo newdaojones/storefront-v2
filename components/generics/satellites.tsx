@@ -40,7 +40,7 @@ export default function Satellites({ links, radius = 100 }: SatellitesProps) {
         return () => {
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [links.length]);
+    }, [links.length, throttledRotate]);
 
     return (
         <div className='transition-transform duration-300 ease-in-out' style={{ transform: `rotate(${rotation}deg)` }}>

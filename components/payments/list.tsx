@@ -27,19 +27,19 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
         loadMore()
     }, loading);
 
-    const handleRefresh = async () => {
-        const latestOrder = await fetchLatestOrder();
-
-        if (latestOrder && (!orders.length || latestOrder.id !== orders[0].id)) {
-            // If there's a new order, prepend it to the list.
-            // Here, we assume orders are sorted in descending order by their creation date or ID.
-            orders.unshift(latestOrder);
-            // Update your state accordingly.
-        }
-    };
-
     // Optional: Set up an interval to auto-refresh the list every X seconds
     React.useEffect(() => {
+
+        const handleRefresh = async () => {
+            const latestOrder = await fetchLatestOrder();
+
+            if (latestOrder && (!orders.length || latestOrder.id !== orders[0].id)) {
+                // If there's a new order, prepend it to the list.
+                // Here, we assume orders are sorted in descending order by their creation date or ID.
+                orders.unshift(latestOrder);
+                // Update your state accordingly.
+            }
+        };
         const intervalId = setInterval(handleRefresh, 10000); // Check every 10 seconds
         return () => clearInterval(intervalId); // Clean up on component unmount
     }, [orders]);

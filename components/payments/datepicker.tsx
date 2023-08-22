@@ -1,9 +1,9 @@
 import { addDays, endOfDay, format, startOfMonth, startOfYear } from 'date-fns';
 import React, { useEffect, useRef, useState } from 'react';
 import { DateRange, DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
 import Tooltip from '../tooltips/tooltip';
 import styles from './datepicker.module.css';
-import 'react-day-picker/dist/style.css';
 
 type DateRangePickerProps = {
   range: DateRange,
@@ -46,12 +46,12 @@ export default function DateRangePicker({ range, setRange, disabled }: DateRange
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [tempRange]);
+  }, [tempRange, setRange]);
 
   return (
     <div className=''>
       <div ref={dateTextRef} className="cursor-pointer bg-white border-2 border-blue-400 relative flex items-center rounded p-2" onClick={() => !disabled && setShowModal(true)}>
-        {format(range.from, 'yyyy-MM-dd')} ~ {format(range.to, 'yyyy-MM-dd')}
+        {format(range.from ?? new Date(), 'yyyy-MM-dd')} ~ {format(range.to ?? new Date(), 'yyyy-MM-dd')}
       </div>
       <div className="relative">
         <div ref={calendarRef} className={`absolute ${showModal ? '' : 'hidden'} top-0 bg-white p-4 rounded-md`}>

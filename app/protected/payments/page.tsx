@@ -66,7 +66,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         } finally {
             setLoading(false)
         }
-    }, [page, limit, dateRange])
+    }, [page, limit, dateRange, orders])
 
     useEffect(() => {
         getOrders()
