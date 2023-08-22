@@ -45,6 +45,9 @@ export function FormInput({ type, values, errors, touched, field, label, disable
 
     if (field === 'postalCode') {
       formattedValue = val.replace(/[^0-9]/g, '');
+      if (formattedValue.length > 5) {
+        formattedValue = formattedValue.slice(0, 5);
+      }
     }
 
     if (field === 'state') {

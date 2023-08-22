@@ -11,7 +11,6 @@ import SignOut from "../auth/sign-out";
 import { FormInput } from "../form-input";
 import Container from "../generics/container";
 import { useAgreement } from "../use/agreement";
-import styles from './form.module.css';
 
 interface KycIndividual {
     companyName: string;
@@ -159,55 +158,46 @@ export default function KycForms() {
     }
 
     return (
-        <Container title={"Storefront KYC Entity Form"}>
-            <div className="grid grid-cols-2 gap-2">
-                {session?.user.role === 'GUEST' ? (<>
-                    <FormInput {...kycInfo} field="companyName" label="Company Name" />
-                    <div className="flex gap-2">
+        <Container title={"Storefront KYC Entity Form"} footer={<button className="w-full rounded-md text-white shadow-lg bg-violet-500 p-2 hover:bg-pink-500" onClick={() => kycInfo.submitForm()}>Submit</button>}>
+            {session?.user.role === 'GUEST' ? (<>
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+                        <FormInput {...kycInfo} field="companyName" label="Company Name" />
                         <FormInput {...kycInfo} field="firstName" label="First Name" />
                         <FormInput {...kycInfo} field="lastName" label="Last Name" />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
                         <FormInput {...kycInfo} field="email" label="Email" type="email" />
                         <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" type="phoneNumber" />
-                    </div>
-                    <div className="flex gap-2">
                         <FormInput {...kycInfo} field="dob" label="Date of Birth" />
                         <FormInput {...kycInfo} field="ssn" label="SSN" />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
                         <FormInput {...kycInfo} field="streetAddress" label="Street Address" />
                         <FormInput {...kycInfo} field="streetAddress2" label="Unit" />
-                    </div>
-                    <div className="flex gap-2">
                         <FormInput {...kycInfo} field="city" label="City" />
                         <FormInput {...kycInfo} field="state" label="State" />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
                         <FormInput {...kycInfo} field="postalCode" label="Postal Code" />
                         <FormInput {...kycInfo} field="country" label="Country" disabled />
+                        <label className="p-2 cursor-pointer select-none">
+                            <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
+                            Confirm Receipt of ToS <span className=" grid grid-cols-1 lg:grid-cols-1 text-purple-500">Bridge Terms of Servce</span>
+                            {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
+                        </label>
                     </div>
-                    <label className="mt-5 cursor-pointer select-none">
-                        <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
-                        Click here to review and accept <span className="text-purple-500">Bridge terms of service (TOS)</span>.
-                        {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
-                    </label>
-
-                    <button className="col-span-2 w-full rounded-md bg-violet-500 p-2 hover:bg-pink-500" onClick={() => kycInfo.submitForm()}>Submit</button></>
-                ) : <>
-                    <>
-                        <div className={styles.formHeader}>
-                            <h2 className={styles.title}>KYC Process</h2>
-                        </div>
-                        {session?.user.status === 'VERIFIED' ? (
-                            <div className="text-center">it&apos;s verified your KYC successfully</div>
-                        ) : <>
-                            <div className="flex-1"></div>
-                            <button className={styles.button} onClick={() => processKyc()}>Process</button>
-                        </>}
-                    </>
-                </>}
-            </div>
+                </div>
+            </>
+            ) : <>
+                <>
+                    {session?.user.status === 'VERIFIED' ? (
+                        <div className="text-center">Your KYC Has Been Successfully Verified</div>
+                    ) : <>
+                        <button className="w-full grid-col-1 rounded-md bg-violet-500 p-2 hover:bg-pink-500" onClick={() => processKyc()}>Process</button>
+                    </>}
+                </>
+            </>}
             <SignOut />
             {loading && (
                 <div className="absolute bg-black/20 w-full h-full left-0 top-0 flex flex-col items-center justify-center">

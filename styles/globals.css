@@ -12,7 +12,6 @@
     --color-lavender: #97B1FA;
 }
 
-
 html,
 body {
     width: 100%;
@@ -36,4 +35,19 @@ body::before {
 
 .qrcode {
     border-radius: 20px;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
