@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { MenuItem } from './menu';
 import { useSession } from 'next-auth/react';
+import { MenuItem } from './menu';
 export interface IMenuItem {
   route: string;
   icon?: any;
@@ -42,7 +42,7 @@ const Orbital = ({ size, items, disabled = false }: Props) => {
   useEffect(() => {
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [focused, disabled]);
+  }, [focused, disabled, onkeydown]);
 
   return (
     <div className='absolute top-0'>

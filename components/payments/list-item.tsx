@@ -14,7 +14,7 @@ type StatusColors = {
     processing: string;
 };
 
-const ListItem = React.memo(({ order, onMouseEnter, onMouseLeave }: ListItemProps) => {
+const PaymentListItem = ({ order, onMouseEnter, onMouseLeave }: ListItemProps) => {
     const total = (order.amount + order.tipAmount + order.networkFee + order.serviceFee + order.taxFee).toFixed(2);
 
     //const displayDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -49,6 +49,9 @@ const ListItem = React.memo(({ order, onMouseEnter, onMouseLeave }: ListItemProp
             </div>
         </div>
     )
-});
+};
+
+const ListItem = React.memo(PaymentListItem);
+ListItem.displayName = "ListItem";
 
 export default ListItem;
