@@ -199,6 +199,7 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
   useEffect(() => {
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, offset, focused, itemsTemp, disabled]);
 
   useEffect(() => {
@@ -219,6 +220,7 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
     if (!disabled && itemsTemp.length && index > 0 && pathname === parentPath + itemsTemp[index].route) {
       moveToIndex(index);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parentItem, itemsTemp, disabled]);
 
   return (

@@ -42,6 +42,7 @@ const Orbital = ({ size, items, disabled = false }: Props) => {
   useEffect(() => {
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focused, disabled]);
 
   return (
