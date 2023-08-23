@@ -1,7 +1,7 @@
 import { FormikProps } from "formik";
 import { HTMLInputTypeAttribute } from "react";
-import PhoneInput from 'react-phone-number-input';
 import DatePicker from "react-datepicker";
+import PhoneInput from 'react-phone-number-input';
 
 type FormInputType = HTMLInputTypeAttribute | 'phoneNumber' | 'amount' | 'date';
 
@@ -17,6 +17,13 @@ export function FormInput({ type, values, errors, touched, field, label, disable
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     let formattedValue = val;
+
+    if (field === 'amount') {
+      formattedValue = val.replace(/[^0-9.]/g, '');
+      if (formattedValue.length > 0) {
+        formattedValue = parseFloat(formattedValue).toFixed(2);
+      }
+    }
 
     if (field === 'ssn') {
       formattedValue = val.replace(/[^0-9]/g, '');
@@ -108,8 +115,6 @@ export function FormInput({ type, values, errors, touched, field, label, disable
       );
       break;
   }
-
-
 
   return (
     <div className="w-full py-4">
