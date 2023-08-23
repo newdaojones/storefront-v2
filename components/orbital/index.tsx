@@ -42,7 +42,8 @@ const Orbital = ({ size, items, disabled = false }: Props) => {
   useEffect(() => {
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [focused, disabled, onKeydown]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focused, disabled]);
 
   return (
     <div className='absolute top-0'>
