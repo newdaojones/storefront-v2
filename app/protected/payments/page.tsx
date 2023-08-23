@@ -4,6 +4,7 @@ import Container from "@/components/generics/container";
 import Widget from "@/components/generics/widget";
 import PaymentButtons from "@/components/payments/buttons";
 import { fetchLatestOrder } from "@/components/payments/data-refresh";
+import { FocusedItemProvider } from "@/components/payments/focused-context";
 import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hovered-context";
 import PaymentList from "@/components/payments/list";
 import CustomerDetails from "@/components/widgets/customer-details";
@@ -21,7 +22,9 @@ export default function Payments() {
 
     return (
         <HoveredItemProvider>
-            <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
+            <FocusedItemProvider orders={[]}>
+                <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
+            </FocusedItemProvider>
         </HoveredItemProvider>
     )
 }

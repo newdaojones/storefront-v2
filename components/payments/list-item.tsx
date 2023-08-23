@@ -16,11 +16,6 @@ type StatusColors = {
 };
 
 const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListItemProps & { isFocused: boolean }) => {
-    const total = (order.amount + order.tipAmount + order.networkFee + order.serviceFee + order.taxFee).toFixed(2);
-    //const displayAmount = order.amount ? parseFloat(order.amount).toFixed(2) : "problem 😮‍💨";
-
-
-    //const displayDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const createDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' }) : null;
     const createTime = order.createdAt ? new Date(order.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) : null;
 
@@ -34,7 +29,6 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
     return (
         <div className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-violet-300" : "bg-slate-50"}`}
 
-            // This will relay the list item data being hovered to the response code widget
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

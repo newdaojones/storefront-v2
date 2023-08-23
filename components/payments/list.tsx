@@ -1,6 +1,7 @@
 import { Order } from '@prisma/client';
 import { useEffect, useMemo } from 'react';
 import useInfiniteScroll from '../useInfiniteScroll';
+import { useFocusedItem } from './focused-context';
 import { useHoveredItem } from './hovered-context';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
 import SkeletonListItem from './skeleton-list-item';
@@ -8,15 +9,17 @@ import SkeletonListItem from './skeleton-list-item';
 type ListProps = {
     orders: Order[];
     loading?: boolean;
-    total?: number
+    total?: number;
+    index?: number;
     loadMore?: () => void
     handleRefresh: () => void
 };
 
 export default function PaymentList({ orders, loading = false, total = 0, loadMore, handleRefresh }: ListProps) {
 
-    const { hoveredItem, setHoveredItem } = useHoveredItem();
     const isReached = useMemo(() => orders.length >= total, [orders, total])
+    const { hoveredItem, setHoveredItem } = useHoveredItem();
+    const { focusedIndex, setFocusedIndex } = useFocusedItem();
 
     useEffect(() => {
         if (orders.length > 0) {
@@ -38,8 +41,6 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
         return () => clearInterval(intervalId); // Clean up on component unmount
     }, [handleRefresh]);
 
-
-
     return (
         <div>
             <div className="grid grid-cols-4 pb-8 justify-items-center">
@@ -48,7 +49,7 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                 <p><strong>For Customer</strong></p>
                 <p><strong>Amount</strong></p>
             </div>
-            <div className="space-y-2 overflow-y-auto max-h-80">
+            <div className="space-y-2 max-h-80">
                 {loading && !orders.length ? (
                     <>
                         <SkeletonListItem />
@@ -65,13 +66,15 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                     </>
                 ) : (
                     <>
-                        {orders.map(order => (
+                        {orders.map((order, index) => (
                             <ListItem
                                 key={order.id}
                                 order={order}
                                 isFocused={hoveredItem?.id === order.id}
-                                onMouseEnter={(e) => setHoveredItem(order)}
-                            //onMouseLeave={(e) => setHoveredItem(null)}
+                                onMouseEnter={(e) => {
+                                    setHoveredItem(order);
+                                    setFocusedIndex(index);
+                                }}
                             />
                         ))}
                     </>
