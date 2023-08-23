@@ -1,13 +1,14 @@
 // These styles apply to every route in the application
 import AuthStatus from "@/components/auth/auth-status";
-import Orbital from "@/components/generics/orbital";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import 'react-phone-number-input/style.css';
+import "react-datepicker/dist/react-datepicker.css";
 import Providers from "./providers/root";
+import { Orbital } from "@/components/orbital";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -44,8 +45,15 @@ export default async function RootLayout({
         </Suspense>
         <Providers>
           {children}
-          <Orbital />
-
+          <Orbital
+            items={[
+              { route: '/protected/orders', text: 'Orders' },
+              { route: '/protected/payments', text: 'Payments' },
+              { route: '/protected/gateway', text: 'Gateway' },
+              { route: '/protected/settings', text: 'Settings' },
+            ]}
+            size={450}
+          />
         </Providers>
       </body>
     </html>

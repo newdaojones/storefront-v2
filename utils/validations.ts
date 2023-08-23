@@ -10,7 +10,6 @@ export const kycValidationSchema = yup.object().shape({
   phoneNumber: yup.string().required('Phone Number is required'),
   dob: yup.string()
     .required('Date of Birth is required')
-    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Date of Birth must be in YYYY-MM-DD format')
     .test('is-adult', 'You must be 18 years or older', (value) => {
       const today = new Date();
       const birthDate = new Date(value);

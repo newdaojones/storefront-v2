@@ -2,7 +2,6 @@
 // components/widgets/DateRangePicker.tsx
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 type DateRangePickerProps = {
     onChange: (startDate: Date, endDate: Date) => void;
