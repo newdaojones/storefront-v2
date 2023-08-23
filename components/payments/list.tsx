@@ -15,9 +15,14 @@ type ListProps = {
 
 export default function PaymentList({ orders, loading = false, total = 0, loadMore, handleRefresh }: ListProps) {
 
+    const { hoveredItem, setHoveredItem } = useHoveredItem();
     const isReached = useMemo(() => orders.length >= total, [orders, total])
-    // This will relay the list item data being hovered to the response code widget
-    const { setHoveredItem } = useHoveredItem();
+
+    useEffect(() => {
+        if (orders.length > 0) {
+            setHoveredItem(orders[0]); // Assuming orders are sorted by most recent
+        }
+    }, [setHoveredItem, orders]);
 
     const [lastElementRef] = useInfiniteScroll(() => {
         if (isReached || loading || !loadMore) {
@@ -64,8 +69,9 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                             <ListItem
                                 key={order.id}
                                 order={order}
+                                isFocused={hoveredItem?.id === order.id}
                                 onMouseEnter={(e) => setHoveredItem(order)}
-                                onMouseLeave={(e) => setHoveredItem(null)}
+                            //onMouseLeave={(e) => setHoveredItem(null)}
                             />
                         ))}
                     </>

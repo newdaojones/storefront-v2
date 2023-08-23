@@ -15,7 +15,7 @@ type StatusColors = {
     processing: string;
 };
 
-const PaymentListItem = ({ order, onMouseEnter, onMouseLeave }: ListItemProps) => {
+const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListItemProps & { isFocused: boolean }) => {
     const total = (order.amount + order.tipAmount + order.networkFee + order.serviceFee + order.taxFee).toFixed(2);
     //const displayAmount = order.amount ? parseFloat(order.amount).toFixed(2) : "problem 😮‍💨";
 
@@ -32,7 +32,7 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave }: ListItemProps) =
     };
 
     return (
-        <div className="grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center bg-slate-50 hover:bg-violet-300"
+        <div className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-violet-300" : "bg-slate-50"}`}
 
             // This will relay the list item data being hovered to the response code widget
             onMouseEnter={onMouseEnter}
