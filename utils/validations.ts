@@ -38,7 +38,18 @@ export const kycValidationSchema = yup.object().shape({
 });
 
 export const createOrderValidationSchema = yup.object().shape({
-  amount: yup.number().required('The amount is required').positive().min(1, 'The amount must be greater than $1'),
+  amount: yup
+    .number()
+    .required('The amount is required')
+    .positive()
+    .min(1, 'The amount must be greater than $1')
+    .test('is-decimal', 'Invalid decimal', value => {
+      if (value !== undefined && value !== null) {
+        return (value.toString().split('.')[1] || []).length <= 2;
+      }
+      return true;
+    }),
+
   phoneNumber: yup.string().required('Phone Number is required'),
   email: yup.string().required('Email is required').email('Email is invalid'),
 })
