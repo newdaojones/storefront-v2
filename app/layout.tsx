@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import 'react-phone-number-input/style.css';
 import "react-datepicker/dist/react-datepicker.css";
 import Providers from "./providers/root";
-import { Orbital } from "@/components/orbital";
+import { OrbitalMenu } from "@/components/orbital";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,15 +45,7 @@ export default async function RootLayout({
         </Suspense>
         <Providers>
           {children}
-          <Orbital
-            items={[
-              { route: '/protected/orders', text: 'Orders' },
-              { route: '/protected/payments', text: 'Payments' },
-              { route: '/protected/gateway', text: 'Gateway' },
-              { route: '/protected/settings', text: 'Settings' },
-            ]}
-            size={450}
-          />
+          <OrbitalMenu />
         </Providers>
       </body>
     </html>

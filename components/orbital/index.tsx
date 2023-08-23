@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { MenuItem } from './menu';
+import { useSession } from 'next-auth/react';
 export interface IMenuItem {
   route: string;
   icon?: any;
@@ -13,12 +14,11 @@ export interface IMenuItem {
 
 interface Props {
   size: number;
-  onDisconnect?: () => void;
   items: IMenuItem[];
   disabled?: boolean;
 }
 
-export const Orbital = ({ size, onDisconnect = () => { }, items, disabled = false }: Props) => {
+const Orbital = ({ size, items, disabled = false }: Props) => {
   const [focused, setFocused] = useState(true);
 
   const onKeydown = (e: KeyboardEvent) => {
@@ -28,7 +28,6 @@ export const Orbital = ({ size, onDisconnect = () => { }, items, disabled = fals
 
     if (e.code === 'KeyQ' && e.ctrlKey) {
       e.preventDefault();
-      onDisconnect();
     }
 
     if (e.code === 'Enter' && e.shiftKey) {
@@ -72,3 +71,21 @@ export const Orbital = ({ size, onDisconnect = () => { }, items, disabled = fals
     </div>
   );
 };
+
+export const OrbitalMenu = () => {
+  const { data: session } = useSession()
+
+  const disabled = !session || !!session?.isNewUser || session?.user.status !== 'VERIFIED' || session?.user.role === "GUEST"
+  return (
+    <Orbital
+      disabled={disabled}
+      items={[
+        { route: '/protected/orders', text: 'Orders' },
+        { route: '/protected/payments', text: 'Payments' },
+        { route: '/protected/gateway', text: 'Gateway' },
+        { route: '/protected/settings', text: 'Settings' },
+      ]}
+      size={450}
+    />
+  )
+}

@@ -52,12 +52,16 @@ export default function AuthContext({ children }: AuthContextProps) {
             signOut()
         }
 
+        const isOnboard = session?.isNewUser || session?.user.status !== 'VERIFIED' || session?.user.role === "GUEST"
+
         if (pathname === '/') {
-            if (session?.isNewUser || session?.user.status !== 'VERIFIED' || session?.user.role === "GUEST") {
+            if (isOnboard) {
                 router.push('/protected/onboard')
             } else if (['OWNER', 'OPERATOR'].includes(session.user?.role || '')) {
                 router.push('/protected/payments')
             }
+        } else if (isOnboard && pathname.startsWith('/protected') && !pathname.startsWith('/protected/onboard')) {
+            router.push('/protected/onboard')
         }
     }, [session, pathname, router, isLoggedIn, disconnect, isLoginInning, initialized])
 

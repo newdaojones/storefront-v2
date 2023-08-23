@@ -100,7 +100,6 @@ export const authOptions: NextAuthOptions = {
         token = {
           ...token,
           ...session?.user,
-          status: 'OWNER'
         }
       }
 
