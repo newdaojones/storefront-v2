@@ -1,18 +1,19 @@
 import React from 'react';
-import styles from './tooltip.module.css';
 
 type TooltipProps = {
     children: React.ReactNode,
-    text: string
+    content: React.ReactNode, // changed from 'text: string' to 'content: React.ReactNode'
 };
 
-export default function Tooltip({ children, text }: TooltipProps) {
+export default function Tooltip({ children, content }: TooltipProps) {
     return (
-        <div className={`relative group overflow-visible ${styles.tooltip}`}>
+        <div className="relative inline-block group">
             {children}
-            <div className={`${styles.tooltipText} absolute text-xs bg-black text-white p-1 rounded z-50 invisible group-hover:visible`}>
-                {text}
+            <div className="flex flex-col w-28 absolute text-xs bg-stone-300 bg-opacity-50 text-black p-1 rounded z-10 left-1/2 transform -translate-x-1/2 invisible group-hover:visible">
+                {content}
             </div>
         </div>
     );
 }
+
+
