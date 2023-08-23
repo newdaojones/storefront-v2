@@ -2,7 +2,7 @@ import { addDays, endOfDay, format, startOfMonth, startOfYear } from 'date-fns';
 import React, { useEffect, useRef, useState } from 'react';
 import { DateRange, DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import Tooltip from '../tooltips/tooltip';
+import Tooltip from '../generics/tooltip';
 import styles from './datepicker.module.css';
 
 type DateRangePickerProps = {

@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import Tooltip from '../tooltips/tooltip';
+import PaymentTooltipStatus from './tooltip-payment-status';
 
 type ListItemProps = {
     order: any;
@@ -41,26 +41,7 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave }: ListItemProps) =
             <div className="col-span-1">
                 <p className="text-sm font-semibold text-gray-500">{displayDate ?? "problem 😮‍💨"}</p>
             </div>
-            <Tooltip
-                content={
-                    <div>
-                        <div className="flex items-center">
-                            <span className="text-green-500 py-1 mx-2">🟢</span> <span>Approved</span>
-                        </div>
-                        <div className="flex items-center">
-                            <span className="text-yellow-500 py-1 mx-2">🟡</span> <span>Pending</span>
-                        </div>
-                        <div className="flex items-center">
-                            <span className="text-red-500 py-1 mx-2">🔴</span> <span>Declined</span>
-                        </div>
-                    </div>
-                }
-            >
-                <div className="col-span-1">
-                    <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{order.amount ?? "problem 😮‍💨"}</p>
-                </div>
-            </Tooltip>
-
+            <PaymentTooltipStatus order={order} statusColors={statusColors} />
             <div className="col-span-1">
                 <p className="text-sm font-semibold text-gray-500">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
             </div>

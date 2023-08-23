@@ -1,4 +1,4 @@
-import Tooltip from "../tooltips/tooltip";
+import Tooltip from "../generics/tooltip";
 
 type SettingsButtonProps = {
     onSave: () => void;
