@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 
 type ListItemProps = {
     order: any;
@@ -14,10 +14,11 @@ type StatusColors = {
     processing: string;
 };
 
-export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItemProps) {
+const ListItem = React.memo(({ order, onMouseEnter, onMouseLeave }: ListItemProps) => {
     const total = (order.amount + order.tipAmount + order.networkFee + order.serviceFee + order.taxFee).toFixed(2);
 
-    const displayDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    //const displayDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const displayDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null;
 
     const statusColors: StatusColors = {
         'paid': 'text-green-500',
@@ -48,4 +49,6 @@ export default function ListItem({ order, onMouseEnter, onMouseLeave }: ListItem
             </div>
         </div>
     )
-}
+});
+
+export default ListItem;

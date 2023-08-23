@@ -3,6 +3,7 @@ import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import Widget from "@/components/generics/widget";
 import PaymentButtons from "@/components/payments/buttons";
+import { fetchLatestOrder } from "@/components/payments/data-refresh";
 import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hovered-context";
 import PaymentList from "@/components/payments/list";
 import CustomerDetails from "@/components/widgets/customer-details";
@@ -38,7 +39,18 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         setDateRange({ startDate, endDate });
     };
 
+    const handleRefresh = async () => {
+        console.log('handleRefresh called');
+        const latestOrder = await fetchLatestOrder();
+
+        if (latestOrder && (!orders.length || latestOrder.id !== orders[0].id)) {
+            setOrders([latestOrder, ...orders]);
+        }
+    };
+
     const getOrders = useCallback(async () => {
+        console.log('Fetching orders');
+
         try {
             setLoading(true)
             const query = queryString.stringify({
@@ -56,8 +68,8 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
             const result = await response.json();
 
             if (response.ok) {
-                setOrders(orders.concat(result.rows))
-                setTotal(result.count)
+                setOrders(prevOrders => prevOrders.concat(result.rows));
+                setTotal(result.count);
             } else {
                 throw new Error(result.message || result.error)
             }
@@ -66,7 +78,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         } finally {
             setLoading(false)
         }
-    }, [page, limit, dateRange, orders])
+    }, [page, limit, dateRange])
 
     useEffect(() => {
         getOrders()
@@ -75,7 +87,16 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Payments"} footer={<PaymentButtons orders={undefined} />}>
-                <PaymentList orders={orders} loading={loading} total={total} loadMore={() => setPage(page + 1)} />
+                <PaymentList
+                    orders={orders}
+                    loading={loading}
+                    total={total}
+                    handleRefresh={handleRefresh}
+                    loadMore={() => {
+                        console.log('loadMore called');  // Debugging line
+                        setPage(page + 1);
+                    }}
+                />
             </Container>
             <CommandBar
                 slot1={'Payment Details'}
