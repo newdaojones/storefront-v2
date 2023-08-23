@@ -11,6 +11,7 @@ import SignOut from "../auth/sign-out";
 import { FormInput } from "../form-input";
 import Container from "../generics/container";
 import { useAgreement } from "../use/agreement";
+import { format } from 'date-fns'
 
 interface KycIndividual {
     companyName: string;
@@ -45,6 +46,7 @@ export default function KycForms() {
                 },
                 body: JSON.stringify({
                     ...values,
+                    dob: format(new Date(values.dob), 'yyyy-MM-dd'),
                     webhook: `${window.location.origin}/api/webhook`
                 }),
             });
@@ -169,7 +171,7 @@ export default function KycForms() {
                     <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
                         <FormInput {...kycInfo} field="email" label="Email" type="email" />
                         <FormInput {...kycInfo} field="phoneNumber" label="Phone Number" type="phoneNumber" />
-                        <FormInput {...kycInfo} field="dob" label="Date of Birth" />
+                        <FormInput {...kycInfo} field="dob" label="Date of Birth" type="date" />
                         <FormInput {...kycInfo} field="ssn" label="SSN" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">

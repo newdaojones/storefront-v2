@@ -1,8 +1,9 @@
 import { FormikProps } from "formik";
 import { HTMLInputTypeAttribute } from "react";
 import PhoneInput from 'react-phone-number-input';
+import DatePicker from "react-datepicker";
 
-type FormInputType = HTMLInputTypeAttribute | 'phoneNumber' | 'amount';
+type FormInputType = HTMLInputTypeAttribute | 'phoneNumber' | 'amount' | 'date';
 
 interface Props extends FormikProps<any> {
   field: string;
@@ -16,19 +17,6 @@ export function FormInput({ type, values, errors, touched, field, label, disable
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     let formattedValue = val;
-
-    if (field === 'dob') {
-      formattedValue = val.replace(/[^0-9]/g, '');
-      if (formattedValue.length >= 4) {
-        formattedValue = formattedValue.slice(0, 4) + '-' + formattedValue.slice(4);
-      }
-      if (formattedValue.length >= 7) {
-        formattedValue = formattedValue.slice(0, 7) + '-' + formattedValue.slice(7);
-      }
-      if (formattedValue.length > 10) {
-        formattedValue = formattedValue.slice(0, 10);
-      }
-    }
 
     if (field === 'ssn') {
       formattedValue = val.replace(/[^0-9]/g, '');
@@ -89,6 +77,21 @@ export function FormInput({ type, values, errors, touched, field, label, disable
           />
         </div>
       );
+      break;
+
+    case 'date':
+      inputComponent = (
+        <DatePicker
+          className="px-4 py-2 w-full rounded outline-violet-500 bg-stone-50"
+          selected={values[field]}
+          showMonthDropdown={true}
+          showYearDropdown={true}
+          placeholderText="Date of Birth"
+          openToDate={new Date("1993/09/28")}
+          onBlur={() => setFieldTouched(field, true)}
+          onChange={(date) => setFieldValue(field, date)}
+        />
+      )
       break;
 
     default:

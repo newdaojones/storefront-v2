@@ -94,6 +94,10 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        if (!session.user.merchantId) {
+            return NextResponse.json({ error: "Please process onboard first" }, { status: 400 });
+        }
+
         const orders = await prisma.order.findMany({
             where: {
                 merchantId: session.user.merchantId,
