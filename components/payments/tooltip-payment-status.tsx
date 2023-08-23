@@ -8,6 +8,8 @@ type ListItemProps = {
 
 export default function PaymentTooltipStatus({ order, statusColors }: ListItemProps) {
     const displayAmount = order.amount ? parseFloat(order.amount).toFixed(2) : "problem 😮‍💨";
+    const finalAmount = order.chargeAmount ? parseFloat(order.chargeAmount).toFixed(2) : " ---";
+
 
     return (
         <Tooltip
@@ -27,6 +29,7 @@ export default function PaymentTooltipStatus({ order, statusColors }: ListItemPr
         >
             <div className="col-span-1">
                 <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>${displayAmount}</p>
+                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>${finalAmount}</p>
             </div>
         </Tooltip>
     )

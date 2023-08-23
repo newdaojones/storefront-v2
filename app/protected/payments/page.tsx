@@ -104,6 +104,11 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                         setPage(page + 1);
                     }}
                 />
+                <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>
+                <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>
+                <Widget title="Date Range"><DateRangePicker onChange={function (startDate: Date, endDate: Date): void {
+                    throw new Error("Function not implemented.");
+                }} /></Widget>
             </Container>
             <CommandBar
                 slot1={'Payment Details'}
@@ -111,9 +116,10 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 slot3={'Customer Details'}
                 changeWidget={setActiveWidget}
             />
-            {activeWidget === 'Payment Details' && <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>}
+            {/* WIDGETS ARE DEFAULT PRESENT FOR NOW */}
+            {/* {activeWidget === 'Payment Details' && <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>}
             {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}
-            {activeWidget === 'Customer Details' && <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>}
+            {activeWidget === 'Customer Details' && <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>} */}
         </div>
     )
 }

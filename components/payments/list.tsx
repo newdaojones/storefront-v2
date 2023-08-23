@@ -1,6 +1,5 @@
 import { Order } from '@prisma/client';
 import { useEffect, useMemo } from 'react';
-import FadeLoader from 'react-spinners/FadeLoader';
 import useInfiniteScroll from '../useInfiniteScroll';
 import { useHoveredItem } from './hovered-context';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
@@ -40,13 +39,20 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
         <div>
             <div className="grid grid-cols-4 pb-8 justify-items-center">
                 <p><strong>Order ID</strong></p>
-                <p><strong>Time</strong></p>
-                <p><strong>Order</strong></p>
-                <p><strong>Customer</strong></p>
+                <p><strong>Created @</strong></p>
+                <p><strong>For Customer</strong></p>
+                <p><strong>Amount</strong></p>
             </div>
             <div className="space-y-2 overflow-y-auto max-h-80">
                 {loading && !orders.length ? (
                     <>
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
+                        <SkeletonListItem />
                         <SkeletonListItem />
                         <SkeletonListItem />
                         <SkeletonListItem />
@@ -63,11 +69,6 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                             />
                         ))}
                     </>
-                )}
-                {loading && orders.length > 0 && (
-                    <div className="flex items-center justify-center">
-                        <FadeLoader color="black" />
-                    </div>
                 )}
                 <div ref={lastElementRef} />
             </div>
