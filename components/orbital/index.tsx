@@ -42,7 +42,7 @@ const Orbital = ({ size, items, disabled = false }: Props) => {
   useEffect(() => {
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [focused, disabled, onkeydown]);
+  }, [focused, disabled, onKeydown]);
 
   return (
     <div className='absolute top-0'>
