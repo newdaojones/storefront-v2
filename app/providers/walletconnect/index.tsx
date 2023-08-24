@@ -90,7 +90,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       setIsLoading(true);
 
       await client.disconnect({
-        topic: session.topic,
+        topic: session?.topic,
         reason: getSdkError("USER_DISCONNECTED"),
       });
 
@@ -101,7 +101,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     } finally {
       reset();
       setIsLoading(false);
-
     }
   }, [client, session]);
 
@@ -109,7 +108,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     const allNamespaceAccounts = Object.values(_session.namespaces)
       .map(namespace => namespace.accounts)
       .flat();
-    const allNamespaceChains = Object.keys(_session.namespaces);
     setSession(_session);
     setAccounts(allNamespaceAccounts);
     setAccount(allNamespaceAccounts[0])
@@ -118,6 +116,10 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
   const connect = useCallback(
     async (pairing?: any) => {
       try {
+        if (session) {
+          return
+        }
+
         if (typeof client === 'undefined') {
           throw new Error('WalletConnect is not initialized');
         }
@@ -133,18 +135,18 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
           setQRCodeUri(uri);
         }
 
-        const session = await approval();
-        onSessionConnected(session);
+        const _session = await approval();
+        onSessionConnected(_session);
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e: any) {
         disconnect();
       }
     },
-    [client, chains, onSessionConnected, disconnect]
+    [client, chains, session, onSessionConnected, disconnect]
   );
 
   const login = useCallback(async () => {
-    if (!account || !session || !client) {
+    if (!account || !session || !client || isLoggedIn) {
       return
     }
 
@@ -218,7 +220,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       setIsLoading(false)
       setIsLoginInning(false)
     }
-  }, [client, session, account, disconnect])
+  }, [client, session, account, isLoggedIn, disconnect])
 
   useEffect(() => {
     login()
