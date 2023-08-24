@@ -1,9 +1,10 @@
 "use client"
-import React from 'react'
-import AuthContext from './auth-context'
-import { WalletConnectProvider } from './walletconnect'
 import { SessionProvider } from 'next-auth/react'
-import { ToastContainer } from 'react-toastify';
+import React from 'react'
+import { ToastContainer } from 'react-toastify'
+import AuthContext from './auth-context'
+import { GlobalProvider } from './global-context'
+import { WalletConnectProvider } from './walletconnect'
 
 type ProviderType = {
     children: React.ReactNode
@@ -14,7 +15,9 @@ const Providers = ({ children }: ProviderType) => {
         <SessionProvider>
             <WalletConnectProvider>
                 <AuthContext>
-                    {children}
+                    <GlobalProvider orders={[]}>
+                        {children}
+                    </GlobalProvider>
                 </AuthContext>
             </WalletConnectProvider>
             <ToastContainer />

@@ -1,8 +1,7 @@
+import { useGlobal } from '@/app/providers/global-context';
 import { Order } from '@prisma/client';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import useInfiniteScroll from '../useInfiniteScroll';
-import { useFocusedItem } from './focused-context';
-import { useHoveredItem } from './hovered-context';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
 import SkeletonListItem from './skeleton-list-item';
 
@@ -13,19 +12,55 @@ type ListProps = {
     index?: number;
     loadMore?: () => void
     handleRefresh: () => void
+    disabled?: boolean;
 };
 
-export default function PaymentList({ orders, loading = false, total = 0, loadMore, handleRefresh }: ListProps) {
+export default function PaymentList({ orders, loading = false, total = 0, loadMore, handleRefresh, disabled = false }: ListProps) {
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
-    const { hoveredItem, setHoveredItem } = useHoveredItem();
-    const { focusedIndex, setFocusedIndex } = useFocusedItem();
+    const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex, focused, setFocused } = useGlobal();
+
+    const onKeydown = useCallback((e: KeyboardEvent) => {
+        if (disabled) {
+            return;
+        }
+
+        if (activeComponent === 'Orbital') {
+            return; // Skip this handler if Orbital is active
+        }
+
+        if (e.code === 'Enter' && e.shiftKey) {
+            return setActiveComponent('Orbital');
+        }
+
+        if (e.key === 'ArrowDown') {
+            setFocusedIndex((prevIndex) => Math.min(prevIndex + 1, orders.length - 1));
+        }
+
+        if (e.key === 'ArrowUp') {
+            setFocusedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        }
+    }, [activeComponent, disabled, orders.length, setActiveComponent, setFocusedIndex]);
+
+    useEffect(() => {
+        if (activeComponent === 'PaymentList') {
+            window.addEventListener('keydown', onKeydown);
+        }
+        return () => window.removeEventListener('keydown', onKeydown);
+    }, [activeComponent, onKeydown]); // Added activeComponent in dependency list
+
 
     useEffect(() => {
         if (orders.length > 0) {
             setHoveredItem(orders[0]); // Assuming orders are sorted by most recent
         }
     }, [setHoveredItem, orders]);
+
+    useEffect(() => {
+        if (focusedIndex >= 0 && focusedIndex < orders.length) {
+            setHoveredItem(orders[focusedIndex]);
+        }
+    }, [focusedIndex, orders, setHoveredItem]);
 
     const [lastElementRef] = useInfiniteScroll(() => {
         if (isReached || loading || !loadMore) {
@@ -70,7 +105,7 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                             <ListItem
                                 key={order.id}
                                 order={order}
-                                isFocused={hoveredItem?.id === order.id}
+                                isFocused={(hoveredItem?.id === order.id)}
                                 onMouseEnter={(e) => {
                                     setHoveredItem(order);
                                     setFocusedIndex(index);

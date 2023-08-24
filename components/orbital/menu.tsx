@@ -1,4 +1,4 @@
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 
 import { usePathname, useRouter } from "next/navigation";
@@ -139,12 +139,11 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
     const delta = getDeltaDiff(offset, beta);
     const angle = { x: offset };
 
-    TweenMax.to(angle, time ?? 0.3, {
+    gsap.to(angle, {
       x: offset + delta,
-      onUpdate: () => {
-        setOffset(angle.x);
-      },
-    });
+      duration: time ?? 0.3,
+      onUpdate: () => { setOffset(angle.x) }
+    })
   };
 
   const getIndexByAngle = (raw: number) => {

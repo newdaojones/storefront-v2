@@ -62,7 +62,7 @@ export const Login = () => {
     if (initialized) {
       connect()
     }
-  }, [initialized])
+  }, [initialized, connect])
 
   // const wcV2Deeplink = qrCodeUri ? qrCodeUri : '';
   const backpackDeeplink = qrCodeUri ? `ndj-backpack://wc?uri=${qrCodeUri}` : '';

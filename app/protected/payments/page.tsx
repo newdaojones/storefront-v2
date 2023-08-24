@@ -1,11 +1,10 @@
 "use client"
+import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import Widget from "@/components/generics/widget";
 import PaymentButtons from "@/components/payments/buttons";
 import { fetchLatestOrder } from "@/components/payments/data-refresh";
-import { FocusedItemProvider } from "@/components/payments/focused-context";
-import { HoveredItemProvider, useHoveredItem } from "@/components/payments/hovered-context";
 import PaymentList from "@/components/payments/list";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker from "@/components/widgets/datepicker";
@@ -19,19 +18,23 @@ import { toast } from "react-hot-toast";
 export default function Payments() {
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
 
-
     return (
-        <HoveredItemProvider>
-            <FocusedItemProvider orders={[]}>
-                <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
-            </FocusedItemProvider>
-        </HoveredItemProvider>
+        <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
     )
+
+
+    // return (
+    //     <HoveredItemProvider>
+    //         <FocusedItemProvider orders={[]}>
+    //             <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
+    //         </FocusedItemProvider>
+    //     </HoveredItemProvider>
+    // )
 }
 
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
-    const { hoveredItem } = useHoveredItem();
+    const { hoveredItem } = useGlobal();
     const [dateRange, setDateRange] = useState<{ startDate: Date | null, endDate: Date | null }>({ startDate: null, endDate: null });
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)

@@ -6,6 +6,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 type FocusedItemContextType = {
     focusedIndex: number;
     setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
+    activeComponent: string;
+    setActiveComponent: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const FocusedItemContext = createContext<FocusedItemContextType | undefined>(undefined);
@@ -17,9 +19,13 @@ type Props = {
 
 export const FocusedItemProvider: React.FC<Props> = ({ children, orders }) => {
     const [focusedIndex, setFocusedIndex] = useState(0);
+    const [activeComponent, setActiveComponent] = useState('Orbital');
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
+            console.log('handleKeyDown called', e.key, activeComponent);
+            if (activeComponent !== 'PaymentList') return;
+
             if (e.key === 'ArrowDown') {
                 setFocusedIndex((prevIndex) => Math.min(prevIndex + 1, orders.length - 1));
             } else if (e.key === 'ArrowUp') {
@@ -32,10 +38,10 @@ export const FocusedItemProvider: React.FC<Props> = ({ children, orders }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [orders]);
+    }, [orders, activeComponent]);
 
     return (
-        <FocusedItemContext.Provider value={{ focusedIndex, setFocusedIndex }}>
+        <FocusedItemContext.Provider value={{ focusedIndex, setFocusedIndex, activeComponent, setActiveComponent }}>
             {children}
         </FocusedItemContext.Provider>
     );

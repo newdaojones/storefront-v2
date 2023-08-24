@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from 'react';
-
+import { useGlobal } from '@/app/providers/global-context';
 import { useSession } from 'next-auth/react';
+import { useCallback, useEffect } from 'react';
 import { MenuItem } from './menu';
+
 export interface IMenuItem {
   route: string;
   icon?: any;
@@ -19,31 +20,33 @@ interface Props {
 }
 
 const Orbital = ({ size, items, disabled = false }: Props) => {
-  const [focused, setFocused] = useState(true);
+  //const [focused, setFocused] = useState(true);
+  const { activeComponent, setActiveComponent, focused, setFocused } = useGlobal();
 
-  const onKeydown = (e: KeyboardEvent) => {
-    if (disabled) {
-      return;
+  const onKeydown = useCallback((e: KeyboardEvent) => {
+    if (disabled || activeComponent !== 'Orbital') {
+      return; // Skip this handler if Orbital is not active or disabled
+    }
+
+    if (e.code === 'Enter') {
+      setActiveComponent('PaymentList');
+    }
+
+    if (e.code === 'Enter' && e.shiftKey) {
+      return setActiveComponent('Orbital');
     }
 
     if (e.code === 'KeyQ' && e.ctrlKey) {
       e.preventDefault();
     }
-
-    if (e.code === 'Enter' && e.shiftKey) {
-      return setFocused(true);
-    }
-
-    if (e.code === 'Enter') {
-      return setFocused(false);
-    }
-  };
+  }, [activeComponent, disabled, setActiveComponent]);
 
   useEffect(() => {
-    window.addEventListener('keydown', onKeydown);
+    if (activeComponent === 'Orbital') {
+      window.addEventListener('keydown', onKeydown);
+    }
     return () => window.removeEventListener('keydown', onKeydown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focused, disabled]);
+  }, [activeComponent, onKeydown]);
 
   return (
     <div className='absolute top-0'>
@@ -67,7 +70,12 @@ const Orbital = ({ size, items, disabled = false }: Props) => {
           }}
         />
 
-        <MenuItem onFocused={() => setFocused(true)} zIndex={0} items={items} size={size + 50} disabled={disabled} focused={focused} />
+        <MenuItem
+          onFocused={() => setActiveComponent('Orbital')}
+          zIndex={0} items={items}
+          size={size + 50}
+          disabled={disabled}
+          focused={activeComponent === 'Orbital'} />
       </div>
     </div>
   );
