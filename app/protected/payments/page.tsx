@@ -110,7 +110,14 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
 
             />
             {/* This widget pops up from the command bar options */}
-            {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}
+            {activeWidget === 'Date Range' && (
+                <Widget title="Date Range">
+                    <DateRangePicker
+                        onChange={handleDateRangeChange}
+                        onClose={() => setActiveWidget(null)}
+                    />
+                </Widget>
+            )}
         </div>
     )
 }

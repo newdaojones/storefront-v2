@@ -5,9 +5,10 @@ import DatePicker from "react-datepicker";
 
 type DateRangePickerProps = {
     onChange: (startDate: Date, endDate: Date) => void;
+    onClose?: () => void;
 };
 
-export default function DateRangePicker({ onChange }: DateRangePickerProps) {
+export default function DateRangePicker({ onChange, onClose }: DateRangePickerProps) {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -48,6 +49,7 @@ export default function DateRangePicker({ onChange }: DateRangePickerProps) {
                 />
             </div>
             <button className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-violet-500" onClick={handleApply}>Apply</button>
+            <button onClick={onClose}>Close</button>
         </div>
     );
 
