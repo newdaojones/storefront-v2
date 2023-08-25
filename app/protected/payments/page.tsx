@@ -2,7 +2,6 @@
 import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
-import Widget from "@/components/generics/widget";
 import PaymentButtons from "@/components/payments/buttons";
 import { fetchLatestOrder } from "@/components/payments/data-refresh";
 import PaymentList from "@/components/payments/list";
@@ -101,24 +100,21 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                         setPage(page + 1);
                     }}
                 />
-                <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget>
-                <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>
+                {/* <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget> */}
+                {/* <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget> */}
             </Container>
+            <div className="absolute top-[35%] right-[76%]">
+                <ResponseCodes data={hoveredItem} />
+            </div>
+            <div className="absolute top-[42%] right-[12%]">
+                <CustomerDetails data={hoveredItem} />
+            </div>
             <CommandBar
                 slot1={'Date Range'}
                 changeWidget={setActiveWidget}
 
             />
-            {/* This widget pops up from the command bar options */}
-            {/* {activeWidget === 'Date Range' && (
-                <Widget title="Date Range">
-                    <DateRangePicker
-                        onChange={handleDateRangeChange}
-                        onClose={() => setActiveWidget(null)}
-                    />
-                </Widget>
-            )} */}
-            <div className="absolute top-[10%] right-[12%]">
+            <div className="absolute top-[18%] right-[12%]">
                 {activeWidget === 'Date Range' && (
                     <DateRangePicker2
                         onChange={(startDate, endDate) => {

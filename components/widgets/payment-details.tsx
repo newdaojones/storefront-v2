@@ -7,7 +7,7 @@ type ResponseCodeProps = {
 export default function ResponseCode({ data }: ResponseCodeProps) {
     console.log(data);
     return (
-        <div>
+        <div className="w-fit date-range-picker grid grid-rows-2 shadow-md bg-gray-500 bg-opacity-40 p-4 border-purps border-4 rounded-md">
             <div className="grid grid-rows-2 pt-4 px-4">
                 <div className="grid grid-rows-1"><strong>CKO Network ID:</strong></div>
                 <div className="grid grid-rows-1">{data?.chargeId}</div>
