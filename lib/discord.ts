@@ -6,8 +6,8 @@ export class DiscordService {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: config.DISCORD_URI
-    })
+      baseURL: config.DISCORD_URI,
+    });
 
     this.axiosInstance.interceptors.response.use(
       (response) => response,
@@ -19,19 +19,28 @@ export class DiscordService {
         }
 
         throw error;
-      },
+      }
     );
   }
 
   static getInstance() {
-    return new DiscordService()
+    return new DiscordService();
   }
 
   async send(content: string) {
-    const res = await this.axiosInstance.post('', {
-      content
-    })
+    try {
+      console.log("discord start--------------------");
+      console.log(content);
+      const res = await this.axiosInstance.post("", {
+        content,
+      });
 
-    return res.data
+      console.log("discord sent---------------------");
+      console.log(res.data);
+      return res.data;
+    } catch (err) {
+      console.log("discord error--------------------");
+      console.log(err);
+    }
   }
 }

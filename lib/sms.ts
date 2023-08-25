@@ -11,6 +11,9 @@ export class SmsService {
 
   async send(phoneNumber: string, message: string) {
     try {
+      console.log('sms start--------------------')
+      console.log(phoneNumber)
+      console.log(message)
       const response = await snsClient.send(
         new PublishCommand({
           Message: message,
@@ -18,11 +21,11 @@ export class SmsService {
           PhoneNumber: phoneNumber,
         })
       );
+      console.log('sms sent---------------------')
       console.log(response)
     } catch (err) {
-      console.log('-errror--------------------')
+      console.log('sms error--------------------')
       console.log(err)
     }
-
   }
 }
