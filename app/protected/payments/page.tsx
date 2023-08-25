@@ -21,15 +21,6 @@ export default function Payments() {
     return (
         <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
     )
-
-
-    // return (
-    //     <HoveredItemProvider>
-    //         <FocusedItemProvider orders={[]}>
-    //             <PaymentDataHook activeWidget={activeWidget} setActiveWidget={setActiveWidget} />
-    //         </FocusedItemProvider>
-    //     </HoveredItemProvider>
-    // )
 }
 
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
@@ -115,9 +106,8 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
             </Container>
             <CommandBar
                 slot1={'Date Range'}
-
-
                 changeWidget={setActiveWidget}
+
             />
             {/* This widget pops up from the command bar options */}
             {activeWidget === 'Date Range' && <Widget title="Date Range"><DateRangePicker onChange={handleDateRangeChange} /></Widget>}

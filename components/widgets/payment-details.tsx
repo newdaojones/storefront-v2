@@ -30,23 +30,23 @@ export default function ResponseCode({ data }: ResponseCodeProps) {
             </div>
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Order Amount:</strong></div>
-                <div className="grid grid-rows-1">{data?.amount}</div>
+                <div className="grid grid-rows-1">${data?.amount}</div>
             </div>
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Order Tip:</strong></div>
-                <div className="grid grid-rows-1">{data?.tipAmount}</div>
+                <div className="grid grid-rows-1">${data?.tipAmount}</div>
             </div>
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Service Fee:</strong></div>
-                <div className="grid grid-rows-1">{data?.serviceFee}</div>
+                <div className="grid grid-rows-1">${data?.serviceFee}</div>
             </div>
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Tax Fee:</strong></div>
-                <div className="grid grid-rows-1">{data?.taxFee}</div>
+                <div className="grid grid-rows-1">${data?.taxFee}</div>
             </div>
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Total:</strong></div>
-                <div className="grid grid-rows-1">{data?.chargeAmount}</div>
+                <div className="grid grid-rows-1">${data?.chargeAmount}</div>
             </div>
         </div>
 
