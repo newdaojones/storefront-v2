@@ -51,13 +51,15 @@ export async function POST(req: NextRequest) {
             }
         })
 
+        console.log('sending to pylon =======')
         const res = await pylonService.createOrder({
             ...body,
             amount: Number(body.amount),
             walletAddress: user.merchant.walletAddress,
             partnerOrderId: order.id
         }, user)
-
+        console.log('received from pylon =======')
+        console.log(res)
         const updatedOrder = await prisma.order.update({
             data: {
                 externalId: res.id,
@@ -67,9 +69,9 @@ export async function POST(req: NextRequest) {
                 id: order.id
             }
         })
-
-        discordService.send(`${user.merchant.name} created order trackingId: $orderTrackingId. payment link: ${res.uri}`)
-        smsService.send(order.phoneNumber, `StorefrontPay checkout url: ${res.uri}.`)
+        console.log('updated ==========')
+        await discordService.send(`${user.merchant.name} created order trackingId: ${res.id}. payment link: ${res.uri}`)
+        await smsService.send(order.phoneNumber, `StorefrontPay checkout url: ${res.uri}.`)
 
         return new Response(JSON.stringify(updatedOrder), {
             status: 200,
