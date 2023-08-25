@@ -62,6 +62,15 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
         }
     }, [focusedIndex, orders, setHoveredItem]);
 
+    useEffect(() => {
+        if (focusedIndex >= 0 && focusedIndex < orders.length) {
+            const item = document.querySelector(`[data-id="item-${orders[focusedIndex].id}"]`);
+            if (item) {
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+        }
+    }, [focusedIndex, orders]);
+
     const [lastElementRef] = useInfiniteScroll(() => {
         if (isReached || loading || !loadMore) {
             return

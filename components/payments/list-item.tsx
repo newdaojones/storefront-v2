@@ -27,7 +27,7 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
     };
 
     return (
-        <div className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-violet-300" : "bg-slate-50"}`}
+        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-violet-300" : "bg-slate-50"}`}
 
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
