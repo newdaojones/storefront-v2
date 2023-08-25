@@ -65,8 +65,9 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
     useEffect(() => {
         if (focusedIndex >= 0 && focusedIndex < orders.length) {
             const item = document.querySelector(`[data-id="item-${orders[focusedIndex].id}"]`);
+            console.log("Focused Index: ", focusedIndex, "Scrolling Item: ", item);
             if (item) {
-                item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                item.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
             }
         }
     }, [focusedIndex, orders]);

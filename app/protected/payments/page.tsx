@@ -114,9 +114,9 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget>
             </Container>
             <CommandBar
-                slot1={'Payment Details'}
-                slot2={'Date Range'}
-                slot3={'Customer Details'}
+                slot1={'Date Range'}
+
+
                 changeWidget={setActiveWidget}
             />
             {/* This widget pops up from the command bar options */}
