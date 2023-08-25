@@ -8,6 +8,7 @@ type WidgetProps = {
     children: React.ReactNode;
 };
 
+
 export default function Widget({ title, children }: WidgetProps) {
     const [isDraggable, setIsDraggable] = useState(false);
 
@@ -23,12 +24,16 @@ export default function Widget({ title, children }: WidgetProps) {
     return (
         <Draggable disabled={!isDraggable} onStart={handleStart} onStop={handleStop}>
             <div className="cursor-move absolute top-[20%] right-[08%] z-50">
-                <button onClick={() => setIsDraggable(!isDraggable)}>
-                    {isDraggable ? 'Lock' : 'Move'}
-                </button>
-                <div className="w-60 h-80 relative">
-                    <div className="w-80 h-152 left-0 top-0 absolute bg-violet-50 bg-opacity-70 backdrop-blur-md rounded-lg shadow border-2 border-violet-600"></div>
-                    <div className="w-26 left-6 top-5 absolute text-stone-900 text-lg font-normal leading-normal">{title}</div>
+                <div className="w-full h-full relative">
+                    <div className="w-80 h-152 left-0 top-0 absolute bg-gray-500 bg-opacity-50 backdrop-blur-md rounded-lg shadow border-4 border-violet-600">
+                        <button onClick={() => setIsDraggable(!isDraggable)}>
+                            {isDraggable ? 'Lock' : 'Move'}
+                        </button>
+                    </div>
+                    <div className="w-26 left-6 top-5 absolute text-stone-900 text-lg font-normal leading-normal">
+                        {title}
+
+                    </div>
                     <div className=" w-80 h-0 left-0 top-14 absolute border-t-2 border-violet-600">{children}</div>
                 </div>
             </div>

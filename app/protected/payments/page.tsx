@@ -7,7 +7,7 @@ import PaymentButtons from "@/components/payments/buttons";
 import { fetchLatestOrder } from "@/components/payments/data-refresh";
 import PaymentList from "@/components/payments/list";
 import CustomerDetails from "@/components/widgets/customer-details";
-import DateRangePicker from "@/components/widgets/datepicker";
+import DateRangePicker2 from "@/components/widgets/datepicker2";
 import ResponseCodes from "@/components/widgets/payment-details";
 import { Order } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -36,7 +36,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
 
     const [orders, setOrders] = useState<Array<Order>>([])
 
-    const handleDateRangeChange = (startDate: Date, endDate: Date) => {
+    const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
         setDateRange({ startDate, endDate });
     };
 
@@ -110,14 +110,26 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
 
             />
             {/* This widget pops up from the command bar options */}
-            {activeWidget === 'Date Range' && (
+            {/* {activeWidget === 'Date Range' && (
                 <Widget title="Date Range">
                     <DateRangePicker
                         onChange={handleDateRangeChange}
                         onClose={() => setActiveWidget(null)}
                     />
                 </Widget>
-            )}
+            )} */}
+            <div className="absolute top-[10%] right-[12%]">
+                {activeWidget === 'Date Range' && (
+                    <DateRangePicker2
+                        onChange={(startDate, endDate) => {
+                            console.log("Start Date:", startDate);
+                            console.log("End Date:", endDate);
+                            handleDateRangeChange(startDate, endDate);
+                        }}
+                        onClose={() => setActiveWidget(null)}
+                    />
+                )}
+            </div>
         </div>
     )
 }
