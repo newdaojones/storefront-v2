@@ -20,7 +20,7 @@ type ListProps = {
 
 export default function PaymentList({ orders, loading = false, total: totalProp = 0, handleRefresh, disabled = false }: ListProps) {
 
-    const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex, focused, setFocused } = useGlobal();
+    const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex } = useGlobal();
     const { isKeyboardMode, hoveredIndex, onMouseEnter, onMouseMove } = useMouseInteraction({ setHoveredItem });
     const onKeydown = useKeyboardInteraction(setFocusedIndex, orders.length, activeComponent, setActiveComponent, disabled);
     const { page, total, setTotal, nextPage } = usePagination();

@@ -24,14 +24,18 @@ export default function Payments() {
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
     const merchantId = session?.user?.merchantId ?? null;
-    const { dateRange, handleDateRangeChange } = useDateRange(null, null);
+
+    const defaultStartDate = new Date(2023, 0, 1); // January 1, 2000
+    const defaultEndDate = new Date();
+
+    const { dateRange, handleDateRangeChange } = useDateRange(defaultStartDate, defaultEndDate);
     const { orders, loading, total, getOrders } = useOrders(merchantId, dateRange);
     const { hoveredItem } = useGlobal();
     const { page, nextPage } = usePagination();
 
     useEffect(() => {
         getOrders()
-    }, [getOrders])
+    }, [getOrders, dateRange])
 
     return (
         <div className="relative w-screen h-screen">
@@ -43,10 +47,6 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                     handleRefresh={() => {
                         console.log('handleRefresh called');
                     }}
-                // loadMore={() => {
-                //     console.log('loadMore called');  // Debugging line
-                //     nextPage();
-                // }}
                 />
             </Container>
             <div className="absolute top-[35%] right-[76%]">

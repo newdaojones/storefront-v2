@@ -88,10 +88,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-
+        // TODO: Fix pagination from naive list to date based
         const session = await getServerSession({ req, ...authOptions });
         const page = Number(req.nextUrl.searchParams.get('page') || 1);
-        const limit = Number(req.nextUrl.searchParams.get('limit') || 10);
+        const limit = Number(req.nextUrl.searchParams.get('limit') || 10000); //Leave this as 10000 for now
         const startDate = new Date(req.nextUrl.searchParams.get('startDate') ?? 0);
         const endDate = new Date(req.nextUrl.searchParams.get('endDate') ?? Date.now());
 
