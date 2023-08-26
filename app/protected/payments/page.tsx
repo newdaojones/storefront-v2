@@ -39,7 +39,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
 
     return (
         <div className="relative w-screen h-screen">
-            <Container title={"Payments"} footer={<PaymentButtons orders={orders} />}>
+            <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>
                 <PaymentList
                     orders={orders}
                     loading={loading}
