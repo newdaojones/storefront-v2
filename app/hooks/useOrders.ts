@@ -34,6 +34,7 @@ export const useOrders = (merchantId: number | null, dateRange: { startDate: Dat
             });
 
             const result = await response.json();
+            console.log("Fetched orders:", result);  // Log the fetched data
 
             if (response.ok) {
                 setOrders(prevOrders => prevOrders.concat(result.rows));
