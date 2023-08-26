@@ -42,7 +42,6 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
                 <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
             </div>
             <NameCheckerTooltip order={order} />
-            {/* <NameCheckerTooltip order={order} statusColors={undefined} /> */}
             <PaymentTooltipStatus order={order} statusColors={statusColors} />
         </div>
     )
