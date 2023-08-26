@@ -81,6 +81,7 @@ model Order {
   amount              Float
   email               String
   phoneNumber         String
+  name                String?
   merchantId          Int
   userId              Int
   tipAmount           Float   @default(0)
