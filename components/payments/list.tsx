@@ -1,6 +1,10 @@
+import { useAutoRefresh } from '@/app/hooks/useAutoRefresh';
+import { useKeyboardInteraction } from '@/app/hooks/useKeyboardInteraction';
+import { useMouseInteraction } from '@/app/hooks/useMouseInteraction';
+import { usePagination } from '@/app/hooks/usePagination';
 import { useGlobal } from '@/app/providers/global-context';
 import { Order } from '@prisma/client';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import useInfiniteScroll from '../useInfiniteScroll';
 import ListItem from './list-item'; // Ensure the path to the list-item component is correct
 import SkeletonListItem from './skeleton-list-item';
@@ -10,81 +14,66 @@ type ListProps = {
     loading?: boolean;
     total?: number;
     index?: number;
-    loadMore?: () => void
     handleRefresh: () => void
     disabled?: boolean;
 };
 
-export default function PaymentList({ orders, loading = false, total = 0, loadMore, handleRefresh, disabled = false }: ListProps) {
+export default function PaymentList({ orders, loading = false, total: totalProp = 0, handleRefresh, disabled = false }: ListProps) {
+
+    const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex, focused, setFocused } = useGlobal();
+    const { isKeyboardMode, hoveredIndex, onMouseEnter, onMouseMove } = useMouseInteraction({ setHoveredItem });
+    const onKeydown = useKeyboardInteraction(setFocusedIndex, orders.length, activeComponent, setActiveComponent, disabled);
+    const { page, total, setTotal, nextPage } = usePagination();
+
+    useEffect(() => {
+        setTotal(totalProp);
+    }, [totalProp]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
-    const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex, focused, setFocused } = useGlobal();
 
-    const onKeydown = useCallback((e: KeyboardEvent) => {
-        if (disabled) {
-            return;
-        }
+    useAutoRefresh({ handleRefresh, interval: 60000 });
 
-        if (activeComponent === 'Orbital') {
-            return; // Skip this handler if Orbital is active
-        }
-
-        if (e.code === 'Enter' && e.shiftKey) {
-            return setActiveComponent('Orbital');
-        }
-
-        if (e.key === 'ArrowDown') {
-            setFocusedIndex((prevIndex) => Math.min(prevIndex + 1, orders.length - 1));
-        }
-
-        if (e.key === 'ArrowUp') {
-            setFocusedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-        }
-    }, [activeComponent, disabled, orders.length, setActiveComponent, setFocusedIndex]);
+    const actualFocusedIndex = isKeyboardMode ? focusedIndex : hoveredIndex;
 
     useEffect(() => {
-        if (activeComponent === 'PaymentList') {
-            window.addEventListener('keydown', onKeydown);
-        }
-        return () => window.removeEventListener('keydown', onKeydown);
-    }, [activeComponent, onKeydown]); // Added activeComponent in dependency list
+        const handleEvents = () => {
+            if (activeComponent === 'PaymentList') {
+                window.addEventListener('keydown', onKeydown);
+                window.addEventListener('mousemove', onMouseMove);
+            } else {
+                window.removeEventListener('keydown', onKeydown);
+                window.removeEventListener('mousemove', onMouseMove);
+            }
+        };
 
+        handleEvents();
 
-    useEffect(() => {
-        if (orders.length > 0) {
-            setHoveredItem(orders[0]); // Assuming orders are sorted by most recent
-        }
-    }, [setHoveredItem, orders]);
-
-    useEffect(() => {
-        if (focusedIndex >= 0 && focusedIndex < orders.length) {
-            setHoveredItem(orders[focusedIndex]);
-        }
-    }, [focusedIndex, orders, setHoveredItem]);
+        // Cleanup
+        return () => {
+            window.removeEventListener('keydown', onKeydown);
+            window.removeEventListener('mousemove', onMouseMove);
+        };
+    }, [activeComponent, onKeydown, onMouseMove]);
 
     useEffect(() => {
         if (focusedIndex >= 0 && focusedIndex < orders.length) {
             const item = document.querySelector(`[data-id="item-${orders[focusedIndex].id}"]`);
+            setHoveredItem(orders[focusedIndex]);
+
             console.log("Focused Index: ", focusedIndex, "Scrolling Item: ", item);
+
             if (item) {
                 item.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
             }
         }
-    }, [focusedIndex, orders]);
+    }, [focusedIndex, setHoveredItem, orders]);
 
     const [lastElementRef] = useInfiniteScroll(() => {
-        if (isReached || loading || !loadMore) {
+        if (isReached || loading || !nextPage) {
             return
         }
-
-        loadMore()
+        nextPage();
     }, loading);
-
-    // Optional: Set up an interval to auto-refresh the list every X seconds
-    useEffect(() => {
-        const intervalId = setInterval(handleRefresh, 10000); // Check every 10 seconds
-        return () => clearInterval(intervalId); // Clean up on component unmount
-    }, [handleRefresh]);
 
     return (
         <div>
@@ -115,11 +104,9 @@ export default function PaymentList({ orders, loading = false, total = 0, loadMo
                             <ListItem
                                 key={order.id}
                                 order={order}
-                                isFocused={(hoveredItem?.id === order.id)}
-                                onMouseEnter={(e) => {
-                                    setHoveredItem(order);
-                                    setFocusedIndex(index);
-                                }}
+                                isFocused={(hoveredItem?.id === order.id) || (actualFocusedIndex === index)}
+                                onMouseEnter={() => onMouseEnter(index, order)}
+
                             />
                         ))}
                     </>
