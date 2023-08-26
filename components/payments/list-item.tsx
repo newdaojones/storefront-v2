@@ -1,4 +1,5 @@
 import React, { MouseEvent } from 'react';
+import NameCheckerTooltip from './tooltip-payment-names';
 import PaymentTooltipStatus from './tooltip-payment-status';
 
 type ListItemProps = {
@@ -26,8 +27,9 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
         'processing': 'text-orange-500',
     };
 
+
     return (
-        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-purps" : "bg-notpurple"} ${isFocused ? "text-notpurple" : "text-gray-500"}`}
+        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-12 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-purps" : "bg-notpurple"} ${isFocused ? "text-notpurple" : "text-gray-500"}`}
 
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
@@ -39,10 +41,8 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
                 <p className="text-sm text-right font-semibold ">{createDate ?? "problem 😮‍💨"}</p>
                 <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
             </div>
-            <div className="col-span-1">
-                <p className="text-sm font-semibold ">{order.customer?.phoneNumber ?? ''}</p>
-                <p className="text-sm text-right font-semibold ">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
-            </div>
+            <NameCheckerTooltip order={order} />
+            {/* <NameCheckerTooltip order={order} statusColors={undefined} /> */}
             <PaymentTooltipStatus order={order} statusColors={statusColors} />
         </div>
     )

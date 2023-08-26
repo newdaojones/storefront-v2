@@ -28,8 +28,8 @@ export default function PaymentTooltipStatus({ order, statusColors }: ListItemPr
             }
         >
             <div className="col-span-1">
-                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>${displayAmount}</p>
-                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>${finalAmount}</p>
+                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{displayAmount}</p>
+                <p className={`text-sm font-semibold ${statusColors[order.status] || 'text-gray-500'}`}>{finalAmount}</p>
             </div>
         </Tooltip>
     )
