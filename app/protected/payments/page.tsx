@@ -30,12 +30,17 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     const [page, setPage] = useState(1)
     const [total, setTotal] = useState(0)
     const [limit] = useState(10);
+    const [orders, setOrders] = useState<Array<Order>>([])
 
     const merchantId = useMemo(() => session?.user?.merchantId, [session])
 
-    const [orders, setOrders] = useState<Array<Order>>([])
-
     const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
+        if (startDate && endDate) {
+            const startDateStr = startDate.toISOString();
+            const endDateStr = endDate.toISOString();
+            console.log("Start Date:", startDateStr);
+            console.log("End Date:", endDateStr);
+        }
         setDateRange({ startDate, endDate });
     };
 
@@ -55,11 +60,16 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         }
         try {
             setLoading(true)
+            const startDateStr = dateRange.startDate?.toISOString();
+            const endDateStr = dateRange.endDate?.toISOString();
+
             const query = queryString.stringify({
                 page,
                 limit,
-                dateRange
+                startDate: startDateStr,
+                endDate: endDateStr,
             })
+
             const response = await fetch(`/api/order?${query}`, {
                 method: 'GET',
                 headers: {
@@ -76,6 +86,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 throw new Error(result.message || result.error)
             }
         } catch (err: any) {
+            // TODO: Improve error handling
             toast.error(err.message)
         } finally {
             setLoading(false)

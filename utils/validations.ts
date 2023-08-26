@@ -51,4 +51,13 @@ export const createOrderValidationSchema = yup.object().shape({
     }),
   phoneNumber: yup.string().required('Phone Number is required'),
   email: yup.string().required('Email is required').email('Email is invalid'),
-})
+});
+
+export const datePickerSchema = yup.object().shape({
+  startDate: yup.string()
+    .required('Start Date is required')
+    .matches(/^\d{2}-\d{2}-\d{2}$/, 'Date is invalid'),
+  endDate: yup.string()
+    .required('End Date is required')
+    .matches(/^\d{2}-\d{2}-\d{2}$/, 'Date is invalid')
+});

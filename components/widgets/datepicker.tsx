@@ -48,7 +48,7 @@ export default function DateRangePicker({ onChange, onClose }: DateRangePickerPr
                     inline
                 />
             </div>
-            <button className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-violet-500" onClick={handleApply}>Apply</button>
+            <button className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-purps" onClick={handleApply}>Apply</button>
             <button onClick={onClose}>Close</button>
         </div>
     );
