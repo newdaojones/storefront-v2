@@ -49,6 +49,7 @@ export default function Orders() {
             amount: 0,
             email: '',
             phoneNumber: '',
+            name: '',
         },
         validateOnBlur: true,
         validateOnChange: true,
@@ -61,6 +62,7 @@ export default function Orders() {
             amount: 0,
             email: '',
             phoneNumber: '',
+            name: ''
         }, false)
     };
 

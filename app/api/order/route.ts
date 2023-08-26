@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
                 chainId: config.CHAIN_ID,
                 currency: 'USDC',
                 walletAddress: user.merchant.walletAddress,
+                name: body.name,
                 amount: Number(body.amount),
                 email: body.email,
                 phoneNumber: body.phoneNumber,

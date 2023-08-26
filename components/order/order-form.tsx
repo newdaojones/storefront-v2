@@ -13,6 +13,7 @@ export default function CreateOrder({ formProps }: OrderFormProps) {
                 <FormInput {...formProps} field="amount" label="Amount" type="amount" />
                 <FormInput {...formProps} field="phoneNumber" label="Phone number" type="phoneNumber" />
                 <FormInput {...formProps} field="email" label="Email" type="email" />
+                <FormInput {...formProps} field="name" label="Name" />
             </div>
         </div>
     );
