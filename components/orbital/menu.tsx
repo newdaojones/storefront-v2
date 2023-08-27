@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 
 import { usePathname, useRouter } from "next/navigation";
+import React from 'react';
 import { IMenuItem } from '.';
 
 interface Props {
@@ -21,6 +22,11 @@ const beta = Math.PI * 2;
 const DEG2RAD = Math.PI / 180;
 
 export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, items, disabled = false, zIndex }: Props) => {
+
+  console.log('MenuItem is being rendered');
+  // rest of your code
+
+
   const ref = useRef<any>();
 
   const router = useRouter()
@@ -46,8 +52,12 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
     const delta = alpha < 0 ? Math.PI * 2 + (alpha % (Math.PI * 2)) : alpha % (Math.PI * 2);
     const isVisible = (delta > 0 && delta < 115 * DEG2RAD) || delta > 340 * DEG2RAD;
 
+    console.log("Rendering MenuItem with items:", items.map(item => item.id));
+
+
     return (
       <div
+        key={item.id || index}
         className="items-center justify-center text-center absolute select-none whitespace-pre-wrap cursor-pointer"
         onClick={() => moveToIndex(index)}
         style={{
@@ -175,7 +185,7 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
       setCenterX(client.x + size / 2);
       setCenterY(client.y + size / 2);
     }
-  }, [ref, size]);
+  }, [ref, size,]);
 
   const onKeydown = (e: KeyboardEvent) => {
     if (disabled) {
@@ -203,13 +213,14 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
 
   useEffect(() => {
     const temp = [1, 2, 3]
-      .map(t => items)
+      .map((multiplier) => items.map((item) => ({ ...item, id: `${item.id}_${multiplier}` })))
       .reduce((d: any[], item: any[]) => {
         return d.concat(item);
       }, []);
 
     setItemsTemp(temp);
   }, [items]);
+
 
   useEffect(() => {
     const parentPath = parentItem ? parentItem.route : '';
@@ -242,7 +253,12 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
       }}
     >
       <div className="w-full h-full border-4 border-violet-600 rounded-full -origin-top-left rotate-[-45deg]"></div>
-      {!disabled && itemsTemp.map((item: IMenuItem, index: number) => renderItems(item, index))}
+      {!disabled && itemsTemp.map((item: IMenuItem, index: number) => (
+        <React.Fragment key={item.id || index}>
+          {renderItems(item, index)}
+        </React.Fragment>
+      ))}
+
       {currentItem?.subItems?.length && (
         <MenuItem
           focused={focused}

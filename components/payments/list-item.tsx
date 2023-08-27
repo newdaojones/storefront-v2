@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
-import NameCheckerTooltip from './tooltip-payment-names';
-import PaymentTooltipStatus from './tooltip-payment-status';
+import PaymentNameTooltip from './tooltip-payment-names';
+import PaymentStatusTooltip from './tooltip-payment-status';
 
 type ListItemProps = {
     order: any;
@@ -41,13 +41,20 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
                 <p className="text-sm text-right font-semibold ">{createDate ?? "problem 😮‍💨"}</p>
                 <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
             </div>
-            <NameCheckerTooltip order={order} />
-            <PaymentTooltipStatus order={order} statusColors={statusColors} />
+            <PaymentNameTooltip order={order} />
+            <PaymentStatusTooltip order={order} statusColors={statusColors} />
         </div>
     )
 };
 
-const ListItem = React.memo(PaymentListItem);
+const areEqual = (prevProps: { order: { chargeAmount: any; }; }, nextProps: { order: { chargeAmount: any; }; }) => {
+    console.log("areEqual called");
+    // Only re-render if chargeAmount changes
+    return prevProps.order.chargeAmount === nextProps.order.chargeAmount;
+};
+
+const ListItem = React.memo(PaymentListItem, areEqual);
+//const ListItem = PaymentListItem;
 ListItem.displayName = "ListItem";
 
 export default ListItem;

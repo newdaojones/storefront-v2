@@ -37,11 +37,6 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         getOrders()
     }, [getOrders, dateRange])
 
-    useEffect(() => {
-        console.log("Orders have been updated:", orders);
-    }, [orders]);
-
-
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>

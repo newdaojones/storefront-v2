@@ -11,7 +11,7 @@ const doNamesMatch = (customerName: string, payerName: string) => {
 };
 
 
-export default function NameCheckerTooltip({ order }: ListItemProps) {
+export default function PaymentNameTooltip({ order }: ListItemProps) {
     const customerName = order.name ?? '';
     const payerName = `${order.customer?.firstName ?? ''}${order.customer?.lastName ?? ''}`;
     const namesMatch = doNamesMatch(customerName, payerName);

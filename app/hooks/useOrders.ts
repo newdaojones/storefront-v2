@@ -37,7 +37,12 @@ export const useOrders = (merchantId: number | null, dateRange: { startDate: Dat
             console.log("Fetched orders:", result);  // Log the fetched data
 
             if (response.ok) {
-                setOrders(prevOrders => prevOrders.concat(result.rows));
+                // setOrders(prevOrders => {
+                //     const newOrders = prevOrders.concat(result.rows);
+                //     console.log("Updated orders:", newOrders);
+                //     return newOrders;
+                // });
+                setOrders(result.rows);
                 setTotal(result.count);
             } else {
                 throw new Error(result.message || result.error);
@@ -48,6 +53,7 @@ export const useOrders = (merchantId: number | null, dateRange: { startDate: Dat
         } finally {
             setLoading(false);
         }
+
     }, [page, limit, dateRange, merchantId, setLoading, setTotal]);
 
     return { orders, loading, total, getOrders };

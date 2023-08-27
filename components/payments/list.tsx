@@ -30,6 +30,8 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
     }, [totalProp]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
+    // how do i do this without useMemo?
+    //const isReached = orders.length >= total;
 
     useAutoRefresh({ handleRefresh, interval: 60000 });
 

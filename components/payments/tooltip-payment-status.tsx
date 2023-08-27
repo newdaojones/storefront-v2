@@ -6,7 +6,7 @@ type ListItemProps = {
 };
 
 
-export default function PaymentTooltipStatus({ order, statusColors }: ListItemProps) {
+export default function PaymentStatusTooltip({ order, statusColors }: ListItemProps) {
     const displayAmount = order.amount ? parseFloat(order.amount).toFixed(2) : "problem 😮‍💨";
     const finalAmount = order.chargeAmount ? parseFloat(order.chargeAmount).toFixed(2) : " ---";
 
