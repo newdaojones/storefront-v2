@@ -8,7 +8,7 @@ export default function CustomerDetails({ data }: CustomerDetailsProps) {
 
         <div className="w-fit date-range-picker grid grid-rows-2 shadow-md bg-gray-500 bg-opacity-40 p-4 border-purps border-4 rounded-md">
             <div className="grid grid-rows-2 py-0 px-4">
-                <div className="grid grid-rows-1"><strong>Customer</strong></div>
+                <div className="grid grid-rows-1"><strong>Payer</strong></div>
                 <div className="grid grid-rows-1">{data?.customer?.firstName} {data?.customer?.lastName}</div>
             </div>
             <div className="grid grid-rows-2 py-0 px-4">

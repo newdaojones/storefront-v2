@@ -27,7 +27,7 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
 
     useEffect(() => {
         setTotal(totalProp);
-    }, [totalProp]);
+    }, [totalProp, setTotal]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
     // how do i do this without useMemo?
