@@ -1,6 +1,5 @@
 "use client"
 import { useOrders } from "@/app/hooks/useOrders";
-import { usePagination } from "@/app/hooks/usePagination";
 import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
@@ -31,7 +30,6 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     const { dateRange, handleDateRangeChange } = useDateRange(defaultStartDate, defaultEndDate);
     const { orders, loading, total, getOrders } = useOrders(merchantId, dateRange);
     const { hoveredItem } = useGlobal();
-    const { page, nextPage } = usePagination();
 
     useEffect(() => {
         getOrders()

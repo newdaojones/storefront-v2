@@ -30,10 +30,14 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
     }, [totalProp, setTotal]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
-    // how do i do this without useMemo?
-    //const isReached = orders.length >= total;
+
+    console.log("Hovered Item: ", hoveredItem);
+    console.log("Focused Index: ", focusedIndex);
 
     useAutoRefresh({ handleRefresh, interval: 60000 });
+
+    console.log("Hovered Item: ", hoveredItem);
+    console.log("Focused Index: ", focusedIndex);
 
     const actualFocusedIndex = isKeyboardMode ? focusedIndex : hoveredIndex;
 

@@ -47,13 +47,13 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
     )
 };
 
-const areEqual = (prevProps: { order: { chargeAmount: any; }; }, nextProps: { order: { chargeAmount: any; }; }) => {
-    console.log("areEqual called");
-    // Only re-render if chargeAmount changes
-    return prevProps.order.chargeAmount === nextProps.order.chargeAmount;
-};
+// const areEqual = (prevProps: { order: { chargeAmount: any; }; }, nextProps: { order: { chargeAmount: any; }; }) => {
+//     console.log("areEqual called");
+//     // Only re-render if chargeAmount changes
+//     return prevProps.order.chargeAmount === nextProps.order.chargeAmount;
+// };
 
-const ListItem = React.memo(PaymentListItem, areEqual);
+const ListItem = React.memo(PaymentListItem);
 //const ListItem = PaymentListItem;
 ListItem.displayName = "ListItem";
 
