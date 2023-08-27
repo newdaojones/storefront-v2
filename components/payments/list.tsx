@@ -1,4 +1,3 @@
-import { useAutoRefresh } from '@/app/hooks/useAutoRefresh';
 import { useKeyboardInteraction } from '@/app/hooks/useKeyboardInteraction';
 import { useMouseInteraction } from '@/app/hooks/useMouseInteraction';
 import { usePagination } from '@/app/hooks/usePagination';
@@ -34,7 +33,6 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
     console.log("Hovered Item: ", hoveredItem);
     console.log("Focused Index: ", focusedIndex);
 
-    useAutoRefresh({ handleRefresh, interval: 60000 });
 
     console.log("Hovered Item: ", hoveredItem);
     console.log("Focused Index: ", focusedIndex);

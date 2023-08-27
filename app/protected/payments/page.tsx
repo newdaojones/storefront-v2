@@ -1,4 +1,5 @@
 "use client"
+import { useAutoRefresh } from "@/app/hooks/useAutoRefresh";
 import { useOrders } from "@/app/hooks/useOrders";
 import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
@@ -34,6 +35,8 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     useEffect(() => {
         getOrders()
     }, [getOrders, dateRange])
+
+    useAutoRefresh({ handleRefresh: getOrders, interval: 10000 });
 
     return (
         <div className="relative w-screen h-screen">
