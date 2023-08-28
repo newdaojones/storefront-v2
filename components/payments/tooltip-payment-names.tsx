@@ -16,7 +16,6 @@ export default function PaymentNameTooltip({ order }: ListItemProps) {
     const payerName = `${order.customer?.firstName ?? ''}${order.customer?.lastName ?? ''}`;
     const namesMatch = doNamesMatch(customerName, payerName);
 
-
     const tooltipContent = (
         <div>
             {namesMatch ? (
@@ -39,10 +38,6 @@ export default function PaymentNameTooltip({ order }: ListItemProps) {
                 <p className="text-sm font-semibold ">{order.name ?? ''}</p>
                 <p className="text-sm text-right font-semibold ">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
             </div>
-            {/* <div className="col-span-1">
-                <p className={`text-sm font-semibold ${textColorClass || 'text-gray-500'}`}>{customerName}</p>
-                <p className={`text-sm font-semibold ${textColorClass || 'text-gray-500'}`}>{payerName}</p>
-            </div> */}
         </Tooltip>
     )
 }
