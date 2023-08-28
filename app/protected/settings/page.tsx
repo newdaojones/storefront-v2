@@ -54,17 +54,19 @@ export default function Settings() {
             <Container title={"Settings"} footer={<SettingsButtons onSave={handleSave} onEdit={handleEdit} isEditing={isEditing} hasChanges={false} />}>
                 {session && (
                     <>
-                        <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
-                        <StorefrontName
-                            merchName={currentMerchName} />
-                        <TxEmailSenderName
-                            merchName={currentMerchName}
-                            isEditing={isEditing}
-                            onNameChange={setMerchName} />
-                        <MerchKycStatus kycStatus={(session?.user.status || '🛑 No KYC Status')} />
+                        <div className="w-1/2 py-8">
+                            <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
+                            <StorefrontName
+                                merchName={currentMerchName} />
+                            <TxEmailSenderName
+                                merchName={currentMerchName}
+                                isEditing={isEditing}
+                                onNameChange={setMerchName} />
+                            <MerchKycStatus kycStatus={(session?.user.status || '🛑 No KYC Status')} />
+                            <AppVersion />
+                        </div>
                     </>
                 )}
-                <AppVersion />
             </Container>
 
             <CommandBar
