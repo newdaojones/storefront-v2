@@ -1,14 +1,14 @@
 // These styles apply to every route in the application
 import AuthStatus from "@/components/auth/auth-status";
+import { OrbitalMenu } from "@/components/orbital";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import { Toaster } from "react-hot-toast";
 import 'react-phone-number-input/style.css';
-import "react-datepicker/dist/react-datepicker.css";
 import Providers from "./providers/root";
-import { OrbitalMenu } from "@/components/orbital";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     title,
     description,
   },
-  metadataBase: new URL("https://storefront-too.vercel.app/"),
-  themeColor: "#FFF",
+  metadataBase: new URL("https://storefront.network/"),
+  themeColor: "#1f1f1f",
 };
 
 export default async function RootLayout({

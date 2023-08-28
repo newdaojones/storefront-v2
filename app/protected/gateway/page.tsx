@@ -1,8 +1,6 @@
 "use client"
 
-import NetworkMode from "@/components/gateway/network-mode";
-import SupportedNetworks from "@/components/gateway/supported-networks";
-import SupportedTokens from "@/components/gateway/supported-tokens";
+import GatewayLayout from "@/components/gateway";
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import Widget from "@/components/generics/widget";
@@ -16,9 +14,7 @@ export default function Gateway() {
     return (
         <div className="relative w-screen h-screen">
             <Container title={"Gateway"}>
-                <SupportedNetworks />
-                <SupportedTokens />
-                <NetworkMode />
+                <GatewayLayout />
             </Container>
 
             <CommandBar
