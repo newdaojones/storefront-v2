@@ -6,6 +6,7 @@ import { useCallback, useEffect } from 'react';
 import { MenuItem } from './menu';
 
 export interface IMenuItem {
+  id: number;
   route: string;
   icon?: any;
   text?: string;
@@ -89,10 +90,10 @@ export const OrbitalMenu = () => {
     <Orbital
       disabled={disabled}
       items={[
-        { route: '/protected/orders', text: 'Orders' },
-        { route: '/protected/payments', text: 'Payments' },
-        { route: '/protected/gateway', text: 'Gateway' },
-        { route: '/protected/settings', text: 'Settings' },
+        { id: 1, route: '/protected/orders', text: 'Orders' },
+        { id: 2, route: '/protected/payments', text: 'Payments' },
+        { id: 3, route: '/protected/gateway', text: 'Gateway' },
+        { id: 4, route: '/protected/settings', text: 'Settings' },
       ]}
       size={450}
     />

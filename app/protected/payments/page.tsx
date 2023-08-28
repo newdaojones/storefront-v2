@@ -1,18 +1,17 @@
 "use client"
+import { useAutoRefresh } from "@/app/hooks/useAutoRefresh";
+import { useOrders } from "@/app/hooks/useOrders";
 import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import PaymentButtons from "@/components/payments/buttons";
-import { fetchLatestOrder } from "@/components/payments/data-refresh";
 import PaymentList from "@/components/payments/list";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker2 from "@/components/widgets/datepicker2";
 import ResponseCodes from "@/components/widgets/payment-details";
-import { Order } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import queryString from "query-string";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useDateRange } from "../../hooks/useDateRange";
 
 export default function Payments() {
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
@@ -24,84 +23,32 @@ export default function Payments() {
 
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
+    const merchantId = session?.user?.merchantId ?? null;
+
+    const defaultStartDate = new Date(2023, 0, 1); // January 1, 2000
+    const defaultEndDate = new Date();
+
+    const { dateRange, handleDateRangeChange } = useDateRange(defaultStartDate, defaultEndDate);
+    const { orders, loading, total, getOrders } = useOrders(merchantId, dateRange);
     const { hoveredItem } = useGlobal();
-    const [dateRange, setDateRange] = useState<{ startDate: Date | null, endDate: Date | null }>({ startDate: null, endDate: null });
-    const [loading, setLoading] = useState(false)
-    const [page, setPage] = useState(1)
-    const [total, setTotal] = useState(0)
-    const [limit] = useState(10);
-
-    const merchantId = useMemo(() => session?.user?.merchantId, [session])
-
-    const [orders, setOrders] = useState<Array<Order>>([])
-
-    const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
-        setDateRange({ startDate, endDate });
-    };
-
-    const handleRefresh = async () => {
-        console.log('handleRefresh called');
-        const latestOrder = await fetchLatestOrder();
-
-        if (latestOrder && (!orders.length || latestOrder.id !== orders[0].id)) {
-            setOrders([latestOrder, ...orders]);
-        }
-    };
-
-    const getOrders = useCallback(async () => {
-        console.log('Fetching orders');
-        if (!merchantId) {
-            return
-        }
-        try {
-            setLoading(true)
-            const query = queryString.stringify({
-                page,
-                limit,
-                dateRange
-            })
-            const response = await fetch(`/api/order?${query}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-
-            const result = await response.json();
-
-            if (response.ok) {
-                setOrders(prevOrders => prevOrders.concat(result.rows));
-                setTotal(result.count);
-            } else {
-                throw new Error(result.message || result.error)
-            }
-        } catch (err: any) {
-            toast.error(err.message)
-        } finally {
-            setLoading(false)
-        }
-    }, [page, limit, dateRange, merchantId])
 
     useEffect(() => {
         getOrders()
-    }, [getOrders])
+    }, [getOrders, dateRange])
 
+    useAutoRefresh({ handleRefresh: getOrders, interval: 10000 });
 
     return (
         <div className="relative w-screen h-screen">
-            <Container title={"Payments"} footer={<PaymentButtons orders={undefined} />}>
+            <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>
                 <PaymentList
                     orders={orders}
                     loading={loading}
                     total={total}
-                    handleRefresh={handleRefresh}
-                    loadMore={() => {
-                        console.log('loadMore called');  // Debugging line
-                        setPage(page + 1);
+                    handleRefresh={() => {
+                        console.log('handleRefresh called');
                     }}
                 />
-                {/* <Widget title="Payment Details"><ResponseCodes data={hoveredItem} /></Widget> */}
-                {/* <Widget title="Customer Details"><CustomerDetails data={hoveredItem} /></Widget> */}
             </Container>
             <div className="absolute top-[35%] right-[76%]">
                 <ResponseCodes data={hoveredItem} />

@@ -8,6 +8,7 @@ import SettingsButtons from "@/components/settings/buttons";
 import MerchKycStatus from "@/components/settings/kyc-status";
 import SettlementAddress from "@/components/settings/settlement-address";
 import StorefrontName from "@/components/settings/storefront-name";
+import TxEmailSenderName from "@/components/settings/tx-email-sender";
 import Agent from "@/components/widgets/agent";
 import Shortcuts from "@/components/widgets/shortcuts";
 import { useSession } from "next-auth/react";
@@ -55,6 +56,8 @@ export default function Settings() {
                     <>
                         <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
                         <StorefrontName
+                            merchName={currentMerchName} />
+                        <TxEmailSenderName
                             merchName={currentMerchName}
                             isEditing={isEditing}
                             onNameChange={setMerchName} />

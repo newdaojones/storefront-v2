@@ -88,10 +88,19 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        const page = Number(req.nextUrl.searchParams.get('page') || 1);
-        const limit = Number(req.nextUrl.searchParams.get('limit') || 10);
-        const dateRange: any = req.nextUrl.searchParams.get('dateRange');
+        // TODO: Fix pagination from naive list to date based
         const session = await getServerSession({ req, ...authOptions });
+        const page = Number(req.nextUrl.searchParams.get('page') || 1);
+        const limit = Number(req.nextUrl.searchParams.get('limit') || 10000); //Leave this as 10000 for now
+        const startDate = new Date(req.nextUrl.searchParams.get('startDate') ?? 0);
+        const endDate = new Date(req.nextUrl.searchParams.get('endDate') ?? Date.now());
+
+        console.log("Start Date:", startDate);
+        console.log("End Date:", endDate);
+
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
+        }
 
         if (!session) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -105,8 +114,8 @@ export async function GET(req: NextRequest) {
             where: {
                 merchantId: session.user.merchantId,
                 createdAt: {
-                    gte: dateRange.from,
-                    lte: dateRange.to
+                    gte: startDate,
+                    lte: endDate
                 }
             },
             include: {
@@ -123,8 +132,8 @@ export async function GET(req: NextRequest) {
             where: {
                 merchantId: session.user.merchantId,
                 createdAt: {
-                    gte: dateRange.from,
-                    lte: dateRange.to
+                    gte: startDate,
+                    lte: endDate
                 }
             }
         })

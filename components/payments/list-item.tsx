@@ -1,5 +1,6 @@
 import React, { MouseEvent } from 'react';
-import PaymentTooltipStatus from './tooltip-payment-status';
+import PaymentNameTooltip from './tooltip-payment-names';
+import PaymentStatusTooltip from './tooltip-payment-status';
 
 type ListItemProps = {
     order: any;
@@ -26,29 +27,35 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
         'processing': 'text-orange-500',
     };
 
+
     return (
-        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-20 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-violet-300" : "bg-slate-50"}`}
+        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-12 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-purps" : "bg-notpurple"} ${isFocused ? "text-notpurple" : "text-gray-500"}`}
 
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{order.id ?? "problem 😮‍💨"}</p>
+                <p className="text-sm font-semibold ">{order.id ?? "problem 😮‍💨"}</p>
             </div>
             <div className="col-span-1">
-                <p className="text-sm text-right font-semibold text-gray-500">{createDate ?? "problem 😮‍💨"}</p>
-                <p className="text-sm text-right font-semibold text-gray-500">{createTime ?? "problem 😮‍💨"}</p>
+                <p className="text-sm text-right font-semibold ">{createDate ?? "problem 😮‍💨"}</p>
+                <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
             </div>
-            <div className="col-span-1">
-                <p className="text-sm font-semibold text-gray-500">{order.customer?.phoneNumber ?? ''}</p>
-                <p className="text-sm text-right font-semibold text-gray-500">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
-            </div>
-            <PaymentTooltipStatus order={order} statusColors={statusColors} />
+            <PaymentNameTooltip order={order} />
+            <PaymentStatusTooltip order={order} statusColors={statusColors} />
         </div>
     )
 };
 
+// const areEqual = (prevProps: { order: { chargeAmount: any; }; }, nextProps: { order: { chargeAmount: any; }; }) => {
+//     console.log("areEqual called");
+//     // Only re-render if chargeAmount changes
+//     return prevProps.order.chargeAmount === nextProps.order.chargeAmount;
+// };
+
 const ListItem = React.memo(PaymentListItem);
+//const ListItem = PaymentListItem;
 ListItem.displayName = "ListItem";
 
 export default ListItem;
+
