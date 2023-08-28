@@ -71,7 +71,7 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
         }}
       >
 
-        {item.text && <div className={`border-1 rounded-md bg-primary px-2 py-1 ${index === current ? 'text-violet-500' : 'text-black'}`}>{item.text}</div>}
+        {item.text && <div className={`border-1 rounded-md bg-primary px-2 py-1 ${index === current ? 'text-purps' : 'text-charyo'}`}>{item.text}</div>}
       </div>
     );
   };
@@ -252,7 +252,7 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
         zIndex: isStartDrag ? 1000 : 1000 - zIndex,
       }}
     >
-      <div className="w-full h-full border-4 border-violet-600 rounded-full -origin-top-left rotate-[-45deg]"></div>
+      <div className="w-full h-full border-4 border-purps rounded-full -origin-top-left rotate-[-45deg]"></div>
       {!disabled && itemsTemp.map((item: IMenuItem, index: number) => (
         <React.Fragment key={item.id || index}>
           {renderItems(item, index)}

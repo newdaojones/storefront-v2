@@ -13,7 +13,8 @@ module.exports = {
         purps: '#7e18ff',
         purplehaze: '#b8b2ff',
         lamegray: '#d9d9d9',
-        lavender: '#97B1FA'
+        lavender: '#97B1FA',
+        aquayuck: '#B4FFDB'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(#c6f6d5, #A5B4FC, #7e18ff)',

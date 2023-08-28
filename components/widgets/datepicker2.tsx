@@ -81,8 +81,8 @@ export default function DateRangePicker2({ onChange, onClose }: DateRangePickerP
                 <div className='text-red-500'>{formik.errors.startDate}</div>
             ) : null}
             <div className='grid grid-cols-2 text-notpurple'>
-                <button onClick={handleApply} className='bg-purps rounded-md text-notpurple m-2 py-1 hover:bg-ualert'>Apply</button>
-                <button onClick={onClose} className='bg-purps rounded-md text-notpurple m-2 py-1 hover:bg-ualert'>Close</button>
+                <button onClick={handleApply} className=' rounded-md text-notpurple m-2 py-1 bg-purps hover:bg-ualert'>Apply</button>
+                <button onClick={onClose} className=' rounded-md text-notpurple m-2 py-1 bg-purps hover:bg-ualert'>Close</button>
             </div>
         </form>
     );

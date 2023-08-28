@@ -1,6 +1,7 @@
 "use client"
 
 import { config } from "config";
+import { format } from 'date-fns';
 import { useFormik } from 'formik';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -11,7 +12,6 @@ import SignOut from "../auth/sign-out";
 import { FormInput } from "../form-input";
 import Container from "../generics/container";
 import { useAgreement } from "../use/agreement";
-import { format } from 'date-fns'
 
 interface KycIndividual {
     companyName: string;
@@ -160,7 +160,7 @@ export default function KycForms() {
     }
 
     return (
-        <Container title={"Storefront KYC Entity Form"} footer={<button className="w-full rounded-md text-white shadow-lg bg-violet-500 p-2 hover:bg-pink-500" onClick={() => kycInfo.submitForm()}>Submit</button>}>
+        <Container title={"Storefront KYC Entity Form"} footer={<button className="w-full rounded-md text-notpurple shadow-lg bg-purps p-2 hover:bg-ualert" onClick={() => kycInfo.submitForm()}>Submit</button>}>
             {session?.user.role === 'GUEST' ? (<>
                 <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
@@ -185,7 +185,7 @@ export default function KycForms() {
                         <FormInput {...kycInfo} field="country" label="Country" disabled />
                         <label className="p-2 cursor-pointer select-none">
                             <input className="checkbox mr-2" type="checkbox" checked={!!kycInfo.values.signedAgreementId} onClick={() => onGetAgreementLink()} />
-                            Confirm Receipt of ToS <span className=" grid grid-cols-1 lg:grid-cols-1 text-purple-500">Bridge Terms of Servce</span>
+                            Confirm Receipt of ToS <span className=" grid grid-cols-1 lg:grid-cols-1 text-purps">Bridge Terms of Servce</span>
                             {errors?.signedAgreementId && <div className="text-red-500 text-xs">{errors?.signedAgreementId as string}</div>}
                         </label>
                     </div>
@@ -196,7 +196,7 @@ export default function KycForms() {
                     {session?.user.status === 'VERIFIED' ? (
                         <div className="text-center">Your KYC Has Been Successfully Verified</div>
                     ) : <>
-                        <button className="w-full grid-col-1 rounded-md bg-violet-500 p-2 hover:bg-pink-500" onClick={() => processKyc()}>Process</button>
+                        <button className="w-full grid-col-1 rounded-md bg-purps p-2 hover:bg-ualert" onClick={() => processKyc()}>Process</button>
                     </>}
                 </>
             </>}

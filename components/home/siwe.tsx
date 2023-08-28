@@ -22,7 +22,7 @@ const SiweContext = () => {
     if (isLoggedIn) {
         return (
             <button
-                className="rounded-lg py-2 px-4 mt-2 bg-pink-500 hover:border hover:border-blue-500 hover:bg-transparent"
+                className="rounded-lg py-2 px-4 mt-2 bg-purps hover:border hover:border-ualert hover:bg-transparent"
                 onClick={() => disconnect(true)}
             >
                 Disconnect Wallet

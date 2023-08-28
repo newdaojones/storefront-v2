@@ -61,7 +61,7 @@ export function FormInput({ type, values, errors, touched, field, label, disable
     case 'phoneNumber':
       inputComponent = (
         <PhoneInput
-          className="px-4 py-2 w-full rounded bg-white outline-none"
+          className="px-4 py-2 w-full rounded bg-notpurple outline-none"
           defaultCountry="US"
           placeholder={label}
           onBlur={() => setFieldTouched(field, true)}
@@ -89,7 +89,7 @@ export function FormInput({ type, values, errors, touched, field, label, disable
     case 'date':
       inputComponent = (
         <DatePicker
-          className="px-4 py-2 w-full rounded outline-violet-500 bg-stone-50"
+          className="px-4 py-2 w-full rounded outline-purps bg-notpurple"
           selected={values[field]}
           showMonthDropdown={true}
           showYearDropdown={true}
@@ -104,7 +104,7 @@ export function FormInput({ type, values, errors, touched, field, label, disable
     default:
       inputComponent = (
         <input
-          className="px-4 py-2 w-full rounded outline-violet-500 bg-stone-50"
+          className="px-4 py-2 w-full rounded outline-purps bg-notpurple"
           type="text"
           placeholder={label}
           value={values[field]}
