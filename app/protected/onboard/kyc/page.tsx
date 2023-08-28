@@ -1,7 +1,12 @@
-import BridgeKyc from "@/components/forms/kyc-bridge";
+import KycForms from "@/components/forms/form-kyc";
+import CommandBar from "@/components/generics/command-bar";
 
-export default function Login() {
+export default function KYC() {
+
     return (
-        <BridgeKyc />
+        <>
+            <CommandBar slot1={""} />
+            <KycForms />
+        </>
     );
 }

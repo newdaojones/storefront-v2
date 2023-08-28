@@ -27,19 +27,19 @@ export default function DataExport({ data }: DataExportProps) {
     return (
         <div>
             <button onClick={handleExportCSV}>Export CSV</button>
-            <button onClick={handleExportJSON}>Export JSON</button>
+            {/* <button onClick={handleExportJSON}>Export JSON</button> */}
         </div>
     );
 }
 
-function convertDataToCSV(data: DataItem[]) {
-    // Convert data to CSV format. You might need to adjust this function
-    // depending on the structure of your data.
-    if (!data[0]) {
-        // If data[0] is undefined or null, return an empty string.
+function convertDataToCSV(data?: DataItem[]) {
+    // Check if data is not defined or if it's not an array or if it's an empty array
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        // If any of these conditions are true, return an empty string.
         return '';
     }
     const headers = Object.keys(data[0]).join(',');
     const rows = data.map(row => Object.values(row).join(',')).join('\n');
     return headers + '\n' + rows;
 }
+

@@ -1,5 +1,7 @@
+import { config } from "config";
+
 export const DEFAULT_LOGGER = 'info';
-export const DEFAULT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PID;
+export const DEFAULT_PROJECT_ID = config.WALLETCONNECT_PID;
 export const DEFAULT_RELAY_URL = 'wss://relay.walletconnect.com';
 export const DEFAULT_MERCHANT_APP_METADATA = {
   name: 'Storefront Merchant',

@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { SiweMessage, generateNonce } from "siwe";
 import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
+import { config } from 'config';
 
 const SIGNATURE_PREFIX = 'NDJ_SIGNATURE_V2_';
 
@@ -25,6 +26,7 @@ interface IContext {
   isLoading: boolean;
   pairings: PairingTypes.Struct[];
   accounts: string[];
+  isLoginInning: boolean;
 }
 
 export const ClientContext = createContext<IContext>({} as IContext);
@@ -32,15 +34,16 @@ export const ClientContext = createContext<IContext>({} as IContext);
 export function WalletConnectProvider({ children }: { children: ReactNode | ReactNode[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoginInning, setIsLoginInning] = useState(true)
   const [session, setSession] = useState<SessionTypes.Struct>();
   const [pairings, setPairings] = useState<PairingTypes.Struct[]>([]);
   const [client, setClient] = useState<Client>();
-  const [isInitializing, setIsInitializing] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [qrCodeUri, setQRCodeUri] = useState<string>();
   const [account, setAccount] = useState<string>();
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [chains] = useState(['eip155:80001']) // Polygon Testnet
+  const [chains] = useState([`eip155:${config.CHAIN_ID}`]) // Polygon Testnet
 
   const createClient = useCallback(async () => {
     try {
@@ -87,7 +90,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       setIsLoading(true);
 
       await client.disconnect({
-        topic: session.topic,
+        topic: session?.topic,
         reason: getSdkError("USER_DISCONNECTED"),
       });
 
@@ -98,7 +101,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     } finally {
       reset();
       setIsLoading(false);
-
     }
   }, [client, session]);
 
@@ -106,7 +108,6 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     const allNamespaceAccounts = Object.values(_session.namespaces)
       .map(namespace => namespace.accounts)
       .flat();
-    const allNamespaceChains = Object.keys(_session.namespaces);
     setSession(_session);
     setAccounts(allNamespaceAccounts);
     setAccount(allNamespaceAccounts[0])
@@ -115,6 +116,10 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
   const connect = useCallback(
     async (pairing?: any) => {
       try {
+        if (session) {
+          return
+        }
+
         if (typeof client === 'undefined') {
           throw new Error('WalletConnect is not initialized');
         }
@@ -130,18 +135,18 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
           setQRCodeUri(uri);
         }
 
-        const session = await approval();
-        onSessionConnected(session);
+        const _session = await approval();
+        onSessionConnected(_session);
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e: any) {
         disconnect();
       }
     },
-    [client, chains, onSessionConnected, disconnect]
+    [client, chains, session, onSessionConnected, disconnect]
   );
 
   const login = useCallback(async () => {
-    if (!account || !session || !client) {
+    if (!account || !session || !client || isLoggedIn) {
       return
     }
 
@@ -206,17 +211,16 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       });
 
       if (res?.status !== 200 || res?.error) {
-        console.log('Failed login', res?.error)
-        throw new Error('Failed login')
+        disconnect()
       }
 
       setIsLoggedIn(true)
     } catch (err) {
-      disconnect()
     } finally {
       setIsLoading(false)
+      setIsLoginInning(false)
     }
-  }, [client, session, account, disconnect])
+  }, [client, session, account, isLoggedIn, disconnect])
 
   useEffect(() => {
     login()
@@ -258,6 +262,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     client.on("session_delete", () => {
       console.debug("EVENT", "session_delete");
       reset();
+      signOut()
     });
   }, [client, onSessionConnected])
 
@@ -268,19 +273,17 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       }
       // populates existing pairings to state
       setPairings(client.pairing.values);
-      console.log("RESTORED PAIRINGS: ", client.pairing.values);
-
-
-      if (typeof session !== 'undefined') return;
 
       if (client.session.length) {
         const lastKeyIndex = client.session.keys.length - 1;
         const _session = client.session.get(client.session.keys[lastKeyIndex]);
         await onSessionConnected(_session);
         return _session;
+      } else {
+        setIsLoginInning(false)
       }
     },
-    [client, session, onSessionConnected, setPairings]
+    [client, onSessionConnected, setPairings]
   );
 
   useEffect(() => {
@@ -301,6 +304,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       account,
       accounts,
       session,
+      isLoginInning
     }),
     [
       isInitializing,
@@ -313,6 +317,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       client,
       session,
       isLoggedIn,
+      isLoginInning,
       connect,
       disconnect,
     ]

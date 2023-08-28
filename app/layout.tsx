@@ -5,7 +5,10 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
+import 'react-phone-number-input/style.css';
+import "react-datepicker/dist/react-datepicker.css";
 import Providers from "./providers/root";
+import { OrbitalMenu } from "@/components/orbital";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -40,7 +43,10 @@ export default async function RootLayout({
         <Suspense fallback="Loading...">
           <AuthStatus />
         </Suspense>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <OrbitalMenu />
+        </Providers>
       </body>
     </html>
   );
