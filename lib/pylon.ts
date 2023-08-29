@@ -9,29 +9,29 @@ export class PylonService {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: config.PYLON_API_URI
-    })
+      baseURL: config.PYLON_API_URI,
+    });
 
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (err) => {
-        const error = err.response
-        const status = error.status
+        const error = err.response;
+        const status = error.status;
 
         if (error?.data) {
           throw {
             status,
-            ...error.data
+            ...error.data,
           };
         }
 
         throw error;
-      },
+      }
     );
   }
 
   static getInstance() {
-    return new PylonService()
+    return new PylonService();
   }
 
   async privateApi(data: AxiosRequestConfig, user: User) {
@@ -40,94 +40,113 @@ export class PylonService {
         ...data,
         headers: {
           ...data.headers,
-          'Authorization': `Bearer ${user.token}`
-        }
-      })
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
-      return res.data
+      return res.data;
     } catch (err: any) {
       if (err.status === 401 && user.email) {
-        const token = await this.login(user.email)
+        const token = await this.login(user.email);
 
         await prisma.user.update({
           where: {
-            id: user.id
+            id: user.id,
           },
           data: {
-            token
-          }
-        })
+            token,
+          },
+        });
 
         const res = await this.axiosInstance.request({
           ...data,
           headers: {
             ...data.headers,
-            'Authorization': `Bearer ${token}`
-          }
-        })
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        return res.data
+        return res.data;
       }
 
-      throw err
+      throw err;
     }
   }
 
   async createPartner(data: any) {
-    const res = await this.axiosInstance.post('/', data)
+    const res = await this.axiosInstance.post("/", data);
 
-    return res.data
+    return res.data;
+  }
+
+  async updatePartner(data: any, user: User) {
+    return this.privateApi(
+      {
+        method: "PATCH",
+        url: "/",
+        data,
+      },
+      user
+    );
   }
 
   async getTosLink(redirectUri: string) {
-    const res = await this.axiosInstance.post('/tos_link', {
-      redirectUri
-    })
+    const res = await this.axiosInstance.post("/tos_link", {
+      redirectUri,
+    });
 
-    return res.data.link
+    return res.data.link;
   }
 
   async login(email: string) {
-    const res = await this.axiosInstance.post('/login', {
+    const res = await this.axiosInstance.post("/login", {
       email,
-      password: config.PYLON_PASSWORD
-    })
+      password: config.PYLON_PASSWORD,
+    });
 
-    return res.data.token
+    return res.data.token;
   }
 
   async getKYCLink(walletAddress?: string) {
     const user = await prisma.user.findUnique({
       where: {
-        walletAddress
-      }
-    })
+        walletAddress,
+      },
+    });
 
     if (!user) {
-      throw new Error(`Not found user for ${walletAddress}`)
+      throw new Error(`Not found user for ${walletAddress}`);
     }
 
-    const res = await this.privateApi({
-      method: 'GET',
-      url: '/kyb_link',
-    }, user)
+    const res = await this.privateApi(
+      {
+        method: "GET",
+        url: "/kyb_link",
+      },
+      user
+    );
 
-    return res.link
+    return res.link;
   }
 
   async sandboxApproveAccount(user: User) {
-    return this.privateApi({
-      method: 'POST',
-      url: '/kyb_success/sandbox'
-    }, user)
+    return this.privateApi(
+      {
+        method: "POST",
+        url: "/kyb_success/sandbox",
+      },
+      user
+    );
   }
 
   async createOrder(data: CreateOrderData, user: User) {
-    return this.privateApi({
-      method: 'POST',
-      url: '/orders',
-      data
-    }, user)
-
+    return this.privateApi(
+      {
+        method: "POST",
+        url: "/orders",
+        data,
+      },
+      user
+    );
   }
 }

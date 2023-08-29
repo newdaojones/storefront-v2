@@ -49,7 +49,8 @@ export default function Orders() {
             amount: 0,
             email: '',
             phoneNumber: '',
-            name: '',
+            firstName: '',
+            lastName: '',
         },
         validateOnBlur: true,
         validateOnChange: true,
@@ -62,7 +63,8 @@ export default function Orders() {
             amount: 0,
             email: '',
             phoneNumber: '',
-            name: ''
+            firstName: '',
+            lastName: '',
         }, false)
     };
 

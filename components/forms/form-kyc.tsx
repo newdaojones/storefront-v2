@@ -31,9 +31,8 @@ interface KycIndividual {
 }
 
 export default function KycForms() {
-    const { data: session } = useSession()
+    const { data: session, update: sessionUpdate } = useSession()
     const { signedAgreementId, openAgreement } = useAgreement()
-    const { update: sessionUpdate } = useSession()
     const [loading, setLoading] = useState(false)
 
     const onSubmitForm = async (values: KycIndividual) => {

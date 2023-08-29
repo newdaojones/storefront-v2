@@ -12,51 +12,73 @@ import TxEmailSenderName from "@/components/settings/tx-email-sender";
 import Agent from "@/components/widgets/agent";
 import Shortcuts from "@/components/widgets/shortcuts";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
 import { default as formatWalletAddress } from "utils/formatWalletAddr";
 
 export default function Settings() {
-    const { data: session } = useSession();
+    const { data: session, update: sessionUpdate } = useSession()
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [hasChanges, setHasChanges] = useState(false);
+    const [currentMerchName, setMerchName] = useState<string>('');
+    const sessionDisplayName = useMemo(() => session?.user?.merchant?.displayName || session?.user?.merchant?.name || '', [session])
+    const hasChanges = useMemo(() => currentMerchName !== sessionDisplayName, [sessionDisplayName, currentMerchName])
 
     function getDefaultMerchName(): string {
-        return session?.user?.name ?? '🛑 No Name';
+        return session?.user?.merchant?.name ?? '🛑 No Name';
     }
-    const [currentMerchName, setMerchName] = useState<string>(getDefaultMerchName());
+
 
     useEffect(() => {
-        if (session?.user?.merchant?.name) {
-            setMerchName(session.user.merchant.name);
+        setMerchName(sessionDisplayName);
+    }, [sessionDisplayName]);
+
+
+    const handleSave = async () => {
+        setIsEditing(false)
+        try {
+            const response = await fetch('/api/merchant', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    displayName: currentMerchName
+                }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && session) {
+                sessionUpdate({
+                    user: {
+                        ...session.user,
+                        merchant: result
+                    },
+                    isNewUser: false,
+                })
+                toast.success('Updated successfully')
+            } else {
+                throw new Error(result.message || result.error)
+            }
+        } catch (error: any) {
+            toast.error(error.message)
+            setMerchName(sessionDisplayName)
         }
-    }, [session]);
-
-
-    const handleSave = () => {
-        setIsEditing(false);
     }
 
     const handleEdit = () => {
         setIsEditing(prevEditing => !prevEditing);
     }
 
-    const handleNameChange = (newName: string) => {
-        if (newName !== currentMerchName) {
-            setHasChanges(true);
-        }
-        setMerchName(newName);
-    }
-
-
     return (
         <div className="relative w-screen h-screen">
-            <Container title={"Settings"} footer={<SettingsButtons onSave={handleSave} onEdit={handleEdit} isEditing={isEditing} hasChanges={false} />}>
+            <Container title={"Settings"} footer={<SettingsButtons onSave={handleSave} onEdit={handleEdit} isEditing={isEditing} hasChanges={hasChanges} />}>
                 {session && (
                     <>
                         <SettlementAddress settlementAddr={formatWalletAddress(session.address || '🛑 No Address')} />
                         <StorefrontName
-                            merchName={currentMerchName} />
+                            merchName={getDefaultMerchName()} />
                         <TxEmailSenderName
                             merchName={currentMerchName}
                             isEditing={isEditing}
