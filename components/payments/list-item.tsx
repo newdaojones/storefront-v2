@@ -29,20 +29,29 @@ const PaymentListItem = ({ order, onMouseEnter, onMouseLeave, isFocused }: ListI
 
 
     return (
-        <div data-id={`item-${order.id}`} className={`grid grid-cols-4 gap-12 w-full rounded-md px-2 py-2 justify-items-center ${isFocused ? "bg-purps" : "bg-notpurple"} ${isFocused ? "text-notpurple" : "text-gray-500"}`}
-
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-        >
-            <div className="col-span-1">
-                <p className="text-sm font-semibold ">{order.id ?? "problem 😮‍💨"}</p>
+        <div className='w-152'>
+            <div
+                data-id={
+                    `item-${order.id}`
+                }
+                className={
+                    `grid grid-cols-4 w-full space-x-12 rounded-md px-2 py-2 justify-items-center
+                    ${isFocused ? "bg-purps" : "bg-notpurple"}
+                    ${isFocused ? "text-notpurple" : "text-gray-500"}`
+                }
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                <div className="grid grid-rows-1">
+                    <p className="text-sm font-semibold ">{order.id ?? "problem 😮‍💨"}</p>
+                </div>
+                <div className="grid grid-rows-2">
+                    <p className="text-sm text-right font-semibold ">{createDate ?? "problem 😮‍💨"}</p>
+                    <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
+                </div>
+                <PaymentNameTooltip order={order} />
+                <PaymentStatusTooltip order={order} statusColors={statusColors} />
             </div>
-            <div className="col-span-1">
-                <p className="text-sm text-right font-semibold ">{createDate ?? "problem 😮‍💨"}</p>
-                <p className="text-sm text-right font-semibold ">{createTime ?? "problem 😮‍💨"}</p>
-            </div>
-            <PaymentNameTooltip order={order} />
-            <PaymentStatusTooltip order={order} statusColors={statusColors} />
         </div>
     )
 };
