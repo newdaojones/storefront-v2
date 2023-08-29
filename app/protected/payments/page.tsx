@@ -6,9 +6,9 @@ import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import PaymentButtons from "@/components/payments/buttons";
 import PaymentList from "@/components/payments/list";
+import CheckoutDetails from "@/components/widgets/checkout-details";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker2 from "@/components/widgets/datepicker2";
-import ResponseCodes from "@/components/widgets/payment-details";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useDateRange } from "../../hooks/useDateRange";
@@ -36,7 +36,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
         getOrders()
     }, [getOrders, dateRange])
 
-    useAutoRefresh({ handleRefresh: getOrders, interval: 10000 });
+    useAutoRefresh({ handleRefresh: getOrders, interval: 60000 });
 
     return (
         <div className="relative w-screen h-screen">
@@ -51,7 +51,7 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 />
             </Container>
             <div className="absolute top-[35%] right-[80%]">
-                <ResponseCodes data={hoveredItem} />
+                <CheckoutDetails data={hoveredItem} />
             </div>
             <div className="absolute top-[42%] right-[5%]">
                 <CustomerDetails data={hoveredItem} />
