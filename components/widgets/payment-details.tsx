@@ -7,7 +7,7 @@ type ResponseCodeProps = {
 export default function ResponseCode({ data }: ResponseCodeProps) {
     console.log(data);
     return (
-        <div className="w-fit date-range-picker grid grid-rows-2 shadow-md bg-notpurple text-charyo bg-opacity-70 p-4 border-purps border-4 rounded-md">
+        <div className="w-fit date-range-picker grid grid-rows-4 shadow-md bg-notpurple text-charyo bg-opacity-70 p-4 border-purps border-4 rounded-md">
             <div className="grid grid-cols-2 py-0 px-4">
                 <div className="space-y-1"><strong>Status:</strong></div>
                 <div className="space-y-1">{data?.chargeStatus}</div>

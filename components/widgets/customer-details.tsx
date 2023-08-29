@@ -6,7 +6,7 @@ export default function CustomerDetails({ data }: CustomerDetailsProps) {
     console.log(data);
     return (
 
-        <div className="w-80 date-range-picker grid grid-rows-2 shadow-md bg-notpurple text-charyo bg-opacity-70 p-4 border-purps border-4 rounded-md">
+        <div className="w-80 date-range-picker grid grid-rows-6 shadow-md bg-notpurple text-charyo bg-opacity-70 p-4 border-purps border-4 rounded-md">
             <div className="grid grid-rows-2 py-0 px-4">
                 <div className="grid grid-rows-1"><strong>Checkout</strong></div>
                 <div className="grid grid-rows-1">{data?.customer?.firstName} {data?.customer?.lastName}</div>
