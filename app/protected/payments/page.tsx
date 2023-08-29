@@ -50,10 +50,10 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                     }}
                 />
             </Container>
-            <div className="absolute top-[35%] right-[76%]">
+            <div className="absolute top-[35%] right-[80%]">
                 <ResponseCodes data={hoveredItem} />
             </div>
-            <div className="absolute top-[42%] right-[12%]">
+            <div className="absolute top-[42%] right-[5%]">
                 <CustomerDetails data={hoveredItem} />
             </div>
             <CommandBar
