@@ -12,7 +12,7 @@ const doNamesMatch = (customerName: string, payerName: string) => {
 
 
 export default function PaymentNameTooltip({ order }: ListItemProps) {
-    const customerName = order.name ?? '';
+    const customerName = `${order?.firstName ?? ''}${order?.lastName ?? ''}`;
     const payerName = `${order.customer?.firstName ?? ''}${order.customer?.lastName ?? ''}`;
     const namesMatch = doNamesMatch(customerName, payerName);
 
@@ -35,7 +35,7 @@ export default function PaymentNameTooltip({ order }: ListItemProps) {
     return (
         <Tooltip content={tooltipContent}>
             <div className="col-span-1">
-                <p className="text-sm font-semibold ">{order.name ?? ''}</p>
+                <p className="text-sm font-semibold ">{order?.firstName ?? "-"} {order?.lastName ?? ''}</p>
                 <p className="text-sm text-right font-semibold ">{order.customer?.firstName ?? "-"} {order.customer?.lastName ?? ''}</p>
             </div>
         </Tooltip>

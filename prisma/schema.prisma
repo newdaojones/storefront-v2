@@ -28,6 +28,7 @@ enum KycStatus {
 model Merchant {
   id                  Int        @id @default(autoincrement())
   name                String
+  displayName         String?
   walletAddress       String
   users               User[]
   createdAt           DateTime @default(now())
@@ -81,7 +82,8 @@ model Order {
   amount              Float
   email               String
   phoneNumber         String
-  name                String?
+  firstName           String?
+  lastName            String?
   merchantId          Int
   userId              Int
   tipAmount           Float   @default(0)
