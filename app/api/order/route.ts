@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         })
         console.log('updated ==========')
         await discordService.send(`${user.merchant.name} created order trackingId: ${order.id}. payment link: ${res.uri}`)
-        await smsService.send(order.phoneNumber, `StorefrontPay checkout url: ${res.uri}.`)
+        await smsService.send(order.phoneNumber, `StorefrontPay checkout url: ${res.uri}`)
 
         return new Response(JSON.stringify(updatedOrder), {
             status: 200,
