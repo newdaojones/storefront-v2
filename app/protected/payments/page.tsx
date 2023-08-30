@@ -6,7 +6,6 @@ import CommandBar from "@/components/generics/command-bar";
 import Container from "@/components/generics/container";
 import PaymentButtons from "@/components/payments/buttons";
 import PaymentList from "@/components/payments/list";
-import CheckoutDetails from "@/components/widgets/checkout-details";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker2 from "@/components/widgets/datepicker2";
 import PaymentDetails from "@/components/widgets/payment-details";
