@@ -23,10 +23,6 @@ const DEG2RAD = Math.PI / 180;
 
 export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, items, disabled = false, zIndex }: Props) => {
 
-  console.log('MenuItem is being rendered');
-  // rest of your code
-
-
   const ref = useRef<any>();
 
   const router = useRouter()
@@ -51,9 +47,6 @@ export const MenuItem = ({ size, parentItem, onFocused = () => { }, focused, ite
 
     const delta = alpha < 0 ? Math.PI * 2 + (alpha % (Math.PI * 2)) : alpha % (Math.PI * 2);
     const isVisible = (delta > 0 && delta < 115 * DEG2RAD) || delta > 340 * DEG2RAD;
-
-    console.log("Rendering MenuItem with items:", items.map(item => item.id));
-
 
     return (
       <div
