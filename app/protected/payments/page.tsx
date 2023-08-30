@@ -9,6 +9,8 @@ import PaymentList from "@/components/payments/list";
 import CheckoutDetails from "@/components/widgets/checkout-details";
 import CustomerDetails from "@/components/widgets/customer-details";
 import DateRangePicker2 from "@/components/widgets/datepicker2";
+import PaymentDetails from "@/components/widgets/payment-details";
+
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useDateRange } from "../../hooks/useDateRange";
@@ -39,29 +41,30 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     useAutoRefresh({ handleRefresh: getOrders, interval: 60000 });
 
     return (
-        <div className="relative w-screen h-screen">
-            <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>
-                <PaymentList
-                    orders={orders}
-                    loading={loading}
-                    total={total}
-                    handleRefresh={() => {
-                        console.log('handleRefresh called');
-                    }}
-                />
-            </Container>
-            <div className="absolute top-[35%] right-[80%]">
-                <CheckoutDetails data={hoveredItem} />
-            </div>
-            <div className="absolute top-[42%] right-[5%]">
-                <CustomerDetails data={hoveredItem} />
+        <div>
+            <div className="grid grid-cols-2 space-x-135 space-y-32">
+                <div className="grid grid-cols-1">
+                    <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>
+                        <PaymentList
+                            orders={orders}
+                            loading={loading}
+                            total={total}
+                            handleRefresh={() => {
+                                console.log('handleRefresh called');
+                            }}
+                        />
+                    </Container>
+                </div>
+                <div className="grid grid-cols-1 h-fit">
+                    <PaymentDetails data={hoveredItem} />
+                    <CustomerDetails data={hoveredItem} />
+                </div>
             </div>
             <CommandBar
                 slot1={'Date Range'}
                 changeWidget={setActiveWidget}
-
             />
-            <div className="absolute top-[18%] right-[12%]">
+            <div className="absolute top-[40%] right-[82%]">
                 {activeWidget === 'Date Range' && (
                     <DateRangePicker2
                         onChange={(startDate, endDate) => {
