@@ -96,9 +96,6 @@ export async function GET(req: NextRequest) {
         const startDate = new Date(req.nextUrl.searchParams.get('startDate') ?? 0);
         const endDate = new Date(req.nextUrl.searchParams.get('endDate') ?? Date.now());
 
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
         }

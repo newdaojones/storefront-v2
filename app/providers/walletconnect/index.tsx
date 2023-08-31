@@ -70,12 +70,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     setAccounts([])
     setAccount(undefined)
     setIsLoggedIn(false)
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.includes(SIGNATURE_PREFIX)) {
-        localStorage.removeItem(key);
-      }
-    }
+    localStorage.clear()
   };
 
 
@@ -125,12 +120,13 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         }
 
         const requiredNamespaces = getRequiredNamespaces(chains);
-
         let connectParams = {
           pairingTopic: pairing?.topic,
           requiredNamespaces,
         };
+
         const { uri, approval } = await client.connect(connectParams);
+
         if (uri) {
           setQRCodeUri(uri);
         }
@@ -236,19 +232,19 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     }
 
     client.on("session_ping", args => {
-      console.warn("EVENT", "session_ping", args);
+      console.log("EVENT", "session_ping", args);
     });
 
     client.on("session_ping", args => {
-      console.warn(`**** session_ping event. args: ${args}`);
+      console.log(`**** session_ping event. args: ${args}`);
     });
 
     client.on("session_event", args => {
-      console.warn("EVENT", "session_event", args);
+      console.log("EVENT", "session_event", args);
     });
 
     client.on("session_update", ({ topic, params }) => {
-      console.warn("EVENT", "session_update", { topic, params });
+      console.log("EVENT", "session_update", { topic, params });
       const { namespaces } = params;
       const _session = client.session.get(topic);
       const updatedSession = { ..._session, namespaces };
@@ -256,11 +252,11 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
     });
 
     client.on("session_proposal", () => {
-      console.debug("EVENT", "session_proposal");
+      console.log("EVENT", "session_proposal");
     })
 
     client.on("session_delete", () => {
-      console.debug("EVENT", "session_delete");
+      console.log("EVENT", "session_delete");
       reset();
       signOut()
     });
@@ -277,6 +273,8 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       if (client.session.length) {
         const lastKeyIndex = client.session.keys.length - 1;
         const _session = client.session.get(client.session.keys[lastKeyIndex]);
+        console.log('session==============', client.session.keys)
+        console.log(_session)
         await onSessionConnected(_session);
         return _session;
       } else {

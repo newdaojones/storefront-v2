@@ -22,7 +22,6 @@ export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWi
                         type="button"
                         onClick={(e) => {
                             e.preventDefault;
-                            console.log("Setting active widget to:", slot1);
                             changeWidget && changeWidget(slot1);
                         }}
                         className="p-2 bg-purps text-notpurple rounded shadow-md sm:bg-transparent sm:text-current sm:shadow-none sm:p-0">
@@ -34,7 +33,6 @@ export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWi
                         type="button"
                         onClick={(e) => {
                             e.preventDefault;
-                            console.log("Setting active widget to:", slot2);
                             changeWidget && changeWidget(slot2 || '');
                         }}
                         className="p-2 bg-purps text-notpurple rounded shadow-md sm:bg-transparent sm:text-current sm:shadow-none sm:p-0">
@@ -46,7 +44,6 @@ export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWi
                         type="button"
                         onClick={(e) => {
                             e.preventDefault;
-                            console.log("Setting active widget to:", slot3);
                             changeWidget && changeWidget(slot3 || '');
                         }}
                         className="p-2 bg-purps text-notpurple rounded shadow-md sm:bg-transparent sm:text-current sm:shadow-none sm:p-0">
@@ -58,7 +55,6 @@ export default function CommandBar({ slot1, slot2, slot3, slot4, slot5, changeWi
                         type="button"
                         onClick={(e) => {
                             e.preventDefault;
-                            console.log("Setting active widget to:", slot4);
                             changeWidget && changeWidget(slot4 || '');
                         }}
                         className="p-2 bg-purps text-notpurple rounded shadow-md sm:bg-transparent sm:text-current sm:shadow-none sm:p-0">

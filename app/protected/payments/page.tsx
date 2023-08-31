@@ -66,8 +66,6 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
                 {activeWidget === 'Date Range' && (
                     <DateRangePicker2
                         onChange={(startDate, endDate) => {
-                            console.log("Start Date:", startDate);
-                            console.log("End Date:", endDate);
                             handleDateRangeChange(startDate, endDate);
                         }}
                         onClose={() => setActiveWidget(null)}

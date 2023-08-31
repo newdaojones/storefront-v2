@@ -60,7 +60,9 @@ export const Login = () => {
 
   useEffect(() => {
     if (initialized) {
-      connect()
+      setTimeout(() => {
+        connect()
+      }, 1000)
     }
   }, [initialized, connect])
 

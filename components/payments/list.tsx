@@ -29,14 +29,6 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
     }, [totalProp, setTotal]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
-
-    console.log("Hovered Item: ", hoveredItem);
-    console.log("Focused Index: ", focusedIndex);
-
-
-    console.log("Hovered Item: ", hoveredItem);
-    console.log("Focused Index: ", focusedIndex);
-
     const actualFocusedIndex = isKeyboardMode ? focusedIndex : hoveredIndex;
 
     useEffect(() => {
@@ -63,8 +55,6 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
         if (focusedIndex >= 0 && focusedIndex < orders.length) {
             const item = document.querySelector(`[data-id="item-${orders[focusedIndex].id}"]`);
             setHoveredItem(orders[focusedIndex]);
-
-            console.log("Focused Index: ", focusedIndex, "Scrolling Item: ", item);
 
             if (item) {
                 item.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
