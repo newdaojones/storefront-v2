@@ -34,14 +34,8 @@ export const useOrders = (merchantId: number | null, dateRange: { startDate: Dat
             });
 
             const result = await response.json();
-            console.log("Fetched orders:", result);  // Log the fetched data
 
             if (response.ok) {
-                // setOrders(prevOrders => {
-                //     const newOrders = prevOrders.concat(result.rows);
-                //     console.log("Updated orders:", newOrders);
-                //     return newOrders;
-                // });
                 setOrders(result.rows);
                 setTotal(result.count);
             } else {

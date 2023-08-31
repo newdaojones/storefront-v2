@@ -3,7 +3,7 @@ type PaymentDetailsProps = {
 }
 
 export default function PaymentDetails({ data }: PaymentDetailsProps) {
-    console.log(data);
+
     return (
 
         <div className="w-fit h-fit overflow-auto grid grid-rows-4 bg-notpurple text-charyo bg-opacity-70 p-8 border-purps border-4 rounded-md">
@@ -28,9 +28,11 @@ export default function PaymentDetails({ data }: PaymentDetailsProps) {
                 <div className="grid grid-rows-1">${data?.serviceFee}</div>
                 <div className="grid grid-rows-1"><strong>Tax Fee</strong></div>
                 <div className="grid grid-rows-1">${data?.taxFee}</div>
+                <div className="grid grid-rows-1"><strong>Total</strong></div>
+                <div className="grid grid-rows-1">${data?.chargeAmount}</div>
             </div>
             <div className="h-fit grid grid-rows-2 pt-8">
-                <div className="grid grid-rows-1"><strong>Message</strong></div>
+                <div className="grid grid-rows-1"><strong>Checkout ID</strong></div>
                 <div className="grid grid-rows-1">{data?.chargeId}</div>
             </div>
 

@@ -7,8 +7,6 @@ export const useDateRange = (initialStartDate: Date | null, initialEndDate: Date
         if (startDate && endDate) {
             const startDateStr = startDate.toISOString();
             const endDateStr = endDate.toISOString();
-            console.log("Start Date:", startDateStr);
-            console.log("End Date:", endDateStr);
         }
         setDateRange({ startDate, endDate });
     };
