@@ -13,7 +13,6 @@ import PaymentDetails from "@/components/widgets/payment-details";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useDateRange } from "../../hooks/useDateRange";
-
 export default function Payments() {
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
 

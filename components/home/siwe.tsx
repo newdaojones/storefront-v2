@@ -12,7 +12,7 @@ const Siwe = () => {
 };
 
 const SiweContext = () => {
-    const { isInitializing, isLoggedIn, disconnect, isLoading } = useWalletConnectClient()
+    const { isInitializing, isLoggedIn, disconnect, isLoading, isLoginInning } = useWalletConnectClient()
     if (isInitializing) {
         return (<p className="text-xl font-semibold text-gray-400">
             Securing connection...
@@ -30,7 +30,7 @@ const SiweContext = () => {
         )
     }
 
-    if (isLoading) {
+    if (isLoading || isLoginInning) {
         return (<p className="text-xl font-semibold text-gray-400">
             Loading...
         </p>)
