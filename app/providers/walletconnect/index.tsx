@@ -111,6 +111,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
   const connect = useCallback(
     async (pairing?: any) => {
       try {
+        console.log('connect request', session)
         if (session) {
           return
         }
@@ -124,7 +125,7 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
           pairingTopic: pairing?.topic,
           requiredNamespaces,
         };
-
+        console.log('sent connect request', connectParams)
         const { uri, approval } = await client.connect(connectParams);
 
         if (uri) {

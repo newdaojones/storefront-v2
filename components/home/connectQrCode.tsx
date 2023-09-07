@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import logoIcon from '../../public/logo.svg';
 
 export const Login = () => {
-  const { qrCodeUri, connect, initialized } = useWalletConnectClient();
+  const { qrCodeUri, connect, initialized, isLoginInning, isLoading } = useWalletConnectClient();
 
   useEffect(() => {
     const generateQRCode = async () => {
@@ -59,12 +59,12 @@ export const Login = () => {
   }, [qrCodeUri]);
 
   useEffect(() => {
-    if (initialized) {
+    if (initialized && !isLoading && !isLoginInning) {
       setTimeout(() => {
         connect()
       }, 1000)
     }
-  }, [initialized, connect])
+  }, [initialized, isLoading, isLoginInning, connect])
 
   // const wcV2Deeplink = qrCodeUri ? qrCodeUri : '';
   const backpackDeeplink = qrCodeUri ? `ndj-backpack://wc?uri=${qrCodeUri}` : '';
