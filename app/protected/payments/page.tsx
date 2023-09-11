@@ -1,5 +1,4 @@
 "use client"
-import { useAutoRefresh } from "@/app/hooks/useAutoRefresh";
 import { useOrders } from "@/app/hooks/useOrders";
 import { useGlobal } from "@/app/providers/global-context";
 import CommandBar from "@/components/generics/command-bar";
@@ -24,7 +23,6 @@ export default function Payments() {
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
     const merchantId = session?.user?.merchantId ?? null;
-
     const defaultStartDate = new Date(2023, 0, 1); // January 1, 2000
     const defaultEndDate = new Date();
 
@@ -33,20 +31,19 @@ function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: stri
     const { hoveredItem } = useGlobal();
 
     useEffect(() => {
-        getOrders()
-    }, [getOrders, dateRange])
-
-    useAutoRefresh({ handleRefresh: getOrders, interval: 60000 });
+        getOrders(0)
+    }, [getOrders])
 
     return (
         <div>
             <div className="grid grid-cols-2 space-x-135 space-y-32">
                 <div className="grid grid-cols-1">
-                    <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={getOrders} />}>
+                    <Container title={"Payments"} footer={<PaymentButtons orders={orders} refreshOrders={() => getOrders(0)} />}>
                         <PaymentList
                             orders={orders}
                             loading={loading}
                             total={total}
+                            loadMore={() => getOrders(orders.length)}
                             handleRefresh={() => {
                                 console.log('handleRefresh called');
                             }}
