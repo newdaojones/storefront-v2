@@ -8,6 +8,8 @@ declare global {
             NEXT_PUBLIC_PYLON_PASSWORD: string;
             NEXT_PUBLIC_CHAIN_ID: string;
             NEXT_PUBLIC_DISCORD_URI: string;
+            NEXT_PUBLIC_GRAPHQL_WS_URI: string
+            NEXT_PUBLIC_GRAPHQL_URI: string
         }
     }
 }

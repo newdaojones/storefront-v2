@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify'
 import AuthContext from './auth-context'
 import { GlobalProvider } from './global-context'
 import { WalletConnectProvider } from './walletconnect'
+import { ApolloProvider } from '@apollo/client'
+import { apolloClient } from '@/lib/apollo'
 
 type ProviderType = {
     children: React.ReactNode
@@ -13,13 +15,15 @@ type ProviderType = {
 const Providers = ({ children }: ProviderType) => {
     return (
         <SessionProvider>
-            <WalletConnectProvider>
-                <AuthContext>
-                    <GlobalProvider orders={[]}>
-                        {children}
-                    </GlobalProvider>
-                </AuthContext>
-            </WalletConnectProvider>
+            <ApolloProvider client={apolloClient}>
+                <WalletConnectProvider>
+                    <AuthContext>
+                        <GlobalProvider orders={[]}>
+                            {children}
+                        </GlobalProvider>
+                    </AuthContext>
+                </WalletConnectProvider>
+            </ApolloProvider>
             <ToastContainer />
         </SessionProvider>
     )

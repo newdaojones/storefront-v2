@@ -1,3 +1,5 @@
+"use client"
+
 import { useKeyboardInteraction } from '@/app/hooks/useKeyboardInteraction';
 import { useMouseInteraction } from '@/app/hooks/useMouseInteraction';
 import { usePagination } from '@/app/hooks/usePagination';
@@ -11,22 +13,17 @@ import SkeletonListItem from './skeleton-list-item';
 type ListProps = {
     orders: Order[];
     loading?: boolean;
-    total?: number;
+    total: number;
     index?: number;
+    loadMore: () => void;
     handleRefresh: () => void
     disabled?: boolean;
 };
 
-export default function PaymentList({ orders, loading = false, total: totalProp = 0, handleRefresh, disabled = false }: ListProps) {
-
+export default function PaymentList({ orders, loading = false, total, loadMore, disabled = false }: ListProps) {
     const { activeComponent, setActiveComponent, hoveredItem, setHoveredItem, focusedIndex, setFocusedIndex } = useGlobal();
     const { isKeyboardMode, hoveredIndex, onMouseEnter, onMouseMove } = useMouseInteraction({ setHoveredItem });
     const onKeydown = useKeyboardInteraction(setFocusedIndex, orders.length, activeComponent, setActiveComponent, disabled);
-    const { page, total, setTotal, nextPage } = usePagination();
-
-    useEffect(() => {
-        setTotal(totalProp);
-    }, [totalProp, setTotal]);
 
     const isReached = useMemo(() => orders.length >= total, [orders, total])
     const actualFocusedIndex = isKeyboardMode ? focusedIndex : hoveredIndex;
@@ -53,20 +50,16 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
 
     useEffect(() => {
         if (focusedIndex >= 0 && focusedIndex < orders.length) {
-            const item = document.querySelector(`[data-id="item-${orders[focusedIndex].id}"]`);
             setHoveredItem(orders[focusedIndex]);
-
-            if (item) {
-                item.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
-            }
         }
     }, [focusedIndex, setHoveredItem, orders]);
 
     const [lastElementRef] = useInfiniteScroll(() => {
-        if (isReached || loading || !nextPage) {
+        if (isReached || loading) {
             return
         }
-        nextPage();
+
+        loadMore()
     }, loading);
 
     return (
@@ -78,7 +71,16 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
                 <p><strong>Amount</strong></p>
             </div>
             <div className="space-y-2 max-h-80">
-                {loading && !orders.length ? (
+                {orders.map((order, index) => (
+                    <ListItem
+                        key={order.id}
+                        order={order}
+                        isFocused={(hoveredItem?.id === order.id) || (actualFocusedIndex === index)}
+                        onMouseEnter={() => onMouseEnter(index, order)}
+
+                    />
+                ))}
+                {loading && (
                     <>
                         <SkeletonListItem />
                         <SkeletonListItem />
@@ -91,18 +93,6 @@ export default function PaymentList({ orders, loading = false, total: totalProp 
                         <SkeletonListItem />
                         <SkeletonListItem />
                         {/* Add more skeletons as needed */}
-                    </>
-                ) : (
-                    <>
-                        {orders.map((order, index) => (
-                            <ListItem
-                                key={order.id}
-                                order={order}
-                                isFocused={(hoveredItem?.id === order.id) || (actualFocusedIndex === index)}
-                                onMouseEnter={() => onMouseEnter(index, order)}
-
-                            />
-                        ))}
                     </>
                 )}
                 <div ref={lastElementRef} />

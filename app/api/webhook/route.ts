@@ -1,6 +1,8 @@
 import { convertKycStatus } from "@/lib/kycStatus";
 import { ChargeStatus, Order, OrderStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
+import { mutationExecute } from "@/lib/apollo";
+import { SEND_PAYMENT_SUBSCRIPTION } from "@/lib/graphql";
 
 interface Payload<T> {
   id: string;
@@ -115,8 +117,10 @@ const orderWebhookHandler = async ({
     last4: data.last4 || null,
   };
 
-  if (data.customer && !order.customer) {
-    const customer = await prisma.customer.create({
+  let customer = order.customer;
+
+  if (data.customer && !customer) {
+    customer = await prisma.customer.create({
       data: {
         externalId: data.customer.id,
         firstName: data.customer.firstName,
@@ -137,10 +141,23 @@ const orderWebhookHandler = async ({
     updateOrderData.customerId = customer?.id;
   }
 
-  return prisma.order.update({
+  const updatedOrder = await prisma.order.update({
     where: {
       id: Number(id),
     },
     data: updateOrderData,
+  });
+
+  await mutationExecute({
+    mutation: SEND_PAYMENT_SUBSCRIPTION,
+    variables: {
+      id: updatedOrder.merchantId.toString(),
+      type: "merchant_order",
+      action: "update",
+      payload: {
+        ...updatedOrder,
+        customer,
+      },
+    },
   });
 };
