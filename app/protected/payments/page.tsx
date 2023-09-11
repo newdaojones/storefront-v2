@@ -12,6 +12,7 @@ import PaymentDetails from "@/components/widgets/payment-details";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useDateRange } from "../../hooks/useDateRange";
+import { endOfDay, startOfDay } from "date-fns";
 export default function Payments() {
     const [activeWidget, setActiveWidget] = useState<string | null>(null);
 
@@ -23,8 +24,8 @@ export default function Payments() {
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
     const merchantId = session?.user?.merchantId ?? null;
-    const defaultStartDate = new Date(2023, 0, 1); // January 1, 2000
-    const defaultEndDate = new Date();
+    const defaultStartDate = startOfDay(new Date(2023, 0, 1)); // January 1, 2000
+    const defaultEndDate = endOfDay(new Date());
 
     const { dateRange, handleDateRangeChange } = useDateRange(defaultStartDate, defaultEndDate);
     const { orders, loading, total, getOrders } = useOrders(merchantId, dateRange);
