@@ -16,7 +16,7 @@ type ProviderType = {
 
 const Providers = ({ children, session }: ProviderType) => {
     return (
-        <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus={false}>
             <ApolloProvider client={apolloClient}>
                 <WalletConnectProvider>
                     <AuthContext>
