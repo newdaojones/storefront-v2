@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Toaster } from "react-hot-toast";
 import 'react-phone-number-input/style.css';
 import Providers from "./providers/root";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,6 +38,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={inter.variable}>
@@ -43,7 +46,7 @@ export default async function RootLayout({
         <Suspense fallback="Loading...">
           <AuthStatus />
         </Suspense>
-        <Providers>
+        <Providers session={session}>
           {children}
           <OrbitalMenu />
         </Providers>

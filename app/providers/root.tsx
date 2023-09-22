@@ -7,14 +7,16 @@ import { GlobalProvider } from './global-context'
 import { WalletConnectProvider } from './walletconnect'
 import { ApolloProvider } from '@apollo/client'
 import { apolloClient } from '@/lib/apollo'
+import { Session } from 'next-auth'
 
 type ProviderType = {
     children: React.ReactNode
+    session: Session | null
 }
 
-const Providers = ({ children }: ProviderType) => {
+const Providers = ({ children, session }: ProviderType) => {
     return (
-        <SessionProvider>
+        <SessionProvider session={session}>
             <ApolloProvider client={apolloClient}>
                 <WalletConnectProvider>
                     <AuthContext>
