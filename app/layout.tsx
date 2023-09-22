@@ -3,7 +3,6 @@ import AuthStatus from "@/components/auth/auth-status";
 import { OrbitalMenu } from "@/components/orbital";
 import "@/styles/globals.css";
 import { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Toaster } from "react-hot-toast";
@@ -11,11 +10,6 @@ import 'react-phone-number-input/style.css';
 import Providers from "./providers/root";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const title = "Storefront Self Banking";
 const description =
@@ -41,7 +35,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body>
         <Toaster />
         <Suspense fallback="Loading...">
           <AuthStatus />
