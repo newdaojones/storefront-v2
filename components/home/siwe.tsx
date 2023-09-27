@@ -2,6 +2,7 @@
 
 import { useWalletConnectClient } from "@/app/providers/walletconnect";
 import { Login } from "./connectQrCode";
+import { sendLog } from "@/lib/log";
 
 const Siwe = () => {
     return (
@@ -13,6 +14,14 @@ const Siwe = () => {
 
 const SiweContext = () => {
     const { isInitializing, isLoggedIn, disconnect, isLoading, isLoginInning } = useWalletConnectClient()
+
+    const onDisconnect = () => {
+        sendLog({
+            message: 'User clicked disconnect on siwe context'
+        })
+        disconnect(true)
+    }
+
     if (isInitializing) {
         return (<p className="text-xl font-semibold text-gray-400">
             Securing connection...
@@ -23,7 +32,7 @@ const SiweContext = () => {
         return (
             <button
                 className="rounded-lg py-2 px-4 mt-2 bg-purps hover:border hover:border-ualert hover:bg-transparent"
-                onClick={() => disconnect(true)}
+                onClick={() => onDisconnect()}
             >
                 Disconnect Wallet
             </button>

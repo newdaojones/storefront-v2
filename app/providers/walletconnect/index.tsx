@@ -11,6 +11,7 @@ import { SiweMessage, generateNonce } from "siwe";
 import { DEFAULT_EIP155_METHODS, DEFAULT_MERCHANT_APP_METADATA, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from "./config";
 import { getRequiredNamespaces } from "./helper";
 import { config } from 'config';
+import { sendLog } from '@/lib/log';
 
 const SIGNATURE_PREFIX = 'NDJ_SIGNATURE_V2_';
 
@@ -136,6 +137,10 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
         onSessionConnected(_session);
         setPairings(client.pairing.getAll({ active: true }));
       } catch (e: any) {
+        sendLog({
+          message: 'failed connect wallet',
+          errorMessage: e.message
+        })
         disconnect();
       }
     },
@@ -208,6 +213,12 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
       });
 
       if (res?.status !== 200 || res?.error) {
+        sendLog({
+          message: 'failed verify signature',
+          status: res?.status,
+          error: res?.error
+        })
+
         disconnect()
       }
 
@@ -258,6 +269,9 @@ export function WalletConnectProvider({ children }: { children: ReactNode | Reac
 
     client.on("session_delete", () => {
       console.log("EVENT", "session_delete");
+      sendLog({
+        message: 'session deleted'
+      })
       reset();
       signOut()
     });

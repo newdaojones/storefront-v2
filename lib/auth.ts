@@ -69,8 +69,8 @@ export const authOptions: NextAuthOptions = {
             merchant: user.merchant,
             isNewUser: false,
           }
-        } catch (e) {
-          console.error(e)
+        } catch (e: any) {
+          console.error('Failed Authentication', e.message)
           return null
         }
       }
