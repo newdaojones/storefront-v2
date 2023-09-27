@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useWalletConnectClient } from "./walletconnect";
 import { useAgreement } from "@/components/use/agreement";
+import { sendLog } from "@/lib/log";
 
 export interface AuthContextProps {
     children: React.ReactNode;
@@ -42,6 +43,13 @@ export default function AuthContext({ children }: AuthContextProps) {
             }
 
             if (isLoggedIn) {
+                sendLog({
+                    isLoginInning,
+                    initialized,
+                    session: !!session,
+                    isLoggedIn,
+                    message: 'disconnect walletconnect, session not found'
+                })
                 disconnect(true)
             }
 
@@ -49,6 +57,13 @@ export default function AuthContext({ children }: AuthContextProps) {
         }
 
         if (session && !isLoggedIn) {
+            sendLog({
+                isLoginInning,
+                initialized,
+                session: !!session,
+                isLoggedIn,
+                message: 'signout session, walletconnect logout'
+            })
             signOut()
         }
 
