@@ -24,10 +24,8 @@ export default function Payments() {
 function PaymentDataHook({ activeWidget, setActiveWidget }: { activeWidget: string | null, setActiveWidget: (widget: string | null) => void }) {
     const { data: session } = useSession()
     const merchantId = session?.user?.merchantId ?? null;
-    const defaultStartDate = startOfDay(new Date(2023, 0, 1)); // January 1, 2000
-    const defaultEndDate = endOfDay(new Date());
 
-    const { dateRange, handleDateRangeChange } = useDateRange(defaultStartDate, defaultEndDate);
+    const { dateRange, handleDateRangeChange } = useDateRange(null, null);
     const { orders, loading, total, getOrders } = useOrders(merchantId, dateRange);
     const { hoveredItem } = useGlobal();
 
