@@ -53,9 +53,9 @@ export default function Settings() {
                 sessionUpdate({
                     user: {
                         ...session.user,
-                        merchant: result
+                        merchant: result,
+                        isNewUser: false,
                     },
-                    isNewUser: false,
                 })
                 toast.success('Updated successfully')
             } else {
