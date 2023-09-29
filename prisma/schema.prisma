@@ -54,6 +54,8 @@ model User {
   merchantId          Int?
   merchant            Merchant?  @relation(fields: [merchantId], references: [id])
   token               String?
+  tosLink             String?
+  kycLink             String?
   status              KycStatus  @default(NONE)
   lastSignedAt        DateTime?
   createdAt           DateTime   @default(now())

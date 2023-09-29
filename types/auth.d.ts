@@ -1,4 +1,4 @@
-import { KycStatus } from '@prisma/client';
+import { KycStatus, Prisma } from '@prisma/client';
 import 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
@@ -46,16 +46,14 @@ declare module 'next-auth' {
      * @property {Merchant | null} merchant - Merchant information, if the user is a merchant.
      */
 
-    interface User {
-        id: number
-        walletAddress: string
-        name?: string
-        email?: string
-        status?: KycStatus
-        role?: string | null
-        merchant?: Merchant | null
+    type UserPayload = Prisma.UserGetPayload<{
+        include: {
+          merchant: true
+        };
+    }>;
+
+    interface User extends UserPayload {
         isNewUser?: boolean
-        merchantId?: number
     }
 
     /**

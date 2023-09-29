@@ -83,6 +83,18 @@ const accountWebhookHandler = async ({ id, data }: Payload<AccountPayload>) => {
     },
     data: {
       status,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      ssn: data.ssn,
+      dob: data.dob,
+      streetAddress: data.streetAddress,
+      streetAddress2: data.streetAddress2,
+      city: data.city,
+      postalCode: data.postalCode,
+      state: data.state,
+      country: data.country,
     },
   });
 };
@@ -160,4 +172,6 @@ const orderWebhookHandler = async ({
       },
     },
   });
+
+  return updatedOrder;
 };
